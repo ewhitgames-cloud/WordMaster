@@ -12,12 +12,14 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/game" component={Game} />
+      <Route path="/game">
+        {(params) => <Game />}
+      </Route>
       <Route path="/challenge">
-        {() => <Game mode="challenge" />}
+        {(params) => <Game mode="challenge" />}
       </Route>
       <Route path="/daily">
-        {() => <Game mode="daily" />}
+        {(params) => <Game mode="daily" />}
       </Route>
       <Route path="/stats" component={Stats} />
       <Route component={NotFound} />
