@@ -11,6 +11,7 @@ interface GameGridProps {
 }
 
 export default function GameGrid({ grid, currentGuess, currentRow, gameState, targetWord, evaluatedRows }: GameGridProps) {
+
   const getTileStateForPosition = (rowIndex: number, colIndex: number): TileState => {
     // Current row with user input
     if (rowIndex === currentRow && gameState === 'playing') {
@@ -70,15 +71,9 @@ export default function GameGrid({ grid, currentGuess, currentRow, gameState, ta
                 whileHover={{ scale: 1.05 }}
                 data-testid={`tile-${rowIndex}-${colIndex}`}
               >
-                <motion.span
-                  key={`${letter}-${rowIndex}-${colIndex}`}
-                  initial={{ scale: letter ? 0.8 : 1 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.2 }}
-                  className="font-bold text-lg"
-                >
+                <span className="font-bold text-lg select-none uppercase">
                   {letter}
-                </motion.span>
+                </span>
               </motion.div>
             );
           })
