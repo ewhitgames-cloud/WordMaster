@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
@@ -52,6 +52,11 @@ export default function CelebrationModal({
       {isOpen && (
         <Dialog open={isOpen} onOpenChange={onClose}>
           <DialogContent className="sm:max-w-md">
+            <DialogTitle className="sr-only">Game Completed</DialogTitle>
+            <DialogDescription className="sr-only">
+              Congratulations! You completed the word puzzle in {attempts} attempts with a score of {score} points.
+            </DialogDescription>
+            
             {showConfetti && (
               <Confetti
                 width={width}

@@ -155,8 +155,13 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
 
       // Mark daily challenge as completed if this was a daily challenge
       if (dailyChallengeMode && won) {
-        const today = new Date().toISOString().split('T')[0];
-        localStorage.setItem('lastDailyChallenge', today);
+        try {
+          const today = new Date().toISOString().split('T')[0];
+          localStorage.setItem('lastDailyChallenge', today);
+          console.log('Daily challenge marked as completed for:', today);
+        } catch (error) {
+          console.error('Failed to mark daily challenge as completed:', error);
+        }
       }
 
       // Update stats
@@ -180,6 +185,16 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
       }
     } catch (error) {
       console.error('Failed to save game result:', error);
+      // Still mark daily challenge as completed even if save fails
+      if (dailyChallengeMode && won) {
+        try {
+          const today = new Date().toISOString().split('T')[0];
+          localStorage.setItem('lastDailyChallenge', today);
+          console.log('Daily challenge marked as completed (fallback):', today);
+        } catch (localStorageError) {
+          console.error('Failed to mark daily challenge as completed (fallback):', localStorageError);
+        }
+      }
     }
   };
 
