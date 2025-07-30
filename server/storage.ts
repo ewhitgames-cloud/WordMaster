@@ -1,4 +1,6 @@
-import { type GameStats, type InsertGameStats, type GameResult, type InsertGameResult } from "@shared/schema";
+import { type GameStats, type InsertGameStats, type GameResult, type InsertGameResult, gameStats, gameResults } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -12,84 +14,72 @@ export interface IStorage {
   getRecentResults(limit: number): Promise<GameResult[]>;
 }
 
-export class MemStorage implements IStorage {
-  private gameStats: GameStats | undefined;
-  private gameResults: Map<string, GameResult>;
-
-  constructor() {
-    this.gameResults = new Map();
-    // Initialize default stats
-    this.gameStats = {
-      id: randomUUID(),
-      totalGames: 0,
-      totalWins: 0,
-      currentStreak: 0,
-      maxStreak: 0,
-      totalPoints: 0,
-      guessDistribution: '{"1":0,"2":0,"3":0,"4":0,"5":0,"6":0}',
-      lastPlayed: null,
-      createdAt: new Date(),
-    };
-  }
-
+export class DatabaseStorage implements IStorage {
   async getGameStats(): Promise<GameStats | undefined> {
-    return this.gameStats;
+    // Get the first (and should be only) game stats record
+    const [stats] = await db.select().from(gameStats).limit(1);
+    
+    // If no stats exist, create default stats
+    if (!stats) {
+      return await this.createGameStats({
+        totalGames: 0,
+        totalWins: 0,
+        currentStreak: 0,
+        maxStreak: 0,
+        totalPoints: 0,
+        guessDistribution: '{"1":0,"2":0,"3":0,"4":0,"5":0,"6":0}',
+        lastPlayed: null,
+      });
+    }
+    
+    return stats;
   }
 
   async createGameStats(insertStats: InsertGameStats): Promise<GameStats> {
-    const stats: GameStats = {
-      id: randomUUID(),
-      totalGames: insertStats.totalGames || 0,
-      totalWins: insertStats.totalWins || 0,
-      currentStreak: insertStats.currentStreak || 0,
-      maxStreak: insertStats.maxStreak || 0,
-      totalPoints: insertStats.totalPoints || 0,
-      guessDistribution: insertStats.guessDistribution || '{"1":0,"2":0,"3":0,"4":0,"5":0,"6":0}',
-      lastPlayed: insertStats.lastPlayed || null,
-      createdAt: new Date(),
-    };
-    this.gameStats = stats;
+    const [stats] = await db
+      .insert(gameStats)
+      .values(insertStats)
+      .returning();
     return stats;
   }
 
   async updateGameStats(updateStats: Partial<InsertGameStats>): Promise<GameStats> {
-    if (!this.gameStats) {
+    // First get existing stats
+    const existingStats = await this.getGameStats();
+    if (!existingStats) {
       throw new Error("Game stats not found");
     }
+
+    // Update the stats
+    const [updatedStats] = await db
+      .update(gameStats)
+      .set({
+        ...updateStats,
+        lastPlayed: new Date(),
+      })
+      .where(eq(gameStats.id, existingStats.id))
+      .returning();
     
-    this.gameStats = {
-      ...this.gameStats,
-      ...updateStats,
-      lastPlayed: new Date(),
-    };
-    
-    return this.gameStats;
+    return updatedStats;
   }
 
   async saveGameResult(insertResult: InsertGameResult): Promise<GameResult> {
-    const id = randomUUID();
-    const result: GameResult = {
-      id,
-      word: insertResult.word,
-      attempts: insertResult.attempts,
-      timeElapsed: insertResult.timeElapsed,
-      points: insertResult.points,
-      isChallengeMode: insertResult.isChallengeMode || false,
-      isWin: insertResult.isWin,
-      playedAt: new Date(),
-    };
-    
-    this.gameResults.set(id, result);
+    const [result] = await db
+      .insert(gameResults)
+      .values(insertResult)
+      .returning();
     return result;
   }
 
   async getRecentResults(limit: number): Promise<GameResult[]> {
-    const results = Array.from(this.gameResults.values())
-      .sort((a, b) => b.playedAt.getTime() - a.playedAt.getTime())
-      .slice(0, limit);
+    const results = await db
+      .select()
+      .from(gameResults)
+      .orderBy((table) => table.playedAt)
+      .limit(limit);
     
-    return results;
+    return results.reverse(); // Most recent first
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
