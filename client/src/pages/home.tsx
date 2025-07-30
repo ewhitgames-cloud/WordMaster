@@ -15,8 +15,18 @@ interface FallingLetter {
   isTitle: boolean;
 }
 
+interface BackgroundLetter {
+  id: string;
+  letter: string;
+  x: number;
+  y: number;
+  animationDelay: number;
+  animationDuration: number;
+}
+
 export default function HomePage() {
   const [fallingLetters, setFallingLetters] = useState<FallingLetter[]>([]);
+  const [backgroundLetters, setBackgroundLetters] = useState<BackgroundLetter[]>([]);
   const [showContent, setShowContent] = useState(false);
 
   // Title letters for "WORD POP!"
@@ -26,9 +36,12 @@ export default function HomePage() {
     // Create falling letters that will settle into the title
     const letters: FallingLetter[] = [];
     const baseY = 120; // Where title should settle
-    const letterSpacing = 60;
-    const startX = window.innerWidth / 2 - (titleLetters.length * letterSpacing) / 2;
-
+    const letterSpacing = 80; // Increased spacing to prevent overlap
+    const wordSpacing = 120; // Extra space between WORD and POP!
+    
+    // Calculate positions for each letter with proper spacing
+    let currentX = window.innerWidth / 2 - 300; // Start position for title
+    
     titleLetters.forEach((letter, index) => {
       if (letter !== ' ') {
         letters.push({
@@ -36,47 +49,71 @@ export default function HomePage() {
           letter,
           x: Math.random() * window.innerWidth,
           delay: index * 0.2,
-          finalX: startX + (index * letterSpacing),
+          finalX: currentX,
           finalY: baseY,
           isTitle: true
         });
+        
+        // Add extra space between WORD and POP
+        if (index === 3) {
+          currentX += letterSpacing + wordSpacing;
+        } else {
+          currentX += letterSpacing;
+        }
+      } else if (index === 4) {
+        // This is the space between WORD and POP
+        currentX += wordSpacing;
       }
     });
 
-    // Add some decorative letters
-    const decorativeLetters = ['A', 'E', 'I', 'O', 'U', 'R', 'S', 'T', 'L', 'N'];
-    decorativeLetters.forEach((letter, index) => {
-      letters.push({
-        id: `deco-${index}`,
-        letter,
-        x: Math.random() * window.innerWidth,
-        delay: 2 + index * 0.1,
-        finalX: Math.random() * window.innerWidth,
-        finalY: 200 + Math.random() * 300,
-        isTitle: false
-      });
-    });
-
     setFallingLetters(letters);
+
+    // Create continuous background letters
+    const createBackgroundLetters = () => {
+      const backgroundLettersList: BackgroundLetter[] = [];
+      const allLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+      
+      // Create 30 background letters
+      for (let i = 0; i < 30; i++) {
+        backgroundLettersList.push({
+          id: `bg-${i}`,
+          letter: allLetters[Math.floor(Math.random() * allLetters.length)],
+          x: Math.random() * window.innerWidth,
+          y: -100 - Math.random() * 500, // Start above screen
+          animationDelay: Math.random() * 10, // Random start time
+          animationDuration: 8 + Math.random() * 4, // 8-12 seconds to fall
+        });
+      }
+      
+      setBackgroundLetters(backgroundLettersList);
+    };
+
+    createBackgroundLetters();
 
     // Show main content after animation
     const timer = setTimeout(() => {
       setShowContent(true);
     }, 3000);
 
-    return () => clearTimeout(timer);
+    // Continuously regenerate background letters
+    const backgroundInterval = setInterval(() => {
+      createBackgroundLetters();
+    }, 5000); // New letters every 5 seconds
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(backgroundInterval);
+    };
   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 dark:from-purple-900 dark:via-pink-900 dark:to-red-900 overflow-hidden relative">
-      {/* Falling Letters Animation */}
+      {/* Title Falling Letters Animation */}
       <AnimatePresence>
         {fallingLetters.map((letter) => (
           <motion.div
             key={letter.id}
-            className={`absolute font-bold text-white ${
-              letter.isTitle ? 'text-6xl md:text-8xl z-20' : 'text-2xl md:text-4xl z-10 opacity-30'
-            }`}
+            className="absolute font-bold text-white text-6xl md:text-8xl z-20"
             initial={{
               x: letter.x,
               y: -100,
@@ -87,7 +124,7 @@ export default function HomePage() {
               x: letter.finalX,
               y: letter.finalY,
               rotate: 0,
-              scale: letter.isTitle ? 1 : 0.8
+              scale: 1
             }}
             transition={{
               delay: letter.delay,
@@ -99,6 +136,39 @@ export default function HomePage() {
             style={{
               textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
               filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.3))'
+            }}
+          >
+            {letter.letter}
+          </motion.div>
+        ))}
+      </AnimatePresence>
+
+      {/* Continuous Background Letters */}
+      <AnimatePresence>
+        {backgroundLetters.map((letter) => (
+          <motion.div
+            key={letter.id}
+            className="absolute font-bold text-white/20 text-3xl md:text-5xl z-5 pointer-events-none"
+            initial={{
+              x: letter.x,
+              y: letter.y,
+              rotate: Math.random() * 360,
+              scale: 0.8
+            }}
+            animate={{
+              x: letter.x + (Math.random() - 0.5) * 100,
+              y: window.innerHeight + 100,
+              rotate: Math.random() * 360,
+              scale: 0.6
+            }}
+            transition={{
+              delay: letter.animationDelay,
+              duration: letter.animationDuration,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            style={{
+              textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
             }}
           >
             {letter.letter}
