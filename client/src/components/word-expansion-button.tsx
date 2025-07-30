@@ -36,7 +36,7 @@ export function WordExpansionButton() {
         setExpanded(true);
         toast({
           title: "Word Library Expanded!",
-          description: `Added ${data.totalWords} new words from OpenAI. The game now has access to a much broader English vocabulary!`,
+          description: `Activated ${data.totalWords} words from comprehensive built-in library. The game now has access to a much broader English vocabulary!`,
         });
       } else {
         toast({
@@ -75,12 +75,12 @@ export function WordExpansionButton() {
       {isExpanding ? (
         <>
           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-          Expanding with AI...
+          Activating Library...
         </>
       ) : (
         <>
           <BookOpen className="w-4 h-4 mr-2" />
-          Expand Word Library
+          Activate Expanded Library
         </>
       )}
     </Button>

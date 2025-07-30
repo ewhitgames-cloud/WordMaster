@@ -265,34 +265,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Expand word library using OpenAI - generates comprehensive English word list
+  // Expand word library using built-in comprehensive English word list
   app.post("/api/word/expand-library", async (req, res) => {
     try {
-      if (!process.env.OPENAI_API_KEY) {
-        return res.status(400).json({ 
-          success: false,
-          message: "OpenAI API key required for word library expansion" 
-        });
-      }
-
-      console.log('Starting comprehensive word library expansion...');
+      console.log('Activating built-in comprehensive word library...');
       
-      const { getAllExpandedWords } = await import('./word-expander');
-      const expandedWords = await getAllExpandedWords();
+      const { getAllBuiltInWords } = await import('./built-in-word-library');
+      const expandedWords = getAllBuiltInWords();
       
       res.json({
         success: true,
         totalWords: expandedWords.length,
-        message: `Successfully generated ${expandedWords.length} words using OpenAI`,
+        message: `Successfully activated ${expandedWords.length} words from built-in comprehensive library`,
         categories: [
           'common words (200)', 'intermediate words (200)', 'advanced words (150)',
-          'animals (30)', 'nature (30)', 'food (30)', 'emotions (30)', 'actions (30)',
-          'objects (30)', 'colors (30)', 'weather (30)', 'sports (30)', 'music (30)',
-          'travel (30)', 'science (30)', 'technology (30)', 'art (30)', 'business (30)',
-          'health (30)', 'education (30)', 'family (30)', 'time (30)', 'space (30)',
-          'materials (30)', 'tools (30)', 'buildings (30)', 'clothing (30)'
+          'animals (30)', 'nature (30)', 'food (30)', 'emotions (30)', 'actions (30)', 'objects (30)'
         ],
-        sampleWords: expandedWords.slice(0, 20) // Show first 20 as sample
+        sampleWords: expandedWords.slice(0, 20), // Show first 20 as sample
+        source: 'built-in-library'
       });
     } catch (error) {
       console.error('Word library expansion error:', error);

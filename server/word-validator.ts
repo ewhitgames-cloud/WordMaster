@@ -100,6 +100,17 @@ export async function validateWordExpanded(word: string, fallbackDictionary: Set
     return true;
   }
 
+  // Check expanded built-in library
+  try {
+    const { getAllBuiltInWords } = await import('./built-in-word-library');
+    const expandedWords = new Set(getAllBuiltInWords());
+    if (expandedWords.has(upperWord)) {
+      return true;
+    }
+  } catch (error) {
+    console.log('Could not load expanded built-in library:', error);
+  }
+
   // Check common word patterns and return true for likely valid words if OpenAI is unavailable
   if (!process.env.OPENAI_API_KEY) {
     return isLikelyValidWord(upperWord);
