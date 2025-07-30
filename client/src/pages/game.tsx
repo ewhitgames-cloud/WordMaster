@@ -216,7 +216,7 @@ export default function Game() {
         challengeMode={challengeMode}
         timeElapsed={challengeMode ? 180 - timeRemaining : 0}
         onPlayAgain={handleNewGame}
-        onChallengeMode={handleToggleChallengeMode}
+        onChallengeMode={() => window.location.href = '/game?mode=challenge'}
         onViewStats={() => {
           setShowCelebration(false);
           setShowStats(true);
@@ -233,7 +233,7 @@ export default function Game() {
         isOpen={showMenu}
         onClose={() => setShowMenu(false)}
         onNewGame={handleNewGame}
-        onChallengeMode={handleToggleChallengeMode}
+        onChallengeMode={() => window.location.href = '/game?mode=challenge'}
         onStats={() => {
           setShowMenu(false);
           setShowStats(true);
