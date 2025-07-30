@@ -39,7 +39,7 @@ export default function HomePage() {
     const letterSpacing = 85; // Equal spacing between all letters
     const wordSpacing = 120; // Bigger space between WORD and POP!
     
-    // Focus on just "WORD" first - position each letter individually
+    // Position "WORD" with perfect spacing
     const wordLetters = ['W', 'O', 'R', 'D'];
     const baseStartX = window.innerWidth / 2 - 150; // Base position for O-R-D
     
@@ -59,6 +59,22 @@ export default function HomePage() {
         x: Math.random() * window.innerWidth,
         delay: index * 0.2,
         finalX: finalX,
+        finalY: baseY,
+        isTitle: true
+      });
+    });
+
+    // Add "POP!" with bigger gap after "WORD"
+    const popLetters = ['P', 'O', 'P', '!'];
+    const popStartX = baseStartX + (2 * letterSpacing) + wordSpacing; // After "WORD" with big gap
+    
+    popLetters.forEach((letter, index) => {
+      letters.push({
+        id: `pop-${index}`,
+        letter,
+        x: Math.random() * window.innerWidth,
+        delay: (wordLetters.length + index) * 0.2,
+        finalX: popStartX + (index * letterSpacing),
         finalY: baseY,
         isTitle: true
       });
