@@ -4,6 +4,8 @@ import { storage } from "./storage";
 import { insertGameStatsSchema, insertGameResultSchema } from "@shared/schema";
 import { z } from "zod";
 import { wordManager } from "./word-manager";
+import { validateWordExpanded } from "./word-validator";
+import { VALID_WORDS } from "./word-dictionary";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get game statistics
@@ -242,6 +244,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ message: `Cache refreshed for category: ${category}` });
     } catch (error) {
       res.status(500).json({ message: `Failed to refresh cache for category: ${req.params.category}` });
+    }
+  });
+
+  // Validate a word using OpenAI + built-in dictionary
+  app.post("/api/word/validate", async (req, res) => {
+    try {
+      const { word } = req.body;
+      
+      if (!word || typeof word !== 'string' || word.length !== 5) {
+        return res.status(400).json({ 
+          message: "Word must be a 5-letter string",
+          isValid: false 
+        });
+      }
+
+      const isValid = await validateWordExpanded(word, VALID_WORDS);
+      
+      res.json({ 
+        word: word.toUpperCase(),
+        isValid,
+        source: VALID_WORDS.has(word.toUpperCase()) ? 'built-in' : 'OpenAI',
+        hasOpenAI: !!process.env.OPENAI_API_KEY
+      });
+    } catch (error) {
+      console.error('Word validation error:', error);
+      res.status(500).json({ 
+        message: "Failed to validate word",
+        isValid: false
+      });
+    }
+  });
+
+  // Batch validate multiple words
+  app.post("/api/word/validate-batch", async (req, res) => {
+    try {
+      const { words } = req.body;
+      
+      if (!Array.isArray(words) || words.length === 0) {
+        return res.status(400).json({ 
+          message: "Words must be a non-empty array",
+          results: {}
+        });
+      }
+
+      const results: Record<string, boolean> = {};
+      
+      // Process words in parallel for better performance
+      const validationPromises = words.map(async (word: string) => {
+        if (typeof word === 'string' && word.length === 5) {
+          const isValid = await validateWordExpanded(word, VALID_WORDS);
+          return { word: word.toUpperCase(), isValid };
+        }
+        return { word: word.toUpperCase(), isValid: false };
+      });
+
+      const validationResults = await Promise.all(validationPromises);
+      
+      validationResults.forEach(({ word, isValid }) => {
+        results[word] = isValid;
+      });
+      
+      res.json({ 
+        results,
+        totalWords: words.length,
+        validWords: Object.values(results).filter(Boolean).length,
+        hasOpenAI: !!process.env.OPENAI_API_KEY
+      });
+    } catch (error) {
+      console.error('Batch word validation error:', error);
+      res.status(500).json({ 
+        message: "Failed to validate words",
+        results: {}
+      });
     }
   });
 

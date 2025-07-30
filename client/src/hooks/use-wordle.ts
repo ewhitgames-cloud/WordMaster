@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { GameStats, InsertGameResult } from "@shared/schema";
-import { calculateScore, isValidWord, TileState, KeyState } from "@/lib/game-utils";
+import { calculateScore, isValidWord, isValidWordExpanded, TileState, KeyState } from "@/lib/game-utils";
 import { useToast } from "@/hooks/use-toast";
 
 export function useWordle(challengeMode: boolean = false) {

@@ -1,10 +1,21 @@
 import { VALID_WORDS } from './words';
+import { validateWordWithAPI } from './word-validation';
 
 export type TileState = 'empty' | 'current' | 'correct' | 'present' | 'absent';
 export type KeyState = 'default' | 'correct' | 'present' | 'absent';
 
 export function isValidWord(word: string): boolean {
   return VALID_WORDS.has(word.toUpperCase());
+}
+
+export async function isValidWordExpanded(word: string): Promise<boolean> {
+  // First try client-side validation for speed
+  if (VALID_WORDS.has(word.toUpperCase())) {
+    return true;
+  }
+  
+  // Then try OpenAI validation for expanded word support
+  return await validateWordWithAPI(word);
 }
 
 export function calculateScore(attempts: number, timeElapsed: number, challengeMode: boolean): number {

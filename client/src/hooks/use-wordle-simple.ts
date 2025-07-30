@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { GameStats, InsertGameResult } from "@shared/schema";
-import { calculateScore, isValidWord, getTileState } from "@/lib/game-utils";
+import { calculateScore, isValidWord, isValidWordExpanded, getTileState } from "@/lib/game-utils";
 import { useToast } from "@/hooks/use-toast";
 
 export function useWordle(challengeMode: boolean = false, dailyChallengeMode: boolean = false) {
@@ -19,6 +19,7 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [score, setScore] = useState(0);
   const [evaluatedRows, setEvaluatedRows] = useState<Set<number>>(new Set());
+  const [isValidatingWord, setIsValidatingWord] = useState(false);
 
   // Fetch stats
   const { data: stats } = useQuery<GameStats>({
@@ -148,13 +149,28 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
       return;
     }
 
-    if (!isValidWord(currentGuess)) {
+    // Check word validity with expanded OpenAI validation
+    setIsValidatingWord(true);
+    try {
+      const isValid = await isValidWordExpanded(currentGuess);
+      if (!isValid) {
+        toast({
+          title: "Invalid word", 
+          description: "Not in word list",
+          variant: "destructive"
+        });
+        return;
+      }
+    } catch (error) {
+      console.error('Word validation error:', error);
       toast({
-        title: "Invalid word", 
-        description: "Not in word list",
+        title: "Validation error", 
+        description: "Unable to validate word, please try again",
         variant: "destructive"
       });
       return;
+    } finally {
+      setIsValidatingWord(false);
     }
 
     // Update grid
@@ -257,6 +273,7 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
       lastPlayed: null,
       createdAt: new Date(),
     },
+    isValidatingWord,
     onKeyPress,
     onEnter,
     onBackspace,
