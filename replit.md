@@ -40,7 +40,8 @@ Preferred communication style: Simple, everyday language.
 - **Game State Management**: Custom React hook (`useWordle`) managing game state
 - **Scoring System**: Points calculation based on attempts, time, and challenge mode
 - **Statistics Tracking**: Persistent game statistics with guess distribution
-- **Dynamic Word Generation**: Multiple word generation modes (random, daily, challenge, category-specific) with 300+ target words organized by themes
+- **OpenAI-Enhanced Word Generation**: Intelligent word generation using OpenAI GPT-4o with automatic fallback to built-in 300+ word library
+- **Dynamic Word Pools**: Multiple generation modes (random, daily, challenge, category-specific) with smart caching and theme-based organization
 
 ### UI Components
 - **Game Grid**: 6x5 tile grid with color-coded feedback (correct/present/absent)
@@ -71,12 +72,14 @@ Preferred communication style: Simple, everyday language.
 
 ### Notable Features
 - **Challenge Mode**: Time-limited gameplay with bonus scoring
+- **Daily Challenge System**: Sophisticated daily words that reset daily and never repeat using date-based seeding
+- **OpenAI Word Generation**: AI-powered word creation with 100+ words per category, smart caching system
 - **Statistics Tracking**: Comprehensive game statistics with visual distribution
 - **Responsive Design**: Mobile-optimized interface with touch-friendly interactions
 - **Dark/Light Mode**: Theme support via CSS variables
 - **Auto-submission**: Automatic word checking when 5 letters are entered
-- **Expanded Word Variety**: 2000+ valid input words and 300+ target words across multiple themes
-- **Dynamic Word Generation**: Daily words, challenge mode words, and category-specific selections
+- **Expanded Word Variety**: 2000+ valid input words with OpenAI-generated target words
+- **Smart Word Caching**: 24-hour cache system for OpenAI words with automatic fallback to built-in library
 
 ## Deployment Strategy
 

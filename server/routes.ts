@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertGameStatsSchema, insertGameResultSchema } from "@shared/schema";
 import { z } from "zod";
+import { wordManager } from "./word-manager";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get game statistics
@@ -120,8 +121,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         'SIGNS', 'HINTS', 'CLUES', 'NOTES', 'MEMOS', 'NEWS', 'INFO', 'DATA', 'FACTS', 'TRUTH'
       ];
       
-      const randomWord = words[Math.floor(Math.random() * words.length)];
-      res.json({ word: randomWord });
+      const randomWord = await wordManager.getRandomWord();
+      res.json({ 
+        word: randomWord,
+        source: process.env.OPENAI_API_KEY ? 'OpenAI' : 'built-in'
+      });
     } catch (error) {
       res.status(500).json({ message: "Failed to get word" });
     }
@@ -153,69 +157,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       switch (mode) {
         case 'daily':
-          // Generate consistent daily word based on date
-          const today = new Date();
-          const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
-          selectedWord = allWords[dayOfYear % allWords.length];
+          selectedWord = await wordManager.getDailyWord();
           break;
           
         case 'daily-challenge':
-          // Generate daily challenge word with sophisticated vocabulary
-          const challengeDailyWords = [
-            'VIVID', 'AZURE', 'EBONY', 'ROUGE', 'IVORY', 'AMBER', 'CORAL', 'PEARL', 'LUNAR', 'SOLAR',
-            'CYBER', 'PIXEL', 'BYTES', 'NODES', 'VIRAL', 'BLEND', 'MERGE', 'SHIFT', 'ADAPT', 'EVOLVE',
-            'MYSTIC', 'VALOR', 'HONOR', 'GLORY', 'REALM', 'SPELL', 'CHARM', 'FAIRY', 'MYTHS', 'EPIC',
-            'CRISP', 'SWIFT', 'SHARP', 'CLEAR', 'SCOPE', 'RANGE', 'LIMIT', 'BOUND', 'SOLID',
-            'GALES', 'MISTY', 'ORBIT', 'COMET', 'COSMIC', 'PHASE', 'CYCLE', 'STAGE', 'TURNS', 'TWIST',
-            'WHIRL', 'SWIRL', 'TWIRL', 'GLIDE', 'SOAR', 'DRIFT', 'FLOAT', 'LEAP', 'SURF',
-            'BLISS', 'CHEER', 'MERRY', 'JOLLY', 'EAGER', 'LOVED', 'ADORE', 'GENTLE', 'FIERCE', 'NOBLE',
-            'GRACE', 'CHARM', 'STYLE', 'CLASS', 'ELITE', 'PRIME', 'GRAND', 'ROYAL', 'MIGHTY', 'BOLD',
-            'ARTSY', 'CRAFT', 'FORMS', 'CURVE', 'SHADE', 'LINES', 'BRUSH', 'PAINT', 'COLOR', 'GLOW',
-            'CODES', 'HINTS', 'CLUES', 'SIGNS', 'TEXTS', 'MEMOS', 'VOICE', 'TALES', 'STORY', 'POEMS'
-          ];
-          
-          const todayChallenge = new Date();
-          const year = todayChallenge.getFullYear();
-          const month = todayChallenge.getMonth() + 1;
-          const day = todayChallenge.getDate();
-          
-          // Create a seed based on date to ensure consistency
-          const dateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-          let seed = 0;
-          for (let i = 0; i < dateString.length; i++) {
-            seed = ((seed << 5) - seed + dateString.charCodeAt(i)) & 0xffffffff;
-          }
-          
-          // Use seeded random to select from challenge words
-          const challengeIndex = Math.abs(seed) % challengeDailyWords.length;
-          selectedWord = challengeDailyWords[challengeIndex];
+          selectedWord = await wordManager.getDailyChallengeWord();
           break;
           
         case 'challenge':
-          // Select more challenging words (tech/fantasy themes)
-          const challengeWords = [
-            'CYBER', 'PIXEL', 'CODES', 'BYTES', 'NODES', 'VIRAL', 'BLEND', 'MERGE', 'SHIFT', 'ADAPT',
-            'QUEST', 'MAGIC', 'SPELL', 'CHARM', 'FAIRY', 'MYTHS', 'EPIC', 'VALOR', 'HONOR', 'GLORY',
-            'COSMIC', 'LUNAR', 'SOLAR', 'COMET', 'ORBIT', 'GALES', 'MISTY', 'AZURE', 'ROUGE', 'EBONY'
-          ];
-          selectedWord = challengeWords[Math.floor(Math.random() * challengeWords.length)];
+          selectedWord = await wordManager.getCategoryWord('tech');
           break;
           
         case 'category':
-          // Select from specific category if provided
-          const categories = {
-            nature: ['WATER', 'EARTH', 'FLAME', 'STORM', 'CLOUD', 'OCEAN', 'RIVER', 'BEACH', 'STONE', 'STEEL'],
-            emotions: ['HAPPY', 'SMILE', 'LAUGH', 'PEACE', 'GRACE', 'CHARM', 'TRUST', 'PRIDE', 'DREAM', 'HOPES'],
-            actions: ['DANCE', 'CLIMB', 'REACH', 'SWIFT', 'SPEED', 'FLASH', 'SPARK', 'SHINE', 'GLIDE', 'SOAR'],
-            fantasy: ['QUEST', 'MAGIC', 'SPELL', 'CHARM', 'FAIRY', 'TALES', 'MYTHS', 'EPIC', 'HERO', 'VALOR']
-          };
-          const categoryWords = categories[category as keyof typeof categories] || allWords;
-          selectedWord = categoryWords[Math.floor(Math.random() * categoryWords.length)];
+          if (category && typeof category === 'string') {
+            selectedWord = await wordManager.getCategoryWord(category);
+          } else {
+            selectedWord = await wordManager.getRandomWord();
+          }
           break;
           
         default:
-          // Random selection
-          selectedWord = allWords[Math.floor(Math.random() * allWords.length)];
+          selectedWord = await wordManager.getRandomWord();
       }
 
       res.json({ 
@@ -232,43 +194,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get today's daily challenge word
   app.get("/api/word/daily-challenge", async (req, res) => {
     try {
-      const challengeDailyWords = [
-        'VIVID', 'AZURE', 'EBONY', 'ROUGE', 'IVORY', 'AMBER', 'CORAL', 'PEARL', 'LUNAR', 'SOLAR',
-        'CYBER', 'PIXEL', 'BYTES', 'NODES', 'VIRAL', 'BLEND', 'MERGE', 'SHIFT', 'ADAPT', 'EVOLVE',
-        'MYSTIC', 'VALOR', 'HONOR', 'GLORY', 'REALM', 'SPELL', 'CHARM', 'FAIRY', 'MYTHS', 'EPIC',
-        'CRISP', 'SWIFT', 'SHARP', 'CLEAR', 'SCOPE', 'RANGE', 'LIMIT', 'BOUND', 'SOLID',
-        'GALES', 'MISTY', 'ORBIT', 'COMET', 'COSMIC', 'PHASE', 'CYCLE', 'STAGE', 'TURNS', 'TWIST',
-        'WHIRL', 'SWIRL', 'TWIRL', 'GLIDE', 'SOAR', 'DRIFT', 'FLOAT', 'LEAP', 'SURF',
-        'BLISS', 'CHEER', 'MERRY', 'JOLLY', 'EAGER', 'LOVED', 'ADORE', 'GENTLE', 'FIERCE', 'NOBLE',
-        'GRACE', 'CHARM', 'STYLE', 'CLASS', 'ELITE', 'PRIME', 'GRAND', 'ROYAL', 'MIGHTY', 'BOLD',
-        'ARTSY', 'CRAFT', 'FORMS', 'CURVE', 'SHADE', 'LINES', 'BRUSH', 'PAINT', 'COLOR', 'GLOW',
-        'CODES', 'HINTS', 'CLUES', 'SIGNS', 'TEXTS', 'MEMOS', 'VOICE', 'TALES', 'STORY', 'POEMS'
-      ];
-      
+      const selectedWord = await wordManager.getDailyChallengeWord();
       const today = new Date();
       const year = today.getFullYear();
       const month = today.getMonth() + 1;
       const day = today.getDate();
-      
-      // Create a seed based on date to ensure consistency
       const dateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-      let seed = 0;
-      for (let i = 0; i < dateString.length; i++) {
-        seed = ((seed << 5) - seed + dateString.charCodeAt(i)) & 0xffffffff;
-      }
-      
-      // Use seeded random to select from challenge words
-      const challengeIndex = Math.abs(seed) % challengeDailyWords.length;
-      const selectedWord = challengeDailyWords[challengeIndex];
       
       res.json({ 
         word: selectedWord,
         date: dateString,
         difficulty: 'hard',
-        totalChallengeWords: challengeDailyWords.length
+        source: process.env.OPENAI_API_KEY ? 'OpenAI' : 'built-in'
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to get daily challenge word" });
+    }
+  });
+
+  // Get word cache statistics and available categories
+  app.get("/api/word/stats", async (req, res) => {
+    try {
+      const cacheStats = wordManager.getCacheStats();
+      const categories = wordManager.getAvailableCategories();
+      
+      res.json({
+        hasOpenAI: !!process.env.OPENAI_API_KEY,
+        categories,
+        cacheStats,
+        totalCachedWords: Object.values(cacheStats).reduce((sum, stat) => sum + stat.wordCount, 0)
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get word stats" });
+    }
+  });
+
+  // Refresh word cache for a specific category
+  app.post("/api/word/refresh/:category", async (req, res) => {
+    try {
+      const { category } = req.params;
+      
+      if (!process.env.OPENAI_API_KEY) {
+        return res.status(400).json({ message: "OpenAI API key required for cache refresh" });
+      }
+      
+      await wordManager.refreshCategory(category);
+      res.json({ message: `Cache refreshed for category: ${category}` });
+    } catch (error) {
+      res.status(500).json({ message: `Failed to refresh cache for category: ${req.params.category}` });
     }
   });
 
