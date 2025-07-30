@@ -13,8 +13,12 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/game" component={Game} />
-      <Route path="/challenge" component={() => <Game mode="challenge" />} />
-      <Route path="/daily" component={() => <Game mode="daily" />} />
+      <Route path="/challenge">
+        {() => <Game mode="challenge" />}
+      </Route>
+      <Route path="/daily">
+        {() => <Game mode="daily" />}
+      </Route>
       <Route path="/stats" component={Stats} />
       <Route component={NotFound} />
     </Switch>
