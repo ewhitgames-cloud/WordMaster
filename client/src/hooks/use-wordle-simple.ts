@@ -5,7 +5,7 @@ import { GameStats, InsertGameResult } from "@shared/schema";
 import { calculateScore, isValidWord, getTileState } from "@/lib/game-utils";
 import { useToast } from "@/hooks/use-toast";
 
-export function useWordle(challengeMode: boolean = false) {
+export function useWordle(challengeMode: boolean = false, dailyChallengeMode: boolean = false) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
@@ -25,9 +25,9 @@ export function useWordle(challengeMode: boolean = false) {
     queryKey: ['/api/stats'],
   });
 
-  // Fetch new word
+  // Fetch new word based on mode
   const { data: wordData, refetch: fetchNewWord } = useQuery<{ word: string }>({
-    queryKey: ['/api/word', 'current-game'],
+    queryKey: dailyChallengeMode ? ['/api/word/daily-challenge'] : ['/api/word', 'current-game'],
     staleTime: Infinity, // Keep the word for the entire game session
   });
 

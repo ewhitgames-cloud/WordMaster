@@ -15,6 +15,7 @@ export default function Game() {
   const [showStats, setShowStats] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [challengeMode, setChallengeMode] = useState(false);
+  const [dailyChallengeMode, setDailyChallengeMode] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(180); // 3 minutes
   
   const {
@@ -32,7 +33,7 @@ export default function Game() {
     onBackspace,
     resetGame,
     submitResult
-  } = useWordle(challengeMode);
+  } = useWordle(challengeMode, dailyChallengeMode);
 
   // Challenge mode timer
   useEffect(() => {
@@ -81,7 +82,14 @@ export default function Game() {
 
   const handleToggleChallengeMode = () => {
     setChallengeMode(!challengeMode);
+    setDailyChallengeMode(false); // Turn off daily challenge if regular challenge is on
     setTimeRemaining(180);
+    handleNewGame();
+  };
+
+  const handleDailyChallengeMode = () => {
+    setDailyChallengeMode(!dailyChallengeMode);
+    setChallengeMode(false); // Turn off regular challenge if daily challenge is on
     handleNewGame();
   };
 
@@ -122,6 +130,12 @@ export default function Game() {
                   <span data-testid="text-timer">{formatTime(timeRemaining)}</span>
                 </div>
               )}
+              
+              {dailyChallengeMode && (
+                <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-semibold">
+                  <span data-testid="text-daily-indicator">🔥 DAILY</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -149,17 +163,30 @@ export default function Game() {
               <div className="text-gray-500 text-xs">Points</div>
             </div>
             <div className="text-center flex-1">
-              <button 
-                onClick={handleToggleChallengeMode}
-                className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-medium transition-all ${
-                  challengeMode 
-                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-                data-testid="button-challenge-mode"
-              >
-                {challengeMode ? '⏱️' : '🎯'}
-              </button>
+              <div className="flex flex-col space-y-1">
+                <button 
+                  onClick={handleToggleChallengeMode}
+                  className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-medium transition-all ${
+                    challengeMode 
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                  data-testid="button-challenge-mode"
+                >
+                  {challengeMode ? '⏱️' : '🎯'}
+                </button>
+                <button 
+                  onClick={handleDailyChallengeMode}
+                  className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-medium transition-all ${
+                    dailyChallengeMode 
+                      ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                  data-testid="button-daily-challenge"
+                >
+                  {dailyChallengeMode ? '🔥' : '📅'}
+                </button>
+              </div>
             </div>
           </div>
         </motion.div>

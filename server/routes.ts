@@ -159,6 +159,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
           selectedWord = allWords[dayOfYear % allWords.length];
           break;
           
+        case 'daily-challenge':
+          // Generate daily challenge word with sophisticated vocabulary
+          const challengeDailyWords = [
+            'VIVID', 'AZURE', 'EBONY', 'ROUGE', 'IVORY', 'AMBER', 'CORAL', 'PEARL', 'LUNAR', 'SOLAR',
+            'CYBER', 'PIXEL', 'BYTES', 'NODES', 'VIRAL', 'BLEND', 'MERGE', 'SHIFT', 'ADAPT', 'EVOLVE',
+            'MYSTIC', 'VALOR', 'HONOR', 'GLORY', 'REALM', 'SPELL', 'CHARM', 'FAIRY', 'MYTHS', 'EPIC',
+            'CRISP', 'SWIFT', 'SHARP', 'CLEAR', 'SCOPE', 'RANGE', 'LIMIT', 'BOUND', 'SOLID',
+            'GALES', 'MISTY', 'ORBIT', 'COMET', 'COSMIC', 'PHASE', 'CYCLE', 'STAGE', 'TURNS', 'TWIST',
+            'WHIRL', 'SWIRL', 'TWIRL', 'GLIDE', 'SOAR', 'DRIFT', 'FLOAT', 'LEAP', 'SURF',
+            'BLISS', 'CHEER', 'MERRY', 'JOLLY', 'EAGER', 'LOVED', 'ADORE', 'GENTLE', 'FIERCE', 'NOBLE',
+            'GRACE', 'CHARM', 'STYLE', 'CLASS', 'ELITE', 'PRIME', 'GRAND', 'ROYAL', 'MIGHTY', 'BOLD',
+            'ARTSY', 'CRAFT', 'FORMS', 'CURVE', 'SHADE', 'LINES', 'BRUSH', 'PAINT', 'COLOR', 'GLOW',
+            'CODES', 'HINTS', 'CLUES', 'SIGNS', 'TEXTS', 'MEMOS', 'VOICE', 'TALES', 'STORY', 'POEMS'
+          ];
+          
+          const todayChallenge = new Date();
+          const year = todayChallenge.getFullYear();
+          const month = todayChallenge.getMonth() + 1;
+          const day = todayChallenge.getDate();
+          
+          // Create a seed based on date to ensure consistency
+          const dateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+          let seed = 0;
+          for (let i = 0; i < dateString.length; i++) {
+            seed = ((seed << 5) - seed + dateString.charCodeAt(i)) & 0xffffffff;
+          }
+          
+          // Use seeded random to select from challenge words
+          const challengeIndex = Math.abs(seed) % challengeDailyWords.length;
+          selectedWord = challengeDailyWords[challengeIndex];
+          break;
+          
         case 'challenge':
           // Select more challenging words (tech/fantasy themes)
           const challengeWords = [
@@ -194,6 +226,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to generate word" });
+    }
+  });
+
+  // Get today's daily challenge word
+  app.get("/api/word/daily-challenge", async (req, res) => {
+    try {
+      const challengeDailyWords = [
+        'VIVID', 'AZURE', 'EBONY', 'ROUGE', 'IVORY', 'AMBER', 'CORAL', 'PEARL', 'LUNAR', 'SOLAR',
+        'CYBER', 'PIXEL', 'BYTES', 'NODES', 'VIRAL', 'BLEND', 'MERGE', 'SHIFT', 'ADAPT', 'EVOLVE',
+        'MYSTIC', 'VALOR', 'HONOR', 'GLORY', 'REALM', 'SPELL', 'CHARM', 'FAIRY', 'MYTHS', 'EPIC',
+        'CRISP', 'SWIFT', 'SHARP', 'CLEAR', 'SCOPE', 'RANGE', 'LIMIT', 'BOUND', 'SOLID',
+        'GALES', 'MISTY', 'ORBIT', 'COMET', 'COSMIC', 'PHASE', 'CYCLE', 'STAGE', 'TURNS', 'TWIST',
+        'WHIRL', 'SWIRL', 'TWIRL', 'GLIDE', 'SOAR', 'DRIFT', 'FLOAT', 'LEAP', 'SURF',
+        'BLISS', 'CHEER', 'MERRY', 'JOLLY', 'EAGER', 'LOVED', 'ADORE', 'GENTLE', 'FIERCE', 'NOBLE',
+        'GRACE', 'CHARM', 'STYLE', 'CLASS', 'ELITE', 'PRIME', 'GRAND', 'ROYAL', 'MIGHTY', 'BOLD',
+        'ARTSY', 'CRAFT', 'FORMS', 'CURVE', 'SHADE', 'LINES', 'BRUSH', 'PAINT', 'COLOR', 'GLOW',
+        'CODES', 'HINTS', 'CLUES', 'SIGNS', 'TEXTS', 'MEMOS', 'VOICE', 'TALES', 'STORY', 'POEMS'
+      ];
+      
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1;
+      const day = today.getDate();
+      
+      // Create a seed based on date to ensure consistency
+      const dateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+      let seed = 0;
+      for (let i = 0; i < dateString.length; i++) {
+        seed = ((seed << 5) - seed + dateString.charCodeAt(i)) & 0xffffffff;
+      }
+      
+      // Use seeded random to select from challenge words
+      const challengeIndex = Math.abs(seed) % challengeDailyWords.length;
+      const selectedWord = challengeDailyWords[challengeIndex];
+      
+      res.json({ 
+        word: selectedWord,
+        date: dateString,
+        difficulty: 'hard',
+        totalChallengeWords: challengeDailyWords.length
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get daily challenge word" });
     }
   });
 

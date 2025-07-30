@@ -244,12 +244,46 @@ export function getRandomWordFromCategory(category: keyof typeof WORD_CATEGORIES
   return words[Math.floor(Math.random() * words.length)];
 }
 
+// Challenging words for daily challenge mode
+export const DAILY_CHALLENGE_WORDS = [
+  // Sophisticated vocabulary - harder to guess
+  'VIVID', 'AZURE', 'EBONY', 'ROUGE', 'IVORY', 'AMBER', 'CORAL', 'PEARL', 'LUNAR', 'SOLAR',
+  'CYBER', 'PIXEL', 'BYTES', 'NODES', 'VIRAL', 'BLEND', 'MERGE', 'SHIFT', 'ADAPT', 'EVOLVE',
+  'MYSTIC', 'VALOR', 'HONOR', 'GLORY', 'REALM', 'SPELL', 'CHARM', 'FAIRY', 'MYTHS', 'EPIC',
+  'CRISP', 'SWIFT', 'SHARP', 'VIVID', 'CLEAR', 'SCOPE', 'RANGE', 'LIMIT', 'BOUND', 'SOLID',
+  'GALES', 'MISTY', 'ORBIT', 'COMET', 'COSMIC', 'PHASE', 'CYCLE', 'STAGE', 'TURNS', 'TWIST',
+  'WHIRL', 'SWIRL', 'TWIRL', 'GLIDE', 'SOAR', 'DRIFT', 'FLOAT', 'BOUND', 'LEAP', 'SURF',
+  'BLISS', 'CHEER', 'MERRY', 'JOLLY', 'EAGER', 'LOVED', 'ADORE', 'GENTLE', 'FIERCE', 'NOBLE',
+  'GRACE', 'CHARM', 'STYLE', 'CLASS', 'ELITE', 'PRIME', 'GRAND', 'ROYAL', 'MIGHTY', 'BOLD',
+  'ARTSY', 'CRAFT', 'FORMS', 'CURVE', 'SHADE', 'LINES', 'BRUSH', 'PAINT', 'COLOR', 'GLOW',
+  'CODES', 'HINTS', 'CLUES', 'SIGNS', 'TEXTS', 'MEMOS', 'VOICE', 'TALES', 'STORY', 'POEMS'
+];
+
 export function getDailyWord(): string {
   // Generate a word based on today's date for consistency
   const today = new Date();
   const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
   const index = dayOfYear % TARGET_WORDS.length;
   return TARGET_WORDS[index];
+}
+
+export function getDailyChallengeWord(): string {
+  // Generate a consistent daily challenge word based on date
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+  
+  // Create a seed based on date to ensure consistency
+  const dateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  let seed = 0;
+  for (let i = 0; i < dateString.length; i++) {
+    seed = ((seed << 5) - seed + dateString.charCodeAt(i)) & 0xffffffff;
+  }
+  
+  // Use seeded random to select from challenge words
+  const index = Math.abs(seed) % DAILY_CHALLENGE_WORDS.length;
+  return DAILY_CHALLENGE_WORDS[index];
 }
 
 export function getChallengeWord(): string {
