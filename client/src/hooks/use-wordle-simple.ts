@@ -27,8 +27,8 @@ export function useWordle(challengeMode: boolean = false) {
 
   // Fetch new word
   const { data: wordData, refetch: fetchNewWord } = useQuery<{ word: string }>({
-    queryKey: ['/api/word'],
-    enabled: false,
+    queryKey: ['/api/word', 'current-game'],
+    staleTime: Infinity, // Keep the word for the entire game session
   });
 
   // Save game result mutation
@@ -53,15 +53,14 @@ export function useWordle(challengeMode: boolean = false) {
     },
   });
 
-  // Initialize game
+  // Initialize game with word data
   useEffect(() => {
-    fetchNewWord().then(({ data }) => {
-      if (data?.word) {
-        setTargetWord(data.word);
-        setStartTime(Date.now());
-      }
-    });
-  }, []);
+    if (wordData?.word && !targetWord) {
+      setTargetWord(wordData.word);
+      setStartTime(Date.now());
+      console.log('Target word set to:', wordData.word);
+    }
+  }, [wordData, targetWord]);
 
   const updateKeyboardState = useCallback((guess: string, target: string) => {
     const newKeyboardState = { ...keyboardState };
@@ -136,15 +135,9 @@ export function useWordle(challengeMode: boolean = false) {
   };
 
   const onEnter = useCallback(async () => {
-    console.log('onEnter called', { gameState, currentGuess, currentRow });
-    
-    if (gameState !== 'playing') {
-      console.log('Game not playing, returning');
-      return;
-    }
+    if (gameState !== 'playing') return;
     
     if (currentGuess.length !== 5) {
-      console.log('Guess not 5 letters:', currentGuess.length);
       toast({
         title: "Invalid guess",
         description: "Guess must be 5 letters long",
@@ -154,7 +147,6 @@ export function useWordle(challengeMode: boolean = false) {
     }
 
     if (!isValidWord(currentGuess)) {
-      console.log('Invalid word:', currentGuess);
       toast({
         title: "Invalid word", 
         description: "Not in word list",
@@ -162,8 +154,6 @@ export function useWordle(challengeMode: boolean = false) {
       });
       return;
     }
-
-    console.log('Processing valid guess:', currentGuess);
 
     // Update grid
     const newGrid = [...grid];
@@ -178,7 +168,6 @@ export function useWordle(challengeMode: boolean = false) {
 
     // Check win condition
     if (currentGuess === targetWord) {
-      console.log('Won the game!');
       setGameState('won');
       const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
       const gameScore = calculateScore(currentRow + 1, timeElapsed, challengeMode);
@@ -187,12 +176,10 @@ export function useWordle(challengeMode: boolean = false) {
       // Save result and update stats
       await submitResult(currentRow + 1, timeElapsed, gameScore, true);
     } else if (currentRow === 5) {
-      console.log('Lost the game - no more rows');
       setGameState('lost');
       const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
       await submitResult(6, timeElapsed, 0, false);
     } else {
-      console.log('Moving to next row. Current row:', currentRow, 'Next row:', currentRow + 1);
       setCurrentRow(prev => prev + 1);
     }
 
@@ -209,12 +196,15 @@ export function useWordle(challengeMode: boolean = false) {
     setStartTime(Date.now());
     setEvaluatedRows(new Set());
     
-    // Fetch new word
+    // Clear the current target word and fetch a new one
+    setTargetWord('');
+    queryClient.invalidateQueries({ queryKey: ['/api/word', 'current-game'] });
     const { data } = await fetchNewWord();
     if (data?.word) {
       setTargetWord(data.word);
+      console.log('🎯 New target word:', data.word);
     }
-  }, [fetchNewWord]);
+  }, [fetchNewWord, queryClient]);
 
   // Handle keyboard input
   useEffect(() => {
