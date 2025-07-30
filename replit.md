@@ -36,10 +36,11 @@ Preferred communication style: Simple, everyday language.
 ## Key Components
 
 ### Game Logic
-- **Word Validation**: Client-side word validation using predefined word list
+- **Word Validation**: Client-side word validation using comprehensive 2000+ word dictionary
 - **Game State Management**: Custom React hook (`useWordle`) managing game state
 - **Scoring System**: Points calculation based on attempts, time, and challenge mode
 - **Statistics Tracking**: Persistent game statistics with guess distribution
+- **Dynamic Word Generation**: Multiple word generation modes (random, daily, challenge, category-specific) with 300+ target words organized by themes
 
 ### UI Components
 - **Game Grid**: 6x5 tile grid with color-coded feedback (correct/present/absent)
@@ -71,8 +72,11 @@ Preferred communication style: Simple, everyday language.
 ### Notable Features
 - **Challenge Mode**: Time-limited gameplay with bonus scoring
 - **Statistics Tracking**: Comprehensive game statistics with visual distribution
-- **Responsive Design**: Works on both desktop and mobile devices
+- **Responsive Design**: Mobile-optimized interface with touch-friendly interactions
 - **Dark/Light Mode**: Theme support via CSS variables
+- **Auto-submission**: Automatic word checking when 5 letters are entered
+- **Expanded Word Variety**: 2000+ valid input words and 300+ target words across multiple themes
+- **Dynamic Word Generation**: Daily words, challenge mode words, and category-specific selections
 
 ## Deployment Strategy
 
