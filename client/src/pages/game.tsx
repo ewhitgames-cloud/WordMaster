@@ -18,16 +18,20 @@ const formatTime = (seconds: number): string => {
   return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
 
-export default function Game() {
+interface GameProps {
+  mode?: 'classic' | 'challenge' | 'daily';
+}
+
+export default function Game({ mode: propMode }: GameProps = {}) {
   const { toast } = useToast();
   const [location] = useLocation();
   const [showCelebration, setShowCelebration] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   
-  // Parse query parameters
+  // Determine game mode from props or URL
   const params = new URLSearchParams(location.split('?')[1] || '');
-  const mode = params.get('mode') || 'classic';
+  const mode = propMode || params.get('mode') || 'classic';
   const challengeMode = mode === 'challenge';
   const dailyChallengeMode = mode === 'daily';
   

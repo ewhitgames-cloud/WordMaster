@@ -222,7 +222,7 @@ export default function HomePage() {
           {/* Classic Mode */}
           <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
             <CardContent className="p-6">
-              <Link href="/game">
+              <Link href="/game" data-testid="link-classic-mode">
                 <Button 
                   className="w-full h-16 text-lg font-bold bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 shadow-lg"
                   data-testid="button-classic-game"
@@ -237,7 +237,7 @@ export default function HomePage() {
           {/* Daily Challenge */}
           <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
             <CardContent className="p-6">
-              <Link href="/game?mode=daily">
+              <Link href="/daily" data-testid="link-daily-challenge">
                 <Button 
                   className="w-full h-16 text-lg font-bold bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white border-0 shadow-lg"
                   data-testid="button-daily-challenge"
@@ -252,7 +252,7 @@ export default function HomePage() {
           {/* Challenge Mode */}
           <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
             <CardContent className="p-6">
-              <Link href="/game?mode=challenge">
+              <Link href="/challenge" data-testid="link-challenge-mode">
                 <Button 
                   className="w-full h-16 text-lg font-bold bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0 shadow-lg"
                   data-testid="button-timed-challenge"

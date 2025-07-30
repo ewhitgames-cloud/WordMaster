@@ -38,6 +38,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertGameResultSchema.parse(req.body);
       const result = await storage.saveGameResult(validatedData);
+      
+      // Mark daily challenge as completed if it was a daily challenge
+      if (req.body.dailyChallengeMode) {
+        req.session.lastDailyDate = new Date().toISOString().split('T')[0];
+      }
+      
       res.json(result);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -220,14 +226,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get today's daily challenge word
+  // Get today's daily challenge word with once-per-day restriction
   app.get("/api/word/daily-challenge", async (req, res) => {
     try {
+      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+      
+      // Check if user already played today's daily challenge
+      const lastDailyDate = req.session.lastDailyDate;
+      
+      if (lastDailyDate === today) {
+        return res.status(429).json({ 
+          error: 'Daily challenge already completed today',
+          message: 'Come back tomorrow for a new daily challenge!',
+          nextAvailable: new Date(Date.now() + (24 * 60 * 60 * 1000)).toISOString()
+        });
+      }
+      
       const selectedWord = await WordManager.getInstance().getDailyChallengeWord();
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = today.getMonth() + 1;
-      const day = today.getDate();
+      const todayDate = new Date();
+      const year = todayDate.getFullYear();
+      const month = todayDate.getMonth() + 1;
+      const day = todayDate.getDate();
       const dateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
       
       res.json({ 

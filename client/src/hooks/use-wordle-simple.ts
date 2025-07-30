@@ -29,9 +29,10 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
   });
 
   // Fetch new word based on mode
-  const { data: wordData, refetch: fetchNewWord } = useQuery<{ word: string }>({
+  const { data: wordData, refetch: fetchNewWord, error: wordError } = useQuery<{ word: string }>({
     queryKey: dailyChallengeMode ? ['/api/word/daily-challenge'] : ['/api/word', 'current-game'],
     staleTime: Infinity, // Keep the word for the entire game session
+    retry: false, // Don't retry if daily challenge already completed
   });
 
   // Save game result mutation
@@ -56,8 +57,18 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     },
   });
 
-  // Initialize game with word data
+  // Initialize game with word data or handle daily challenge errors
   useEffect(() => {
+    if (wordError && dailyChallengeMode) {
+      // Show error for daily challenge already completed
+      toast({
+        title: "Daily Challenge Completed",
+        description: "You've already completed today's daily challenge. Come back tomorrow!",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     if (wordData?.word && !targetWord) {
       setTargetWord(wordData.word);
       setStartTime(Date.now());
@@ -65,7 +76,7 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
       setGameEndedByTime(false);
       console.log('Target word set to:', wordData.word);
     }
-  }, [wordData, targetWord, challengeMode]);
+  }, [wordData, targetWord, challengeMode, wordError, dailyChallengeMode, toast]);
 
   // Challenge mode timer
   useEffect(() => {
