@@ -125,34 +125,34 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     setCurrentGuess(prev => prev.slice(0, -1));
   }, [gameState]);
 
-  const submitResult = async (attempts: number, timeElapsed: number, points: number, isWin: boolean) => {
+  const submitResult = async (attempts: number, timeElapsed: number, score: number, won: boolean) => {
     try {
-      // Save game result
+      // Save game result  
       await saveResultMutation.mutateAsync({
         word: targetWord,
         attempts,
         timeElapsed,
-        points,
+        points: score,
         isChallengeMode: challengeMode,
-        isWin,
+        isWin: won,
       });
 
       // Update stats
       if (stats) {
         const newGuessDistribution = JSON.parse(stats.guessDistribution) as Record<string, number>;
-        if (isWin) {
+        if (won) {
           newGuessDistribution[attempts.toString()] = (newGuessDistribution[attempts.toString()] || 0) + 1;
         }
 
-        const newCurrentStreak = isWin ? stats.currentStreak + 1 : 0;
+        const newCurrentStreak = won ? stats.currentStreak + 1 : 0;
         const newMaxStreak = Math.max(stats.maxStreak, newCurrentStreak);
 
         await updateStatsMutation.mutateAsync({
           totalGames: stats.totalGames + 1,
-          totalWins: stats.totalWins + (isWin ? 1 : 0),
+          totalWins: stats.totalWins + (won ? 1 : 0),
           currentStreak: newCurrentStreak,
           maxStreak: newMaxStreak,
-          totalPoints: stats.totalPoints + points,
+          totalPoints: stats.totalPoints + score,
           guessDistribution: JSON.stringify(newGuessDistribution),
         });
       }
