@@ -5,7 +5,7 @@ import { GameStats, InsertGameResult } from "@shared/schema";
 import { calculateScore, isValidWord, isValidWordExpanded, getTileState } from "@/lib/game-utils";
 import { useToast } from "@/hooks/use-toast";
 
-export function useWordle(challengeMode: boolean = false, dailyChallengeMode: boolean = false) {
+export function useWordle(challengeMode: boolean = false, dailyChallengeMode: boolean = false, onTimeUp?: () => void) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
@@ -18,6 +18,8 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
   const [targetWord, setTargetWord] = useState('');
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [score, setScore] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState(challengeMode ? 180 : 0); // 3 minutes for challenge mode
+  const [gameEndedByTime, setGameEndedByTime] = useState(false);
   const [evaluatedRows, setEvaluatedRows] = useState<Set<number>>(new Set());
   const [isValidatingWord, setIsValidatingWord] = useState(false);
 
@@ -59,9 +61,31 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     if (wordData?.word && !targetWord) {
       setTargetWord(wordData.word);
       setStartTime(Date.now());
+      setTimeRemaining(challengeMode ? 180 : 0); // Reset timer for challenge mode
+      setGameEndedByTime(false);
       console.log('Target word set to:', wordData.word);
     }
-  }, [wordData, targetWord]);
+  }, [wordData, targetWord, challengeMode]);
+
+  // Challenge mode timer
+  useEffect(() => {
+    if (challengeMode && gameState === 'playing' && timeRemaining > 0) {
+      const timer = setInterval(() => {
+        setTimeRemaining(prev => {
+          if (prev <= 1) {
+            // Time's up!
+            setGameState('lost');
+            setGameEndedByTime(true);
+            if (onTimeUp) onTimeUp();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      
+      return () => clearInterval(timer);
+    }
+  }, [challengeMode, gameState, timeRemaining, onTimeUp]);
 
 
 
@@ -188,7 +212,7 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     if (currentGuess === targetWord) {
       setGameState('won');
       const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
-      const gameScore = calculateScore(currentRow + 1, timeElapsed, challengeMode);
+      const gameScore = calculateFinalScore(currentRow + 1, timeElapsed, challengeMode);
       setScore(gameScore);
       
       // Save result and update stats
@@ -223,6 +247,8 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     setKeyboardState({});
     setScore(0);
     setStartTime(Date.now());
+    setTimeRemaining(challengeMode ? 180 : 0);
+    setGameEndedByTime(false);
     setEvaluatedRows(new Set());
     
     // Clear the current target word and fetch a new one
@@ -262,6 +288,8 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     score,
     targetWord,
     evaluatedRows,
+    timeRemaining,
+    gameEndedByTime,
     stats: stats || {
       id: '',
       totalGames: 0,

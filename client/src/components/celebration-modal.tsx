@@ -15,6 +15,7 @@ interface CelebrationModalProps {
   onPlayAgain: () => void;
   onChallengeMode: () => void;
   onViewStats: () => void;
+  gameEndedByTime?: boolean;
 }
 
 export default function CelebrationModal({
@@ -26,7 +27,8 @@ export default function CelebrationModal({
   timeElapsed,
   onPlayAgain,
   onChallengeMode,
-  onViewStats
+  onViewStats,
+  gameEndedByTime = false
 }: CelebrationModalProps) {
   const { width, height } = useWindowSize();
   const [showConfetti, setShowConfetti] = useState(false);

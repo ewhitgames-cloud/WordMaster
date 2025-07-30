@@ -11,6 +11,13 @@ import { useWordle } from "@/hooks/use-wordle-simple";
 import { Menu, Star, Clock, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Format time as MM:SS
+const formatTime = (seconds: number): string => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
+
 export default function Game() {
   const { toast } = useToast();
   const [location] = useLocation();
@@ -24,8 +31,6 @@ export default function Game() {
   const challengeMode = mode === 'challenge';
   const dailyChallengeMode = mode === 'daily';
   
-  const [timeRemaining, setTimeRemaining] = useState(180); // 3 minutes
-  
   const {
     grid,
     currentGuess,
@@ -35,35 +40,23 @@ export default function Game() {
     score,
     targetWord,
     evaluatedRows,
+    timeRemaining,
+    gameEndedByTime,
     stats,
     onKeyPress,
     onEnter,
     onBackspace,
     resetGame,
     submitResult
-  } = useWordle(challengeMode, dailyChallengeMode);
+  } = useWordle(challengeMode, dailyChallengeMode, () => {
+    toast({
+      title: "Time's Up!",
+      description: "Challenge mode time expired",
+      variant: "destructive"
+    });
+  });
 
-  // Challenge mode timer
-  useEffect(() => {
-    if (challengeMode && gameState === 'playing' && timeRemaining > 0) {
-      const timer = setInterval(() => {
-        setTimeRemaining(prev => {
-          if (prev <= 1) {
-            // Time's up!
-            toast({
-              title: "Time's Up!",
-              description: "Challenge mode time expired",
-              variant: "destructive"
-            });
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      
-      return () => clearInterval(timer);
-    }
-  }, [challengeMode, gameState, timeRemaining, toast]);
+  // Timer is now handled in the hook
 
   // Handle game state changes
   useEffect(() => {
@@ -217,6 +210,7 @@ export default function Game() {
         timeElapsed={challengeMode ? 180 - timeRemaining : 0}
         onPlayAgain={handleNewGame}
         onChallengeMode={() => window.location.href = '/game?mode=challenge'}
+        gameEndedByTime={gameEndedByTime}
         onViewStats={() => {
           setShowCelebration(false);
           setShowStats(true);
