@@ -146,11 +146,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error getting current game word:', error);
       
-      // Emergency fallback to ensure game always works
+      // Emergency fallback to ensure game always works - all exactly 5 letters
       const emergencyWords = [
         'WATER', 'HAPPY', 'DANCE', 'LIGHT', 'MAGIC', 'POWER', 'VOICE', 'DREAM', 'SMILE', 'PEACE',
         'BRAVE', 'SWIFT', 'SPARK', 'SHINE', 'OCEAN', 'STORM', 'GLIDE', 'TWIST', 'CHARM', 'QUEST'
-      ];
+      ].filter(word => word.length === 5);
       const emergencyWord = emergencyWords[Math.floor(Math.random() * emergencyWords.length)];
       
       res.json({ 

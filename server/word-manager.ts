@@ -2,12 +2,12 @@ import { generateWords, generateDailyChallengeWords, generateWordsByCategory } f
 
 // Enhanced word categories with larger sets
 const ENHANCED_WORD_CATEGORIES = {
-  nature: ['OCEAN', 'RIVER', 'BEACH', 'FIELD', 'PLANT', 'STONE', 'CLOUD', 'STORM', 'WOODS', 'GRASS'],
-  emotions: ['HAPPY', 'BRAVE', 'PROUD', 'LOVED', 'CALM', 'EAGER', 'MERRY', 'SWEET', 'KIND', 'WARM'],
-  actions: ['JUMP', 'DANCE', 'CLIMB', 'WRITE', 'PAINT', 'BUILD', 'LEARN', 'TEACH', 'LAUGH', 'SING'],
-  colors: ['BLUE', 'GREEN', 'GOLD', 'PINK', 'WHITE', 'BLACK', 'CORAL', 'AMBER', 'ROUGE', 'IVORY'],
-  tech: ['CYBER', 'PIXEL', 'BYTES', 'NODES', 'VIRAL', 'CLOUD', 'SMART', 'CODED', 'LINKS', 'FEEDS'],
-  fantasy: ['MAGIC', 'SPELL', 'CHARM', 'FAIRY', 'DRAGON', 'QUEST', 'REALM', 'MYTHS', 'ROYAL', 'CROWN'],
+  nature: ['OCEAN', 'RIVER', 'BEACH', 'FIELD', 'PLANT', 'STONE', 'CLOUD', 'STORM', 'WOODS', 'GRASS', 'WATER', 'EARTH', 'WINDS', 'WAVES', 'BLOOM', 'FRESH', 'SUNNY'],
+  emotions: ['HAPPY', 'BRAVE', 'PROUD', 'LOVED', 'EAGER', 'MERRY', 'SWEET', 'SMILE', 'PEACE', 'GRACE', 'CHARM', 'TRUST', 'PRIDE', 'DREAM', 'HOPES', 'BLISS', 'CHEER'],
+  actions: ['DANCE', 'CLIMB', 'WRITE', 'PAINT', 'BUILD', 'LEARN', 'TEACH', 'LAUGH', 'REACH', 'SWIFT', 'SPEED', 'FLASH', 'SPARK', 'SHINE', 'GLIDE', 'DRIFT', 'FLOAT'],
+  colors: ['GREEN', 'WHITE', 'BLACK', 'CORAL', 'AMBER', 'ROUGE', 'IVORY', 'AZURE', 'EBONY', 'LIGHT', 'BRIGHT', 'SHADE'],
+  tech: ['CYBER', 'PIXEL', 'BYTES', 'NODES', 'VIRAL', 'CLOUD', 'SMART', 'CODED', 'LINKS', 'FEEDS', 'TREND', 'BLEND', 'MERGE'],
+  fantasy: ['MAGIC', 'SPELL', 'CHARM', 'FAIRY', 'QUEST', 'REALM', 'MYTHS', 'ROYAL', 'CROWN', 'VALOR', 'HONOR', 'GLORY'],
   objects: ['CHAIR', 'TABLE', 'BOOKS', 'PHONE', 'WATCH', 'LIGHT', 'MUSIC', 'GLASS', 'PAPER', 'TOOLS']
 };
 
@@ -61,8 +61,8 @@ export class WordManager {
       console.log('OpenAI unavailable, using built-in words');
     }
 
-    // Fallback to built-in words
-    const allBuiltInWords = Object.values(ENHANCED_WORD_CATEGORIES).flat();
+    // Fallback to built-in words - ensure all are exactly 5 letters
+    const allBuiltInWords = Object.values(ENHANCED_WORD_CATEGORIES).flat().filter(word => word.length === 5);
     return allBuiltInWords[Math.floor(Math.random() * allBuiltInWords.length)];
   }
 
@@ -72,13 +72,13 @@ export class WordManager {
     const dateString = today.toDateString();
     const seed = this.hashString(dateString);
     
-    const allWords = Object.values(ENHANCED_WORD_CATEGORIES).flat();
+    const allWords = Object.values(ENHANCED_WORD_CATEGORIES).flat().filter(word => word.length === 5);
     return allWords[seed % allWords.length];
   }
 
   async getDailyChallengeWord(): Promise<string> {
-    // Harder words for daily challenge
-    const challengeWords = [...ENHANCED_WORD_CATEGORIES.tech, ...ENHANCED_WORD_CATEGORIES.fantasy];
+    // Harder words for daily challenge - ensure exactly 5 letters
+    const challengeWords = [...ENHANCED_WORD_CATEGORIES.tech, ...ENHANCED_WORD_CATEGORIES.fantasy].filter(word => word.length === 5);
     const today = new Date();
     const dateString = today.toDateString() + '-challenge';
     const seed = this.hashString(dateString);
@@ -119,9 +119,9 @@ export class WordManager {
       console.log(`OpenAI unavailable for category ${category}, using built-in words`);
     }
 
-    // Fallback to built-in category words
-    const categoryWords = ENHANCED_WORD_CATEGORIES[category as keyof typeof ENHANCED_WORD_CATEGORIES] || 
-                         ENHANCED_WORD_CATEGORIES.nature;
+    // Fallback to built-in category words - ensure exactly 5 letters
+    const categoryWords = (ENHANCED_WORD_CATEGORIES[category as keyof typeof ENHANCED_WORD_CATEGORIES] || 
+                         ENHANCED_WORD_CATEGORIES.nature).filter(word => word.length === 5);
     return categoryWords[Math.floor(Math.random() * categoryWords.length)];
   }
 
@@ -152,8 +152,8 @@ export class WordManager {
       console.log('OpenAI unavailable for daily word, using built-in words');
     }
 
-    // Fallback to built-in words with date seed
-    const allBuiltInWords = Object.values(ENHANCED_WORD_CATEGORIES).flat();
+    // Fallback to built-in words with date seed - ensure exactly 5 letters
+    const allBuiltInWords = Object.values(ENHANCED_WORD_CATEGORIES).flat().filter(word => word.length === 5);
     return allBuiltInWords[dayOfYear % allBuiltInWords.length];
   }
 
@@ -192,12 +192,12 @@ export class WordManager {
       console.log('OpenAI unavailable for daily challenge, using built-in words');
     }
 
-    // Fallback to built-in challenging words
+    // Fallback to built-in challenging words - all exactly 5 letters
     const challengeWords = [
       'VIVID', 'AZURE', 'EBONY', 'ROUGE', 'IVORY', 'AMBER', 'CORAL', 'PEARL', 'LUNAR', 'SOLAR',
       'CYBER', 'PIXEL', 'BYTES', 'NODES', 'VIRAL', 'BLEND', 'MERGE', 'SHIFT', 'ADAPT', 'EVOLVE',
-      'MYSTIC', 'VALOR', 'HONOR', 'GLORY', 'REALM', 'SPELL', 'CHARM', 'FAIRY', 'MYTHS', 'EPIC'
-    ];
+      'VALOR', 'HONOR', 'GLORY', 'REALM', 'SPELL', 'CHARM', 'FAIRY', 'MYTHS'
+    ].filter(word => word.length === 5);
     return challengeWords[Math.abs(seed) % challengeWords.length];
   }
 
