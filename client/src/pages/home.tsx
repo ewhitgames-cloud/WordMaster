@@ -36,11 +36,11 @@ export default function HomePage() {
     // Create falling letters that will settle into the title
     const letters: FallingLetter[] = [];
     const baseY = 120; // Where title should settle
-    const letterSpacing = 70; // Letter spacing within words
+    const letterSpacing = 85; // Letter spacing within words (increased to prevent overlap)
     const wordSpacing = 40; // Reduced space between WORD and POP!
     
     // Calculate positions for each letter with proper spacing
-    let currentX = window.innerWidth / 2 - 250; // Start position for title (more centered)
+    let currentX = window.innerWidth / 2 - 280; // Start position for title (adjusted for wider spacing)
     
     titleLetters.forEach((letter, index) => {
       if (letter !== ' ') {
