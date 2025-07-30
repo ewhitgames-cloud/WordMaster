@@ -136,9 +136,15 @@ export function useWordle(challengeMode: boolean = false) {
   };
 
   const onEnter = useCallback(async () => {
-    if (gameState !== 'playing') return;
+    console.log('onEnter called', { gameState, currentGuess, currentRow });
+    
+    if (gameState !== 'playing') {
+      console.log('Game not playing, returning');
+      return;
+    }
     
     if (currentGuess.length !== 5) {
+      console.log('Guess not 5 letters:', currentGuess.length);
       toast({
         title: "Invalid guess",
         description: "Guess must be 5 letters long",
@@ -148,6 +154,7 @@ export function useWordle(challengeMode: boolean = false) {
     }
 
     if (!isValidWord(currentGuess)) {
+      console.log('Invalid word:', currentGuess);
       toast({
         title: "Invalid word", 
         description: "Not in word list",
@@ -156,19 +163,22 @@ export function useWordle(challengeMode: boolean = false) {
       return;
     }
 
+    console.log('Processing valid guess:', currentGuess);
+
     // Update grid
     const newGrid = [...grid];
     newGrid[currentRow] = currentGuess.split('');
     setGrid(newGrid);
 
     // Mark this row as evaluated
-    setEvaluatedRows(prev => new Set([...prev, currentRow]));
+    setEvaluatedRows(prev => new Set([...Array.from(prev), currentRow]));
 
     // Update keyboard state
     updateKeyboardState(currentGuess, targetWord);
 
     // Check win condition
     if (currentGuess === targetWord) {
+      console.log('Won the game!');
       setGameState('won');
       const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
       const gameScore = calculateScore(currentRow + 1, timeElapsed, challengeMode);
@@ -177,10 +187,12 @@ export function useWordle(challengeMode: boolean = false) {
       // Save result and update stats
       await submitResult(currentRow + 1, timeElapsed, gameScore, true);
     } else if (currentRow === 5) {
+      console.log('Lost the game - no more rows');
       setGameState('lost');
       const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
       await submitResult(6, timeElapsed, 0, false);
     } else {
+      console.log('Moving to next row. Current row:', currentRow, 'Next row:', currentRow + 1);
       setCurrentRow(prev => prev + 1);
     }
 
