@@ -75,8 +75,66 @@ export async function validateWordExpanded(word: string, fallbackDictionary: Set
     return true;
   }
 
-  // Then check with OpenAI for expanded validation
-  return await validateWordWithOpenAI(upperWord);
+  // Check common word patterns and return true for likely valid words if OpenAI is unavailable
+  if (!process.env.OPENAI_API_KEY) {
+    return isLikelyValidWord(upperWord);
+  }
+
+  try {
+    // Then check with OpenAI for expanded validation
+    return await validateWordWithOpenAI(upperWord);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.log('OpenAI validation failed, using fallback validation:', errorMessage);
+    // Fallback to pattern-based validation if OpenAI fails
+    return isLikelyValidWord(upperWord);
+  }
+}
+
+// Fallback validation for common word patterns
+function isLikelyValidWord(word: string): boolean {
+  // Basic validation: must be 5 letters, all alphabetic
+  if (word.length !== 5 || !/^[A-Z]+$/.test(word)) {
+    return false;
+  }
+
+  // Reject obvious non-words (too many repeated letters, etc.)
+  const letterCounts = word.split('').reduce((acc, letter) => {
+    acc[letter] = (acc[letter] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Reject if any letter appears more than 3 times
+  if (Object.values(letterCounts).some(count => count > 3)) {
+    return false;
+  }
+
+  // Common 5-letter word patterns and endings that are likely valid
+  const commonEndings = ['ING', 'ION', 'TION', 'ED', 'ER', 'EST', 'LY', 'AL', 'IC', 'ABLE', 'IBLE'];
+  const commonPrefixes = ['UN', 'RE', 'IN', 'DIS', 'EN', 'NON', 'PRE', 'SUB', 'OVER', 'OUT'];
+  
+  // Check for common patterns
+  const hasCommonEnding = commonEndings.some(ending => word.endsWith(ending.slice(-Math.min(ending.length, 3))));
+  const hasCommonPrefix = commonPrefixes.some(prefix => word.startsWith(prefix.slice(0, Math.min(prefix.length, 2))));
+  
+  // Accept words with common patterns or that look like real words
+  return hasCommonEnding || hasCommonPrefix || hasReasonableLetterDistribution(word);
+}
+
+function hasReasonableLetterDistribution(word: string): boolean {
+  // Check for reasonable vowel/consonant distribution
+  const vowels = 'AEIOU';
+  const vowelCount = word.split('').filter(letter => vowels.includes(letter)).length;
+  const consonantCount = 5 - vowelCount;
+  
+  // Most English words have 1-3 vowels
+  if (vowelCount < 1 || vowelCount > 4) return false;
+  
+  // Avoid words with too many consecutive consonants
+  const consecutiveConsonants = word.match(/[BCDFGHJKLMNPQRSTVWXYZ]{4,}/);
+  if (consecutiveConsonants) return false;
+  
+  return true;
 }
 
 // Batch validation for multiple words (useful for performance)
