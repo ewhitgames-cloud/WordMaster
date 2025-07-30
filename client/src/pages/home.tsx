@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import SettingsModal from '@/components/settings-modal';
+import { WordExpansionButton } from '@/components/word-expansion-button';
 import { useSettings } from '@/hooks/use-settings';
 import { Sparkles, Calendar, Trophy, BarChart3, Settings } from 'lucide-react';
 
@@ -303,9 +304,19 @@ export default function HomePage() {
           </div>
         </motion.div>
 
+        {/* Word Expansion Feature */}
+        <motion.div
+          className="mt-6"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: showContent ? 1 : 0 }}
+          transition={{ delay: 0.9, duration: 0.8 }}
+        >
+          <WordExpansionButton />
+        </motion.div>
+
         {/* Footer */}
         <motion.div
-          className="mt-8 text-white/70 text-center"
+          className="mt-4 text-white/70 text-center"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: showContent ? 1 : 0 }}
           transition={{ delay: 1, duration: 0.8 }}

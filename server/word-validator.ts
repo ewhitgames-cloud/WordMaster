@@ -1,13 +1,38 @@
 import OpenAI from "openai";
+import { getAllExpandedWords } from './word-expander';
 
 // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 let openai: OpenAI | null = null;
+let expandedWordsCache: Set<string> | null = null;
+let expandedWordsCacheTime = 0;
+const EXPANDED_CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
 function getOpenAIClient(): OpenAI | null {
   if (!openai && process.env.OPENAI_API_KEY) {
     openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   }
   return openai;
+}
+
+async function getExpandedWordsSet(): Promise<Set<string>> {
+  const now = Date.now();
+  
+  // Use cached expanded words if available and fresh
+  if (expandedWordsCache && (now - expandedWordsCacheTime) < EXPANDED_CACHE_DURATION) {
+    return expandedWordsCache;
+  }
+  
+  try {
+    console.log('Generating expanded word library from OpenAI...');
+    const expandedWords = await getAllExpandedWords();
+    expandedWordsCache = new Set(expandedWords);
+    expandedWordsCacheTime = now;
+    console.log(`Cached ${expandedWords.length} expanded words from OpenAI`);
+    return expandedWordsCache;
+  } catch (error) {
+    console.error('Failed to get expanded words, using existing cache or empty set:', error);
+    return expandedWordsCache || new Set();
+  }
 }
 
 // Cache for validated words to avoid repeated API calls

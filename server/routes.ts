@@ -265,6 +265,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Expand word library using OpenAI - generates comprehensive English word list
+  app.post("/api/word/expand-library", async (req, res) => {
+    try {
+      if (!process.env.OPENAI_API_KEY) {
+        return res.status(400).json({ 
+          success: false,
+          message: "OpenAI API key required for word library expansion" 
+        });
+      }
+
+      console.log('Starting comprehensive word library expansion...');
+      
+      const { getAllExpandedWords } = await import('./word-expander');
+      const expandedWords = await getAllExpandedWords();
+      
+      res.json({
+        success: true,
+        totalWords: expandedWords.length,
+        message: `Successfully generated ${expandedWords.length} words using OpenAI`,
+        categories: [
+          'common words (200)', 'intermediate words (200)', 'advanced words (150)',
+          'animals (30)', 'nature (30)', 'food (30)', 'emotions (30)', 'actions (30)',
+          'objects (30)', 'colors (30)', 'weather (30)', 'sports (30)', 'music (30)',
+          'travel (30)', 'science (30)', 'technology (30)', 'art (30)', 'business (30)',
+          'health (30)', 'education (30)', 'family (30)', 'time (30)', 'space (30)',
+          'materials (30)', 'tools (30)', 'buildings (30)', 'clothing (30)'
+        ],
+        sampleWords: expandedWords.slice(0, 20) // Show first 20 as sample
+      });
+    } catch (error) {
+      console.error('Word library expansion error:', error);
+      res.status(500).json({ 
+        success: false,
+        error: 'Failed to expand word library',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
   // Refresh word cache for a specific category
   app.post("/api/word/refresh/:category", async (req, res) => {
     try {
