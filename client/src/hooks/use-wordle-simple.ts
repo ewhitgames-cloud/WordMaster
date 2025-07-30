@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { GameStats, InsertGameResult } from "@shared/schema";
@@ -61,6 +61,8 @@ export function useWordle(challengeMode: boolean = false) {
       console.log('Target word set to:', wordData.word);
     }
   }, [wordData, targetWord]);
+
+
 
   const updateKeyboardState = useCallback((guess: string, target: string) => {
     const newKeyboardState = { ...keyboardState };
@@ -185,6 +187,17 @@ export function useWordle(challengeMode: boolean = false) {
 
     setCurrentGuess('');
   }, [currentGuess, currentRow, grid, targetWord, startTime, challengeMode, gameState, toast, updateKeyboardState]);
+
+  // Auto-submit when 5 letters are typed
+  useEffect(() => {
+    if (currentGuess.length === 5 && gameState === 'playing') {
+      const timer = setTimeout(() => {
+        onEnter();
+      }, 200); // Small delay to allow UI to update
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentGuess, gameState, onEnter]);
 
   const resetGame = useCallback(async () => {
     setGrid(Array(6).fill(null).map(() => Array(5).fill('')));
