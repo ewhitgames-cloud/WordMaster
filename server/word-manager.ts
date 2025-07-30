@@ -67,23 +67,13 @@ export class WordManager {
   }
 
   async getDailyWord(): Promise<string> {
-    // Use date-based seeding for consistent daily words
+    // Use date-based seed for consistency
     const today = new Date();
-    const dateString = today.toDateString();
-    const seed = this.hashString(dateString);
+    const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
     
-    const allWords = Object.values(ENHANCED_WORD_CATEGORIES).flat().filter(word => word.length === 5);
-    return allWords[seed % allWords.length];
-  }
-
-  async getDailyChallengeWord(): Promise<string> {
-    // Harder words for daily challenge - ensure exactly 5 letters
-    const challengeWords = [...ENHANCED_WORD_CATEGORIES.tech, ...ENHANCED_WORD_CATEGORIES.fantasy].filter(word => word.length === 5);
-    const today = new Date();
-    const dateString = today.toDateString() + '-challenge';
-    const seed = this.hashString(dateString);
-    
-    return challengeWords[seed % challengeWords.length];
+    // Always use built-in words for reliability - ensure exactly 5 letters
+    const allBuiltInWords = Object.values(ENHANCED_WORD_CATEGORIES).flat().filter(word => word.length === 5);
+    return allBuiltInWords[dayOfYear % allBuiltInWords.length];
   }
 
   private hashString(str: string): number {
@@ -104,7 +94,7 @@ export class WordManager {
           const generatedWords = await generateWordsByCategory(category, 50);
           if (generatedWords.length > 0) {
             wordCache[cacheKey] = {
-              words: generatedWords.map(w => w.word),
+              words: generatedWords,
               timestamp: Date.now()
             };
           }
@@ -125,81 +115,7 @@ export class WordManager {
     return categoryWords[Math.floor(Math.random() * categoryWords.length)];
   }
 
-  async getDailyWord(): Promise<string> {
-    // Use date-based seed for consistency
-    const today = new Date();
-    const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
-    
-    try {
-      if (process.env.OPENAI_API_KEY) {
-        const cacheKey = 'daily_words';
-        if (!this.isCacheValid(cacheKey)) {
-          const generatedWords = await generateWords({
-            category: 'daily challenges',
-            difficulty: 'medium',
-            count: 365 // A year's worth
-          });
-          wordCache[cacheKey] = {
-            words: generatedWords.map(w => w.word),
-            timestamp: Date.now()
-          };
-        }
-        
-        const cachedWords = wordCache[cacheKey].words;
-        return cachedWords[dayOfYear % cachedWords.length];
-      }
-    } catch (error) {
-      console.log('OpenAI unavailable for daily word, using built-in words');
-    }
 
-    // Fallback to built-in words with date seed - ensure exactly 5 letters
-    const allBuiltInWords = Object.values(ENHANCED_WORD_CATEGORIES).flat().filter(word => word.length === 5);
-    return allBuiltInWords[dayOfYear % allBuiltInWords.length];
-  }
-
-  async getDailyChallengeWord(): Promise<string> {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1;
-    const day = today.getDate();
-    
-    // Create a seed based on date to ensure consistency
-    const dateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    let seed = 0;
-    for (let i = 0; i < dateString.length; i++) {
-      seed = ((seed << 5) - seed + dateString.charCodeAt(i)) & 0xffffffff;
-    }
-
-    try {
-      if (process.env.OPENAI_API_KEY) {
-        const cacheKey = 'daily_challenge_words';
-        if (!this.isCacheValid(cacheKey)) {
-          const generatedWords = await generateDailyChallengeWords(200);
-          if (generatedWords.length > 0) {
-            wordCache[cacheKey] = {
-              words: generatedWords.map(w => w.word),
-              timestamp: Date.now()
-            };
-          }
-        }
-        
-        if (this.isCacheValid(cacheKey)) {
-          const cachedWords = wordCache[cacheKey].words;
-          return cachedWords[Math.abs(seed) % cachedWords.length];
-        }
-      }
-    } catch (error) {
-      console.log('OpenAI unavailable for daily challenge, using built-in words');
-    }
-
-    // Fallback to built-in challenging words - all exactly 5 letters
-    const challengeWords = [
-      'VIVID', 'AZURE', 'EBONY', 'ROUGE', 'IVORY', 'AMBER', 'CORAL', 'PEARL', 'LUNAR', 'SOLAR',
-      'CYBER', 'PIXEL', 'BYTES', 'NODES', 'VIRAL', 'BLEND', 'MERGE', 'SHIFT', 'ADAPT', 'EVOLVE',
-      'VALOR', 'HONOR', 'GLORY', 'REALM', 'SPELL', 'CHARM', 'FAIRY', 'MYTHS'
-    ].filter(word => word.length === 5);
-    return challengeWords[Math.abs(seed) % challengeWords.length];
-  }
 
   // Get available categories
   getAvailableCategories(): string[] {
@@ -217,7 +133,7 @@ export class WordManager {
       if (generatedWords.length > 0) {
         const cacheKey = `category_${category}`;
         wordCache[cacheKey] = {
-          words: generatedWords.map(w => w.word),
+          words: generatedWords,
           timestamp: Date.now()
         };
       }

@@ -39,10 +39,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = insertGameResultSchema.parse(req.body);
       const result = await storage.saveGameResult(validatedData);
       
-      // Mark daily challenge as completed if it was a daily challenge
-      if (req.body.dailyChallengeMode) {
-        req.session.lastDailyDate = new Date().toISOString().split('T')[0];
-      }
+      // Daily challenge completion tracking will be handled client-side for now
+      // TODO: Implement server-side session tracking
       
       res.json(result);
     } catch (error) {
@@ -129,7 +127,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         'SIGNS', 'HINTS', 'CLUES', 'NOTES', 'MEMOS', 'NEWS', 'INFO', 'DATA', 'FACTS', 'TRUTH'
       ];
       
-      const randomWord = await wordManager.getRandomWord();
+      const randomWord = await WordManager.getInstance().getRandomWord();
       res.json({ 
         word: randomWord,
         source: process.env.OPENAI_API_KEY ? 'OpenAI' : 'built-in'
@@ -196,7 +194,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           break;
           
         case 'daily-challenge':
-          selectedWord = await WordManager.getInstance().getDailyChallengeWord();
+          selectedWord = await WordManager.getInstance().getDailyWord();
           break;
           
         case 'challenge':
@@ -229,20 +227,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get today's daily challenge word with once-per-day restriction
   app.get("/api/word/daily-challenge", async (req, res) => {
     try {
-      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+      const selectedWord = await WordManager.getInstance().getDailyWord();
       
-      // Check if user already played today's daily challenge
-      const lastDailyDate = req.session.lastDailyDate;
-      
-      if (lastDailyDate === today) {
-        return res.status(429).json({ 
-          error: 'Daily challenge already completed today',
-          message: 'Come back tomorrow for a new daily challenge!',
-          nextAvailable: new Date(Date.now() + (24 * 60 * 60 * 1000)).toISOString()
-        });
-      }
-      
-      const selectedWord = await WordManager.getInstance().getDailyChallengeWord();
       const todayDate = new Date();
       const year = todayDate.getFullYear();
       const month = todayDate.getMonth() + 1;
@@ -253,10 +239,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         word: selectedWord,
         date: dateString,
         difficulty: 'hard',
-        source: process.env.OPENAI_API_KEY ? 'OpenAI' : 'built-in'
+        source: 'built-in'
       });
     } catch (error) {
-      res.status(500).json({ message: "Failed to get daily challenge word" });
+      console.error('Daily challenge error:', error);
+      console.error('Error stack:', (error as Error).stack);
+      res.status(500).json({ message: "Failed to get daily challenge word", error: (error as Error).message });
     }
   });
 

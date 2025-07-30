@@ -57,16 +57,21 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     },
   });
 
-  // Initialize game with word data or handle daily challenge errors
+  // Initialize game with word data or handle daily challenge restrictions
   useEffect(() => {
-    if (wordError && dailyChallengeMode) {
-      // Show error for daily challenge already completed
-      toast({
-        title: "Daily Challenge Completed",
-        description: "You've already completed today's daily challenge. Come back tomorrow!",
-        variant: "destructive"
-      });
-      return;
+    // Check daily challenge restriction
+    if (dailyChallengeMode) {
+      const today = new Date().toISOString().split('T')[0];
+      const lastPlayedDaily = localStorage.getItem('lastDailyChallenge');
+      
+      if (lastPlayedDaily === today) {
+        toast({
+          title: "Daily Challenge Completed",
+          description: "You've already completed today's daily challenge. Come back tomorrow!",
+          variant: "destructive"
+        });
+        return;
+      }
     }
     
     if (wordData?.word && !targetWord) {
@@ -76,7 +81,7 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
       setGameEndedByTime(false);
       console.log('Target word set to:', wordData.word);
     }
-  }, [wordData, targetWord, challengeMode, wordError, dailyChallengeMode, toast]);
+  }, [wordData, targetWord, challengeMode, dailyChallengeMode, toast]);
 
   // Challenge mode timer
   useEffect(() => {
@@ -147,6 +152,12 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
         isChallengeMode: challengeMode,
         isWin: won,
       });
+
+      // Mark daily challenge as completed if this was a daily challenge
+      if (dailyChallengeMode && won) {
+        const today = new Date().toISOString().split('T')[0];
+        localStorage.setItem('lastDailyChallenge', today);
+      }
 
       // Update stats
       if (stats) {
