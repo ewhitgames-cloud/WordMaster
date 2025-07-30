@@ -39,31 +39,20 @@ export default function HomePage() {
     const letterSpacing = 85; // Equal spacing between all letters
     const wordSpacing = 120; // Bigger space between WORD and POP!
     
-    // Calculate positions for each letter with proper spacing
-    let currentX = window.innerWidth / 2 - 320; // Start position for title (adjusted for bigger word spacing)
+    // Focus on just "WORD" first - calculate exact positions
+    const wordLetters = ['W', 'O', 'R', 'D'];
+    const startX = window.innerWidth / 2 - 150; // Center the word WORD
     
-    titleLetters.forEach((letter, index) => {
-      if (letter !== ' ') {
-        letters.push({
-          id: `title-${index}`,
-          letter,
-          x: Math.random() * window.innerWidth,
-          delay: index * 0.2,
-          finalX: currentX,
-          finalY: baseY,
-          isTitle: true
-        });
-        
-        // Add extra space between WORD and POP
-        if (index === 3) {
-          currentX += letterSpacing + wordSpacing;
-        } else {
-          currentX += letterSpacing;
-        }
-      } else if (index === 4) {
-        // This is the space between WORD and POP
-        currentX += wordSpacing;
-      }
+    wordLetters.forEach((letter, index) => {
+      letters.push({
+        id: `word-${index}`,
+        letter,
+        x: Math.random() * window.innerWidth,
+        delay: index * 0.2,
+        finalX: startX + (index * letterSpacing),
+        finalY: baseY,
+        isTitle: true
+      });
     });
 
     setFallingLetters(letters);
