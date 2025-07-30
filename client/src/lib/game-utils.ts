@@ -39,13 +39,19 @@ export function getKeyboardState(guesses: string[], target: string): Record<stri
   guesses.forEach(guess => {
     for (let i = 0; i < guess.length; i++) {
       const letter = guess[i];
-      const state = getTileState(guess, target, i);
+      const tileState = getTileState(guess, target, i);
+      
+      // Convert TileState to KeyState
+      let keyState: KeyState = 'default';
+      if (tileState === 'correct') keyState = 'correct';
+      else if (tileState === 'present') keyState = 'present';
+      else if (tileState === 'absent') keyState = 'absent';
       
       // Only update if current state is better than existing
       if (!keyboardState[letter] || 
-          (state === 'correct') ||
-          (state === 'present' && keyboardState[letter] !== 'correct')) {
-        keyboardState[letter] = state;
+          (keyState === 'correct') ||
+          (keyState === 'present' && keyboardState[letter] !== 'correct')) {
+        keyboardState[letter] = keyState;
       }
     }
   });

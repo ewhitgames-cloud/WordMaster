@@ -6,7 +6,7 @@ import Keyboard from "@/components/keyboard";
 import CelebrationModal from "@/components/celebration-modal";
 import StatsModal from "@/components/stats-modal";
 import MenuModal from "@/components/menu-modal";
-import { useWordle } from "@/hooks/use-wordle";
+import { useWordle } from "@/hooks/use-wordle-simple";
 import { Menu, Star, Clock } from "lucide-react";
 
 export default function Game() {
@@ -24,6 +24,8 @@ export default function Game() {
     gameState,
     keyboardState,
     score,
+    targetWord,
+    evaluatedRows,
     stats,
     onKeyPress,
     onEnter,
@@ -61,11 +63,11 @@ export default function Game() {
     } else if (gameState === 'lost') {
       toast({
         title: "Game Over",
-        description: `The word was ${grid[0]?.join('') || 'UNKNOWN'}`,
+        description: `The word was ${targetWord}`,
         variant: "destructive"
       });
     }
-  }, [gameState, grid, toast]);
+  }, [gameState, targetWord, toast]);
 
   const handleNewGame = () => {
     resetGame();
@@ -168,6 +170,8 @@ export default function Game() {
           currentGuess={currentGuess}
           currentRow={currentRow}
           gameState={gameState}
+          targetWord={targetWord}
+          evaluatedRows={evaluatedRows}
         />
 
         {/* Keyboard */}

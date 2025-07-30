@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { GameStats, InsertGameResult } from "@shared/schema";
-import { calculateScore, isValidWord, TileState, KeyState } from "@/lib/game-utils";
+import { calculateScore, isValidWord, getTileState } from "@/lib/game-utils";
 import { useToast } from "@/hooks/use-toast";
 
 export function useWordle(challengeMode: boolean = false) {
@@ -14,7 +14,7 @@ export function useWordle(challengeMode: boolean = false) {
   const [currentGuess, setCurrentGuess] = useState('');
   const [currentRow, setCurrentRow] = useState(0);
   const [gameState, setGameState] = useState<'playing' | 'won' | 'lost'>('playing');
-  const [keyboardState, setKeyboardState] = useState<Record<string, KeyState>>({});
+  const [keyboardState, setKeyboardState] = useState<Record<string, 'default' | 'correct' | 'present' | 'absent'>>({});
   const [targetWord, setTargetWord] = useState('');
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [score, setScore] = useState(0);
@@ -53,34 +53,91 @@ export function useWordle(challengeMode: boolean = false) {
     },
   });
 
-  const updateKeyboardState = (guess: string, target: string) => {
+  // Initialize game
+  useEffect(() => {
+    fetchNewWord().then(({ data }) => {
+      if (data?.word) {
+        setTargetWord(data.word);
+        setStartTime(Date.now());
+      }
+    });
+  }, []);
+
+  const updateKeyboardState = useCallback((guess: string, target: string) => {
     const newKeyboardState = { ...keyboardState };
     
     for (let i = 0; i < guess.length; i++) {
       const letter = guess[i];
-      if (target[i] === letter) {
-        newKeyboardState[letter] = 'correct';
-      } else if (target.includes(letter) && newKeyboardState[letter] !== 'correct') {
-        newKeyboardState[letter] = 'present';
-      } else if (newKeyboardState[letter] !== 'correct' && newKeyboardState[letter] !== 'present') {
-        newKeyboardState[letter] = 'absent';
+      const tileState = getTileState(guess, target, i);
+      
+      // Convert tile state to keyboard state
+      let keyState: 'default' | 'correct' | 'present' | 'absent' = 'default';
+      if (tileState === 'correct') keyState = 'correct';
+      else if (tileState === 'present') keyState = 'present';
+      else if (tileState === 'absent') keyState = 'absent';
+      
+      // Only update if current state is better than existing
+      if (!newKeyboardState[letter] || 
+          (keyState === 'correct') ||
+          (keyState === 'present' && newKeyboardState[letter] !== 'correct')) {
+        newKeyboardState[letter] = keyState;
       }
     }
     
     setKeyboardState(newKeyboardState);
-  };
+  }, [keyboardState]);
 
   const onKeyPress = useCallback((key: string) => {
+    if (gameState !== 'playing') return;
     if (currentGuess.length < 5) {
       setCurrentGuess(prev => prev + key);
     }
-  }, [currentGuess]);
+  }, [currentGuess, gameState]);
 
   const onBackspace = useCallback(() => {
+    if (gameState !== 'playing') return;
     setCurrentGuess(prev => prev.slice(0, -1));
-  }, []);
+  }, [gameState]);
+
+  const submitResult = async (attempts: number, timeElapsed: number, points: number, isWin: boolean) => {
+    try {
+      // Save game result
+      await saveResultMutation.mutateAsync({
+        word: targetWord,
+        attempts,
+        timeElapsed,
+        points,
+        isChallengeMode: challengeMode,
+        isWin,
+      });
+
+      // Update stats
+      if (stats) {
+        const newGuessDistribution = JSON.parse(stats.guessDistribution) as Record<string, number>;
+        if (isWin) {
+          newGuessDistribution[attempts.toString()] = (newGuessDistribution[attempts.toString()] || 0) + 1;
+        }
+
+        const newCurrentStreak = isWin ? stats.currentStreak + 1 : 0;
+        const newMaxStreak = Math.max(stats.maxStreak, newCurrentStreak);
+
+        await updateStatsMutation.mutateAsync({
+          totalGames: stats.totalGames + 1,
+          totalWins: stats.totalWins + (isWin ? 1 : 0),
+          currentStreak: newCurrentStreak,
+          maxStreak: newMaxStreak,
+          totalPoints: stats.totalPoints + points,
+          guessDistribution: JSON.stringify(newGuessDistribution),
+        });
+      }
+    } catch (error) {
+      console.error('Failed to save game result:', error);
+    }
+  };
 
   const onEnter = useCallback(async () => {
+    if (gameState !== 'playing') return;
+    
     if (currentGuess.length !== 5) {
       toast({
         title: "Invalid guess",
@@ -92,7 +149,7 @@ export function useWordle(challengeMode: boolean = false) {
 
     if (!isValidWord(currentGuess)) {
       toast({
-        title: "Invalid word",
+        title: "Invalid word", 
         description: "Not in word list",
         variant: "destructive"
       });
@@ -128,43 +185,7 @@ export function useWordle(challengeMode: boolean = false) {
     }
 
     setCurrentGuess('');
-  }, [currentGuess, currentRow, grid, targetWord, startTime, challengeMode, keyboardState, toast]);
-
-  const submitResult = async (attempts: number, timeElapsed: number, points: number, isWin: boolean) => {
-    try {
-      // Save game result
-      await saveResultMutation.mutateAsync({
-        word: targetWord,
-        attempts,
-        timeElapsed,
-        points,
-        isChallengeMode: challengeMode,
-        isWin,
-      });
-
-      // Update stats
-      if (stats) {
-        const newGuessDistribution = JSON.parse(stats.guessDistribution);
-        if (isWin) {
-          newGuessDistribution[attempts.toString()] = (newGuessDistribution[attempts.toString()] || 0) + 1;
-        }
-
-        const newCurrentStreak = isWin ? stats.currentStreak + 1 : 0;
-        const newMaxStreak = Math.max(stats.maxStreak, newCurrentStreak);
-
-        await updateStatsMutation.mutateAsync({
-          totalGames: stats.totalGames + 1,
-          totalWins: stats.totalWins + (isWin ? 1 : 0),
-          currentStreak: newCurrentStreak,
-          maxStreak: newMaxStreak,
-          totalPoints: stats.totalPoints + points,
-          guessDistribution: JSON.stringify(newGuessDistribution),
-        });
-      }
-    } catch (error) {
-      console.error('Failed to save game result:', error);
-    }
-  };
+  }, [currentGuess, currentRow, grid, targetWord, startTime, challengeMode, gameState, toast, updateKeyboardState]);
 
   const resetGame = useCallback(async () => {
     setGrid(Array(6).fill(null).map(() => Array(5).fill('')));

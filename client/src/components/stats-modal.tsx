@@ -13,7 +13,7 @@ export default function StatsModal({ isOpen, onClose, stats }: StatsModalProps) 
   const winRate = stats.totalGames > 0 ? Math.round((stats.totalWins / stats.totalGames) * 100) : 0;
   const avgScore = stats.totalGames > 0 ? Math.round(stats.totalPoints / stats.totalGames) : 0;
   
-  const guessDistribution = JSON.parse(stats.guessDistribution);
+  const guessDistribution = JSON.parse(stats.guessDistribution) as Record<string, number>;
   const maxGuesses = Math.max(...Object.values(guessDistribution));
 
   return (

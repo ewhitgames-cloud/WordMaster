@@ -39,7 +39,13 @@ export class MemStorage implements IStorage {
   async createGameStats(insertStats: InsertGameStats): Promise<GameStats> {
     const stats: GameStats = {
       id: randomUUID(),
-      ...insertStats,
+      totalGames: insertStats.totalGames || 0,
+      totalWins: insertStats.totalWins || 0,
+      currentStreak: insertStats.currentStreak || 0,
+      maxStreak: insertStats.maxStreak || 0,
+      totalPoints: insertStats.totalPoints || 0,
+      guessDistribution: insertStats.guessDistribution || '{"1":0,"2":0,"3":0,"4":0,"5":0,"6":0}',
+      lastPlayed: insertStats.lastPlayed || null,
       createdAt: new Date(),
     };
     this.gameStats = stats;
@@ -64,7 +70,12 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const result: GameResult = {
       id,
-      ...insertResult,
+      word: insertResult.word,
+      attempts: insertResult.attempts,
+      timeElapsed: insertResult.timeElapsed,
+      points: insertResult.points,
+      isChallengeMode: insertResult.isChallengeMode || false,
+      isWin: insertResult.isWin,
       playedAt: new Date(),
     };
     

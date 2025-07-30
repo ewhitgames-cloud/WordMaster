@@ -1,27 +1,33 @@
 import { motion } from "framer-motion";
-import { TileState } from "@/lib/game-utils";
+import { TileState, getTileState } from "@/lib/game-utils";
 
 interface GameGridProps {
   grid: string[][];
   currentGuess: string;
   currentRow: number;
   gameState: 'playing' | 'won' | 'lost';
+  targetWord: string;
+  evaluatedRows: Set<number>;
 }
 
-export default function GameGrid({ grid, currentGuess, currentRow, gameState }: GameGridProps) {
-  const getTileState = (rowIndex: number, colIndex: number): TileState => {
-    const row = grid[rowIndex];
-    if (!row || !row[colIndex]) {
-      if (rowIndex === currentRow && colIndex < currentGuess.length) {
+export default function GameGrid({ grid, currentGuess, currentRow, gameState, targetWord, evaluatedRows }: GameGridProps) {
+  const getTileStateForPosition = (rowIndex: number, colIndex: number): TileState => {
+    // Current row with user input
+    if (rowIndex === currentRow && gameState === 'playing') {
+      if (colIndex < currentGuess.length) {
         return 'current';
       }
       return 'empty';
     }
     
-    // For completed rows, determine the state based on the target word
-    // This would normally come from the game logic
-    return row[colIndex] === grid[0]?.[colIndex] ? 'correct' : 
-           grid[0]?.includes(row[colIndex]) ? 'present' : 'absent';
+    // Completed/evaluated rows
+    const row = grid[rowIndex];
+    if (row && row[colIndex] && evaluatedRows.has(rowIndex)) {
+      return getTileState(row.join(''), targetWord, colIndex);
+    }
+    
+    // Empty state
+    return 'empty';
   };
 
   const getTileClass = (state: TileState) => {
@@ -39,7 +45,7 @@ export default function GameGrid({ grid, currentGuess, currentRow, gameState }: 
       <div className="grid grid-cols-5 gap-2 max-w-xs mx-auto">
         {Array.from({ length: 6 }).map((_, rowIndex) => (
           Array.from({ length: 5 }).map((_, colIndex) => {
-            const state = getTileState(rowIndex, colIndex);
+            const state = getTileStateForPosition(rowIndex, colIndex);
             const letter = rowIndex === currentRow && colIndex < currentGuess.length
               ? currentGuess[colIndex]
               : grid[rowIndex]?.[colIndex] || '';
