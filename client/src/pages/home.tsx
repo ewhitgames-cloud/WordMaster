@@ -39,9 +39,10 @@ export default function HomePage() {
     const letterSpacing = 85; // Equal spacing between all letters
     const wordSpacing = 120; // Bigger space between WORD and POP!
     
-    // Position "WORD" with perfect spacing
+    // Position "WORD" centered over the menu content
     const wordLetters = ['W', 'O', 'R', 'D'];
-    const baseStartX = window.innerWidth / 2 - 150; // Base position for O-R-D
+    const totalTitleWidth = (wordLetters.length - 1) * letterSpacing + wordSpacing + (4 * letterSpacing); // WORD + gap + POP!
+    const baseStartX = window.innerWidth / 2 - (totalTitleWidth / 2) + 50; // Center the entire title
     
     wordLetters.forEach((letter, index) => {
       let finalX;
