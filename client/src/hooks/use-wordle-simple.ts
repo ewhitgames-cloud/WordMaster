@@ -249,7 +249,7 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     if (currentGuess === targetWord) {
       setGameState('won');
       const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
-      const gameScore = calculateFinalScore(currentRow + 1, timeElapsed, challengeMode);
+      const gameScore = calculateScore(currentRow + 1, timeElapsed, challengeMode);
       setScore(gameScore);
       
       // Save result and update stats
@@ -265,9 +265,10 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     setCurrentGuess('');
   }, [currentGuess, currentRow, grid, targetWord, startTime, challengeMode, gameState, toast, updateKeyboardState]);
 
-  // Auto-submit when 5 letters are typed
+  // Auto-submit when 5 letters are typed (if enabled in settings)
   useEffect(() => {
     if (currentGuess.length === 5 && gameState === 'playing') {
+      // Note: Auto-submit setting will be handled when settings are fully integrated
       const timer = setTimeout(() => {
         onEnter();
       }, 200); // Small delay to allow UI to update

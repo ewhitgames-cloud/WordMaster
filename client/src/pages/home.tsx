@@ -3,7 +3,9 @@ import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Sparkles, Calendar, Trophy, BarChart3 } from 'lucide-react';
+import SettingsModal from '@/components/settings-modal';
+import { useSettings } from '@/hooks/use-settings';
+import { Sparkles, Calendar, Trophy, BarChart3, Settings } from 'lucide-react';
 
 interface FallingLetter {
   id: string;
@@ -28,6 +30,8 @@ export default function HomePage() {
   const [fallingLetters, setFallingLetters] = useState<FallingLetter[]>([]);
   const [backgroundLetters, setBackgroundLetters] = useState<BackgroundLetter[]>([]);
   const [showContent, setShowContent] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const { settings, updateSettings } = useSettings();
 
   // Title letters for "WORD POP!"
   const titleLetters = ['W', 'O', 'R', 'D', ' ', 'P', 'O', 'P', '!'];
@@ -264,21 +268,39 @@ export default function HomePage() {
             </CardContent>
           </Card>
 
-          {/* Statistics */}
-          <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
-            <CardContent className="p-4">
-              <Link href="/stats">
+          {/* Bottom row with Statistics and Settings */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* Statistics */}
+            <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
+              <CardContent className="p-4">
+                <Link href="/stats">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full text-white hover:bg-white/20"
+                    data-testid="button-view-stats"
+                  >
+                    <BarChart3 className="mr-2 h-4 w-4" />
+                    Stats
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* Settings */}
+            <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
+              <CardContent className="p-4">
                 <Button 
                   variant="ghost" 
                   className="w-full text-white hover:bg-white/20"
-                  data-testid="button-view-stats"
+                  onClick={() => setShowSettingsModal(true)}
+                  data-testid="button-settings"
                 >
-                  <BarChart3 className="mr-2 h-4 w-4" />
-                  View Statistics
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
                 </Button>
-              </Link>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </motion.div>
 
         {/* Footer */}
@@ -298,6 +320,14 @@ export default function HomePage() {
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_70%)]"></div>
       </div>
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={showSettingsModal}
+        onClose={() => setShowSettingsModal(false)}
+        settings={settings}
+        onSettingsChange={updateSettings}
+      />
     </div>
   );
 }
