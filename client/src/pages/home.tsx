@@ -42,7 +42,7 @@ export default function HomePage() {
     // Position "WORD" centered over the menu content
     const wordLetters = ['W', 'O', 'R', 'D'];
     const totalTitleWidth = (wordLetters.length - 1) * letterSpacing + wordSpacing + (4 * letterSpacing); // WORD + gap + POP!
-    const baseStartX = window.innerWidth / 2 - (totalTitleWidth / 2) + 50; // Center the entire title
+    const baseStartX = window.innerWidth / 2 - (totalTitleWidth / 2) + 100; // Move title to the right
     
     wordLetters.forEach((letter, index) => {
       let finalX;
