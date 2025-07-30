@@ -92,33 +92,33 @@ export default function Game() {
   };
 
   return (
-    <div className="game-container">
+    <div className="game-container min-h-screen flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm">
-        <div className="max-w-lg mx-auto px-4 py-3">
+        <div className="w-full px-3 py-2 sm:px-4 sm:py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <button 
                 onClick={() => setShowMenu(true)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 data-testid="button-menu"
               >
-                <Menu className="w-5 h-5 text-gray-600" />
+                <Menu className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
               </button>
-              <h1 className="font-bold text-2xl bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="font-bold text-lg sm:text-2xl bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
                 WordQuest
               </h1>
             </div>
             
-            <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                <Star className="w-4 h-4 inline mr-1" />
+            <div className="flex items-center space-x-1.5 sm:space-x-3">
+              <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-semibold">
+                <Star className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" />
                 <span data-testid="text-score">{score}</span>
               </div>
               
               {challengeMode && (
-                <div className="bg-gradient-to-r from-red-400 to-pink-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                  <Clock className="w-4 h-4 inline mr-1" />
+                <div className="bg-gradient-to-r from-red-400 to-pink-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-semibold">
+                  <Clock className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" />
                   <span data-testid="text-timer">{formatTime(timeRemaining)}</span>
                 </div>
               )}
@@ -127,38 +127,38 @@ export default function Game() {
         </div>
       </header>
 
-      <main className="max-w-lg mx-auto px-4 py-6">
+      <main className="flex-1 w-full px-3 py-4 sm:px-4 sm:py-6 max-w-sm sm:max-w-lg mx-auto">
         {/* Stats Bar */}
         <motion.div 
-          className="bg-white rounded-2xl p-4 mb-6 shadow-lg border border-gray-100"
+          className="bg-white rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 shadow-lg border border-gray-100"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center justify-between text-sm">
-            <div className="text-center">
+          <div className="flex items-center justify-between text-xs sm:text-sm">
+            <div className="text-center flex-1">
               <div className="font-semibold text-gray-800" data-testid="text-attempt">{currentRow + 1}</div>
-              <div className="text-gray-500">Attempt</div>
+              <div className="text-gray-500 text-xs">Attempt</div>
             </div>
-            <div className="text-center">
+            <div className="text-center flex-1">
               <div className="font-semibold text-green-600" data-testid="text-streak">{stats.currentStreak}</div>
-              <div className="text-gray-500">Win Streak</div>
+              <div className="text-gray-500 text-xs">Streak</div>
             </div>
-            <div className="text-center">
+            <div className="text-center flex-1">
               <div className="font-semibold text-blue-600" data-testid="text-total-points">{stats.totalPoints}</div>
-              <div className="text-gray-500">Total Points</div>
+              <div className="text-gray-500 text-xs">Points</div>
             </div>
-            <div className="text-center">
+            <div className="text-center flex-1">
               <button 
                 onClick={handleToggleChallengeMode}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-medium transition-all ${
                   challengeMode 
                     ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
                 data-testid="button-challenge-mode"
               >
-                Challenge
+                {challengeMode ? '⏱️' : '🎯'}
               </button>
             </div>
           </div>

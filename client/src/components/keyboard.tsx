@@ -46,9 +46,9 @@ export default function Keyboard({ onKeyPress, onEnter, onBackspace, keyboardSta
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5 sm:space-y-2 px-1">
       {KEYBOARD_ROWS.map((row, rowIndex) => (
-        <div key={rowIndex} className="flex justify-center space-x-1">
+        <div key={rowIndex} className="flex justify-center gap-1 sm:gap-1.5">
           {row.map((key) => (
             <motion.button
               key={key}
@@ -60,7 +60,7 @@ export default function Keyboard({ onKeyPress, onEnter, onBackspace, keyboardSta
               data-testid={`key-${key.toLowerCase()}`}
             >
               {key === 'BACKSPACE' ? (
-                <Delete className="w-4 h-4" />
+                <Delete className="w-3 h-3 sm:w-4 sm:h-4" />
               ) : (
                 key
               )}

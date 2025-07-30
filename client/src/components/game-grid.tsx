@@ -41,8 +41,8 @@ export default function GameGrid({ grid, currentGuess, currentRow, gameState, ta
   };
 
   return (
-    <div className="mb-6">
-      <div className="grid grid-cols-5 gap-2 max-w-xs mx-auto">
+    <div className="mb-4 sm:mb-6">
+      <div className="grid grid-cols-5 gap-1.5 sm:gap-2 w-full max-w-[280px] sm:max-w-xs mx-auto">
         {Array.from({ length: 6 }).map((_, rowIndex) => (
           Array.from({ length: 5 }).map((_, colIndex) => {
             const state = getTileStateForPosition(rowIndex, colIndex);

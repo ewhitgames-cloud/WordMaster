@@ -63,6 +63,8 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
     font-family: 'Inter', sans-serif;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -73,8 +75,9 @@
   }
 
   .tile {
-    @apply aspect-square rounded-lg flex items-center justify-center font-bold text-xl shadow-md transition-all duration-300;
+    @apply aspect-square rounded-lg flex items-center justify-center font-bold shadow-md transition-all duration-300;
     transform-style: preserve-3d;
+    font-size: clamp(1rem, 4vw, 1.5rem);
   }
 
   .tile-empty {
@@ -101,7 +104,10 @@
   }
 
   .keyboard-key {
-    @apply h-12 min-w-[2.5rem] rounded font-semibold text-sm transition-all duration-200 shadow-sm;
+    @apply rounded font-semibold transition-all duration-200 shadow-sm;
+    height: clamp(2.5rem, 8vh, 3rem);
+    min-width: clamp(1.8rem, 6vw, 2.5rem);
+    font-size: clamp(0.75rem, 3vw, 0.875rem);
   }
 
   .keyboard-key-default {
@@ -124,7 +130,8 @@
   }
 
   .keyboard-key-special {
-    @apply bg-gray-600 hover:bg-gray-700 text-white px-3;
+    @apply bg-gray-600 hover:bg-gray-700 text-white;
+    padding: 0 clamp(0.5rem, 2vw, 0.75rem);
   }
 }
 
