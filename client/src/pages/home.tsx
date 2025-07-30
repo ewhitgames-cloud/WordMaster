@@ -41,7 +41,7 @@ export default function HomePage() {
     
     // Focus on just "WORD" first - calculate exact positions
     const wordLetters = ['W', 'O', 'R', 'D'];
-    const startX = window.innerWidth / 2 - 150; // Center the word WORD
+    const startX = window.innerWidth / 2 - 170; // Move W further left for equal spacing
     
     wordLetters.forEach((letter, index) => {
       letters.push({
