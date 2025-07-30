@@ -105,62 +105,56 @@
   }
 
   .tile {
-    @apply aspect-square rounded-lg flex items-center justify-center font-bold shadow-md transition-all duration-300;
+    @apply aspect-square rounded-xl flex items-center justify-center font-bold shadow-lg transition-all duration-300 border-4 border-white/50 backdrop-blur-sm;
     transform-style: preserve-3d;
     font-size: clamp(1rem, 4vw, 1.5rem);
   }
 
   .tile-empty {
-    @apply bg-white border-2 border-gray-200;
+    @apply bg-white/30 border-white/40 text-gray-600;
   }
 
   .tile-current {
-    @apply bg-blue-50 border-2 border-blue-300 text-gray-800;
+    @apply bg-gradient-to-br from-blue-300 to-cyan-400 border-blue-400 text-white shadow-xl;
   }
 
   .tile-correct {
-    background-color: var(--wordle-correct);
-    @apply text-white;
+    @apply bg-gradient-to-br from-green-400 to-emerald-500 border-green-300 text-white shadow-xl;
   }
 
   .tile-present {
-    background-color: var(--wordle-present);
-    @apply text-white;
+    @apply bg-gradient-to-br from-yellow-400 to-orange-400 border-yellow-300 text-white shadow-xl;
   }
 
   .tile-absent {
-    background-color: var(--wordle-absent);
-    @apply text-white;
+    @apply bg-gradient-to-br from-gray-400 to-slate-500 border-gray-300 text-white shadow-xl;
   }
 
   .keyboard-key {
-    @apply rounded font-semibold transition-all duration-200 shadow-sm;
+    @apply rounded-xl font-bold transition-all duration-300 shadow-lg border-2 border-white/30;
     height: clamp(2.5rem, 8vh, 3rem);
     min-width: clamp(1.8rem, 6vw, 2.5rem);
     font-size: clamp(0.75rem, 3vw, 0.875rem);
   }
 
   .keyboard-key-default {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800;
+    @apply bg-gradient-to-br from-white/80 to-gray-100/80 hover:from-gray-100 hover:to-gray-200 text-gray-800 backdrop-blur-sm;
   }
 
   .keyboard-key-correct {
-    background-color: var(--wordle-correct);
-    @apply text-white;
+    @apply bg-gradient-to-br from-green-400 to-emerald-500 text-white shadow-xl;
   }
 
   .keyboard-key-present {
-    background-color: var(--wordle-present);
-    @apply text-white;
+    @apply bg-gradient-to-br from-yellow-400 to-orange-400 text-white shadow-xl;
   }
 
   .keyboard-key-absent {
-    background-color: var(--wordle-absent);
-    @apply text-white;
+    @apply bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-xl;
   }
 
   .keyboard-key-special {
-    @apply bg-gray-600 hover:bg-gray-700 text-white;
+    @apply bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white shadow-xl;
     padding: 0 clamp(0.5rem, 2vw, 0.75rem);
   }
 }

@@ -42,8 +42,13 @@ export default function GameGrid({ grid, currentGuess, currentRow, gameState, ta
   };
 
   return (
-    <div className="mb-4 sm:mb-6">
-      <div className="grid grid-cols-5 gap-1.5 sm:gap-2 w-full max-w-[280px] sm:max-w-xs mx-auto">
+    <motion.div 
+      className="mb-4 sm:mb-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
+      <div className="grid grid-cols-5 gap-2 sm:gap-3 w-full max-w-[320px] sm:max-w-sm mx-auto p-4 bg-white/20 backdrop-blur-sm rounded-2xl border-4 border-white/30 shadow-2xl">
         {Array.from({ length: 6 }).map((_, rowIndex) => (
           Array.from({ length: 5 }).map((_, colIndex) => {
             const state = getTileStateForPosition(rowIndex, colIndex);
@@ -63,15 +68,19 @@ export default function GameGrid({ grid, currentGuess, currentRow, gameState, ta
                 key={`${rowIndex}-${colIndex}`}
                 className={getTileClass(state)}
                 initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
+                animate={{ 
+                  scale: 1, 
+                  opacity: 1,
+                  rotateY: state !== 'empty' && evaluatedRows.has(rowIndex) ? [0, 180, 360] : 0
+                }}
                 transition={{ 
                   duration: 0.3, 
-                  delay: (rowIndex * 5 + colIndex) * 0.02 
+                  delay: evaluatedRows.has(rowIndex) ? colIndex * 0.1 : (rowIndex * 5 + colIndex) * 0.02 
                 }}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: gameState === 'playing' ? 1.05 : 1, y: gameState === 'playing' ? -2 : 0 }}
                 data-testid={`tile-${rowIndex}-${colIndex}`}
               >
-                <span className="font-bold text-lg select-none uppercase">
+                <span className="font-bold text-lg sm:text-xl select-none uppercase">
                   {letter}
                 </span>
               </motion.div>
@@ -79,6 +88,6 @@ export default function GameGrid({ grid, currentGuess, currentRow, gameState, ta
           })
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }

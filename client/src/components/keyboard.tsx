@@ -46,16 +46,25 @@ export default function Keyboard({ onKeyPress, onEnter, onBackspace, keyboardSta
   };
 
   return (
-    <div className="space-y-1.5 sm:space-y-2 px-1">
+    <motion.div 
+      className="space-y-2 sm:space-y-3 px-2 py-4 bg-white/20 backdrop-blur-sm rounded-2xl border-4 border-white/30 shadow-2xl"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.4 }}
+    >
       {KEYBOARD_ROWS.map((row, rowIndex) => (
-        <div key={rowIndex} className="flex justify-center gap-1 sm:gap-1.5">
+        <div key={rowIndex} className="flex justify-center gap-1.5 sm:gap-2">
           {row.map((key) => (
             <motion.button
               key={key}
               className={getKeyClass(key)}
               onClick={() => handleKeyClick(key)}
               disabled={disabled}
-              whileHover={{ scale: disabled ? 1 : 1.05 }}
+              whileHover={{ 
+                scale: disabled ? 1 : 1.1,
+                y: disabled ? 0 : -2,
+                boxShadow: disabled ? undefined : "0 8px 16px rgba(0,0,0,0.2)"
+              }}
               whileTap={{ scale: disabled ? 1 : 0.95 }}
               data-testid={`key-${key.toLowerCase()}`}
             >
@@ -68,6 +77,6 @@ export default function Keyboard({ onKeyPress, onEnter, onBackspace, keyboardSta
           ))}
         </div>
       ))}
-    </div>
+    </motion.div>
   );
 }
