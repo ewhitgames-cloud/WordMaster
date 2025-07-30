@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertGameStatsSchema, insertGameResultSchema } from "@shared/schema";
 import { z } from "zod";
-import { wordManager } from "./word-manager";
+import { WordManager } from "./word-manager";
 import { validateWordExpanded } from "./word-validator";
 import { VALID_WORDS } from "./word-dictionary";
 
@@ -133,6 +133,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get current game word - this is what the client actually calls
+  app.get("/api/word/current-game", async (req, res) => {
+    try {
+      const wordManager = WordManager.getInstance();
+      const selectedWord = await wordManager.getRandomWord();
+      
+      res.json({ 
+        word: selectedWord,
+        source: process.env.OPENAI_API_KEY ? 'built-in-with-openai-fallback' : 'built-in'
+      });
+    } catch (error) {
+      console.error('Error getting current game word:', error);
+      
+      // Emergency fallback to ensure game always works
+      const emergencyWords = [
+        'WATER', 'HAPPY', 'DANCE', 'LIGHT', 'MAGIC', 'POWER', 'VOICE', 'DREAM', 'SMILE', 'PEACE',
+        'BRAVE', 'SWIFT', 'SPARK', 'SHINE', 'OCEAN', 'STORM', 'GLIDE', 'TWIST', 'CHARM', 'QUEST'
+      ];
+      const emergencyWord = emergencyWords[Math.floor(Math.random() * emergencyWords.length)];
+      
+      res.json({ 
+        word: emergencyWord,
+        source: 'emergency-fallback'
+      });
+    }
+  });
+
   // Get word by mode (random, daily, challenge, category-specific)
   app.get("/api/word/generate/:mode", async (req, res) => {
     try {
@@ -159,27 +186,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       switch (mode) {
         case 'daily':
-          selectedWord = await wordManager.getDailyWord();
+          selectedWord = await WordManager.getInstance().getDailyWord();
           break;
           
         case 'daily-challenge':
-          selectedWord = await wordManager.getDailyChallengeWord();
+          selectedWord = await WordManager.getInstance().getDailyChallengeWord();
           break;
           
         case 'challenge':
-          selectedWord = await wordManager.getCategoryWord('tech');
+          selectedWord = await WordManager.getInstance().getCategoryWord('tech');
           break;
           
         case 'category':
           if (category && typeof category === 'string') {
-            selectedWord = await wordManager.getCategoryWord(category);
+            selectedWord = await WordManager.getInstance().getCategoryWord(category);
           } else {
-            selectedWord = await wordManager.getRandomWord();
+            selectedWord = await WordManager.getInstance().getRandomWord();
           }
           break;
           
         default:
-          selectedWord = await wordManager.getRandomWord();
+          selectedWord = await WordManager.getInstance().getRandomWord();
       }
 
       res.json({ 
@@ -196,7 +223,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get today's daily challenge word
   app.get("/api/word/daily-challenge", async (req, res) => {
     try {
-      const selectedWord = await wordManager.getDailyChallengeWord();
+      const selectedWord = await WordManager.getInstance().getDailyChallengeWord();
       const today = new Date();
       const year = today.getFullYear();
       const month = today.getMonth() + 1;
@@ -217,8 +244,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get word cache statistics and available categories
   app.get("/api/word/stats", async (req, res) => {
     try {
-      const cacheStats = wordManager.getCacheStats();
-      const categories = wordManager.getAvailableCategories();
+      const cacheStats = WordManager.getInstance().getCacheStats();
+      const categories = WordManager.getInstance().getAvailableCategories();
       
       res.json({
         hasOpenAI: !!process.env.OPENAI_API_KEY,
@@ -240,7 +267,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "OpenAI API key required for cache refresh" });
       }
       
-      await wordManager.refreshCategory(category);
+      await WordManager.getInstance().refreshCategory(category);
       res.json({ message: `Cache refreshed for category: ${category}` });
     } catch (error) {
       res.status(500).json({ message: `Failed to refresh cache for category: ${req.params.category}` });

@@ -66,6 +66,36 @@ export class WordManager {
     return allBuiltInWords[Math.floor(Math.random() * allBuiltInWords.length)];
   }
 
+  async getDailyWord(): Promise<string> {
+    // Use date-based seeding for consistent daily words
+    const today = new Date();
+    const dateString = today.toDateString();
+    const seed = this.hashString(dateString);
+    
+    const allWords = Object.values(ENHANCED_WORD_CATEGORIES).flat();
+    return allWords[seed % allWords.length];
+  }
+
+  async getDailyChallengeWord(): Promise<string> {
+    // Harder words for daily challenge
+    const challengeWords = [...ENHANCED_WORD_CATEGORIES.tech, ...ENHANCED_WORD_CATEGORIES.fantasy];
+    const today = new Date();
+    const dateString = today.toDateString() + '-challenge';
+    const seed = this.hashString(dateString);
+    
+    return challengeWords[seed % challengeWords.length];
+  }
+
+  private hashString(str: string): number {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash);
+  }
+
   async getCategoryWord(category: string): Promise<string> {
     try {
       if (process.env.OPENAI_API_KEY) {
@@ -74,7 +104,7 @@ export class WordManager {
           const generatedWords = await generateWordsByCategory(category, 50);
           if (generatedWords.length > 0) {
             wordCache[cacheKey] = {
-              words: generatedWords,
+              words: generatedWords.map(w => w.word),
               timestamp: Date.now()
             };
           }
@@ -147,7 +177,7 @@ export class WordManager {
           const generatedWords = await generateDailyChallengeWords(200);
           if (generatedWords.length > 0) {
             wordCache[cacheKey] = {
-              words: generatedWords,
+              words: generatedWords.map(w => w.word),
               timestamp: Date.now()
             };
           }
@@ -178,18 +208,33 @@ export class WordManager {
 
   // Refresh cache for a specific category
   async refreshCategory(category: string): Promise<void> {
-    const cacheKey = `category_${category}`;
-    delete wordCache[cacheKey];
-    await this.getCategoryWord(category);
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OpenAI API key required for cache refresh');
+    }
+    
+    try {
+      const generatedWords = await generateWordsByCategory(category, 50);
+      if (generatedWords.length > 0) {
+        const cacheKey = `category_${category}`;
+        wordCache[cacheKey] = {
+          words: generatedWords.map(w => w.word),
+          timestamp: Date.now()
+        };
+      }
+    } catch (error) {
+      console.error(`Failed to refresh category ${category}:`, error);
+      throw error;
+    }
   }
 
   // Get cache statistics
-  getCacheStats(): { [key: string]: { wordCount: number; lastUpdated: Date } } {
-    const stats: { [key: string]: { wordCount: number; lastUpdated: Date } } = {};
+  getCacheStats(): Record<string, any> {
+    const stats: Record<string, any> = {};
     for (const [key, cache] of Object.entries(wordCache)) {
       stats[key] = {
         wordCount: cache.words.length,
-        lastUpdated: new Date(cache.timestamp)
+        lastUpdated: new Date(cache.timestamp).toISOString(),
+        isValid: this.isCacheValid(key)
       };
     }
     return stats;
