@@ -35,13 +35,47 @@ export function calculateScore(attempts: number, timeElapsed: number, challengeM
 }
 
 export function getTileState(guess: string, target: string, position: number): TileState {
-  if (guess[position] === target[position]) {
+  const guessLetter = guess[position];
+  
+  // If the letter is in the correct position
+  if (guessLetter === target[position]) {
     return 'correct';
-  } else if (target.includes(guess[position])) {
-    return 'present';
-  } else {
+  }
+  
+  // Check if the letter exists in the target word at all
+  if (!target.includes(guessLetter)) {
     return 'absent';
   }
+  
+  // For letters that exist in target but are in wrong position,
+  // we need to check if there are available instances
+  
+  // Count total occurrences of this letter in target
+  const targetCount = target.split('').filter(letter => letter === guessLetter).length;
+  
+  // Count how many of this letter are already correctly placed in the guess
+  let correctlyPlaced = 0;
+  for (let i = 0; i < guess.length; i++) {
+    if (guess[i] === guessLetter && target[i] === guessLetter) {
+      correctlyPlaced++;
+    }
+  }
+  
+  // Count how many of this letter appear before current position in wrong positions
+  let wrongPositionsBefore = 0;
+  for (let i = 0; i < position; i++) {
+    if (guess[i] === guessLetter && target[i] !== guessLetter) {
+      wrongPositionsBefore++;
+    }
+  }
+  
+  // If we have available instances after accounting for correct placements and previous wrong positions
+  const availableInstances = targetCount - correctlyPlaced;
+  if (wrongPositionsBefore < availableInstances) {
+    return 'present';
+  }
+  
+  return 'absent';
 }
 
 export function getKeyboardState(guesses: string[], target: string): Record<string, KeyState> {
