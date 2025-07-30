@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a modern React-based Wordle game application built with a full-stack TypeScript architecture. The application features a web-based word guessing game with statistics tracking, challenge modes, and a polished UI using shadcn/ui components.
+This is a modern React-based Wordle game application built with a full-stack TypeScript architecture. The application features a web-based word guessing game with statistics tracking, challenge modes, and a vibrant Nintendo-style UI using shadcn/ui components with colorful gradients and animations throughout.
 
 ## User Preferences
 
@@ -71,15 +71,16 @@ Preferred communication style: Simple, everyday language.
 - **Animations**: Framer Motion, React Confetti for celebrations
 
 ### Notable Features
-- **Challenge Mode**: Time-limited gameplay with bonus scoring
+- **Challenge Mode**: Time-limited gameplay with bonus scoring and 3-minute countdown timer
 - **Daily Challenge System**: Sophisticated daily words that reset daily and never repeat using date-based seeding
-- **OpenAI Word Generation**: AI-powered word creation with 100+ words per category, smart caching system
+- **Built-in Word Library**: 730+ offline words across 6 categories (no API required)
 - **Statistics Tracking**: Comprehensive game statistics with visual distribution
+- **Nintendo-Style UI**: Vibrant gradients, colorful animations, and playful design throughout
 - **Responsive Design**: Mobile-optimized interface with touch-friendly interactions
 - **Dark/Light Mode**: Theme support via CSS variables
 - **Auto-submission**: Automatic word checking when 5 letters are entered
-- **Expanded Word Variety**: 2000+ valid input words with OpenAI-generated target words
-- **Smart Word Caching**: 24-hour cache system for OpenAI words with automatic fallback to built-in library
+- **Expanded Word Variety**: 2000+ valid input words with comprehensive built-in target words
+- **Colorful Game Elements**: Gradient tiles, animated backgrounds, and glassmorphism effects
 
 ## Deployment Strategy
 
