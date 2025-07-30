@@ -80,9 +80,6 @@ export default function Game({ mode: propMode }: GameProps = {}) {
     setShowCelebration(false);
     setShowStats(false);
     setShowMenu(false);
-    if (challengeMode) {
-      setTimeRemaining(180);
-    }
   };
 
   // Mode display text

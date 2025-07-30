@@ -77,9 +77,13 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     if (wordData?.word && !targetWord) {
       setTargetWord(wordData.word);
       setStartTime(Date.now());
-      setTimeRemaining(challengeMode ? 180 : 0); // Reset timer for challenge mode
       setGameEndedByTime(false);
       console.log('Target word set to:', wordData.word);
+      
+      // Set timer only once for challenge mode
+      if (challengeMode) {
+        setTimeRemaining(180);
+      }
     }
   }, [wordData, targetWord, challengeMode, dailyChallengeMode, toast]);
 

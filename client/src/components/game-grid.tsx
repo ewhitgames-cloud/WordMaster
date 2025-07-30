@@ -46,9 +46,16 @@ export default function GameGrid({ grid, currentGuess, currentRow, gameState, ta
         {Array.from({ length: 6 }).map((_, rowIndex) => (
           Array.from({ length: 5 }).map((_, colIndex) => {
             const state = getTileStateForPosition(rowIndex, colIndex);
-            const letter = rowIndex === currentRow && colIndex < currentGuess.length
-              ? currentGuess[colIndex]
-              : grid[rowIndex]?.[colIndex] || '';
+            let letter = '';
+            
+            // Get the letter for this position
+            if (rowIndex === currentRow && colIndex < currentGuess.length) {
+              // Current row being typed
+              letter = currentGuess[colIndex];
+            } else if (grid[rowIndex] && grid[rowIndex][colIndex]) {
+              // Previously submitted rows
+              letter = grid[rowIndex][colIndex];
+            }
             
             return (
               <motion.div
@@ -64,10 +71,11 @@ export default function GameGrid({ grid, currentGuess, currentRow, gameState, ta
                 data-testid={`tile-${rowIndex}-${colIndex}`}
               >
                 <motion.span
-                  key={letter}
-                  initial={{ scale: 0 }}
+                  key={`${letter}-${rowIndex}-${colIndex}`}
+                  initial={{ scale: letter ? 0.8 : 1 }}
                   animate={{ scale: 1 }}
                   transition={{ duration: 0.2 }}
+                  className="font-bold text-lg"
                 >
                   {letter}
                 </motion.span>
