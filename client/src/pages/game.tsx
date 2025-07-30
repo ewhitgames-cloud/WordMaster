@@ -1,21 +1,29 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation, Link } from "wouter";
 import GameGrid from "@/components/game-grid";
 import Keyboard from "@/components/keyboard";
 import CelebrationModal from "@/components/celebration-modal";
 import StatsModal from "@/components/stats-modal";
 import MenuModal from "@/components/menu-modal";
 import { useWordle } from "@/hooks/use-wordle-simple";
-import { Menu, Star, Clock } from "lucide-react";
+import { Menu, Star, Clock, Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Game() {
   const { toast } = useToast();
+  const [location] = useLocation();
   const [showCelebration, setShowCelebration] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [challengeMode, setChallengeMode] = useState(false);
-  const [dailyChallengeMode, setDailyChallengeMode] = useState(false);
+  
+  // Parse query parameters
+  const params = new URLSearchParams(location.split('?')[1] || '');
+  const mode = params.get('mode') || 'classic';
+  const challengeMode = mode === 'challenge';
+  const dailyChallengeMode = mode === 'daily';
+  
   const [timeRemaining, setTimeRemaining] = useState(180); // 3 minutes
   
   const {
@@ -80,17 +88,11 @@ export default function Game() {
     }
   };
 
-  const handleToggleChallengeMode = () => {
-    setChallengeMode(!challengeMode);
-    setDailyChallengeMode(false); // Turn off daily challenge if regular challenge is on
-    setTimeRemaining(180);
-    handleNewGame();
-  };
-
-  const handleDailyChallengeMode = () => {
-    setDailyChallengeMode(!dailyChallengeMode);
-    setChallengeMode(false); // Turn off regular challenge if daily challenge is on
-    handleNewGame();
+  // Mode display text
+  const getModeText = () => {
+    if (dailyChallengeMode) return 'Daily Challenge';
+    if (challengeMode) return 'Timed Challenge';
+    return 'Classic Game';
   };
 
   const formatTime = (seconds: number) => {
@@ -106,6 +108,16 @@ export default function Game() {
         <div className="w-full px-3 py-2 sm:px-4 sm:py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-4">
+              <Link href="/">
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  data-testid="button-home"
+                >
+                  <Home className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+                </Button>
+              </Link>
               <button 
                 onClick={() => setShowMenu(true)}
                 className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -114,7 +126,7 @@ export default function Game() {
                 <Menu className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
               </button>
               <h1 className="font-bold text-lg sm:text-2xl bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                WordQuest
+                Word Pop! - {getModeText()}
               </h1>
             </div>
             
@@ -163,30 +175,14 @@ export default function Game() {
               <div className="text-gray-500 text-xs">Points</div>
             </div>
             <div className="text-center flex-1">
-              <div className="flex flex-col space-y-1">
-                <button 
-                  onClick={handleToggleChallengeMode}
-                  className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-medium transition-all ${
-                    challengeMode 
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                  data-testid="button-challenge-mode"
-                >
-                  {challengeMode ? '⏱️' : '🎯'}
-                </button>
-                <button 
-                  onClick={handleDailyChallengeMode}
-                  className={`px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-medium transition-all ${
-                    dailyChallengeMode 
-                      ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white' 
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                  data-testid="button-daily-challenge"
-                >
-                  {dailyChallengeMode ? '🔥' : '📅'}
-                </button>
-              </div>
+              <button 
+                onClick={() => setShowStats(true)}
+                className="font-semibold text-purple-600 hover:text-purple-800 transition-colors"
+                data-testid="button-show-stats"
+              >
+                📊
+              </button>
+              <div className="text-gray-500 text-xs">Stats</div>
             </div>
           </div>
         </motion.div>
