@@ -33,6 +33,7 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
   const [evaluatedRows, setEvaluatedRows] = useState<Set<number>>(new Set());
   const [isValidatingWord, setIsValidatingWord] = useState(false);
   const [invalidWord, setInvalidWord] = useState<string>('');
+  const [showingInvalidToast, setShowingInvalidToast] = useState(false);
 
   // Fetch stats
   const { data: stats } = useQuery<GameStats>({
@@ -149,13 +150,25 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     if (currentGuess.length < 5) {
       setCurrentGuess(prev => prev + key);
       playKeyPress();
+      
+      // Clear invalid word state when typing new letters
+      if (invalidWord && showingInvalidToast) {
+        setInvalidWord('');
+        setShowingInvalidToast(false);
+      }
     }
-  }, [currentGuess, gameState, playKeyPress]);
+  }, [currentGuess, gameState, playKeyPress, invalidWord, showingInvalidToast]);
 
   const onBackspace = useCallback(() => {
     if (gameState !== 'playing') return;
     setCurrentGuess(prev => prev.slice(0, -1));
-  }, [gameState]);
+    
+    // Clear invalid word notification when user starts deleting
+    if (invalidWord && showingInvalidToast) {
+      setInvalidWord('');
+      setShowingInvalidToast(false);
+    }
+  }, [gameState, invalidWord, showingInvalidToast]);
 
   const submitResult = async (attempts: number, timeElapsed: number, score: number, won: boolean) => {
     try {
@@ -232,13 +245,17 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     setIsValidatingWord(false);
     
     if (!isValid) {
-      setInvalidWord(currentGuess);
-      playInvalidWord();
-      toast({
-        title: "Invalid word", 
-        description: "Not in official Wordle word list",
-        variant: "destructive"
-      });
+      // Only show the toast if we're not already showing one for this word
+      if (!showingInvalidToast || invalidWord !== currentGuess) {
+        setInvalidWord(currentGuess);
+        setShowingInvalidToast(true);
+        playInvalidWord();
+        toast({
+          title: "Invalid word", 
+          description: "Not in official Wordle word list",
+          variant: "destructive"
+        });
+      }
       return;
     }
 
