@@ -151,24 +151,21 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
       setCurrentGuess(prev => prev + key);
       playKeyPress();
       
-      // Clear invalid word state when typing new letters
-      if (invalidWord && showingInvalidToast) {
-        setInvalidWord('');
-        setShowingInvalidToast(false);
-      }
+      // Don't clear invalid word state when typing - only when deleting
     }
-  }, [currentGuess, gameState, playKeyPress, invalidWord, showingInvalidToast]);
+  }, [currentGuess, gameState, playKeyPress]);
 
   const onBackspace = useCallback(() => {
     if (gameState !== 'playing') return;
-    setCurrentGuess(prev => prev.slice(0, -1));
+    const newGuess = currentGuess.slice(0, -1);
+    setCurrentGuess(newGuess);
     
-    // Clear invalid word notification when user starts deleting
-    if (invalidWord && showingInvalidToast) {
+    // Clear invalid word notification when user deletes the last letter (goes below 5 letters)
+    if (invalidWord && showingInvalidToast && newGuess.length < 5) {
       setInvalidWord('');
       setShowingInvalidToast(false);
     }
-  }, [gameState, invalidWord, showingInvalidToast]);
+  }, [gameState, currentGuess, invalidWord, showingInvalidToast]);
 
   const submitResult = async (attempts: number, timeElapsed: number, score: number, won: boolean) => {
     try {
