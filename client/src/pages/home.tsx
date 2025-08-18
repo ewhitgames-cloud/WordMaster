@@ -204,11 +204,11 @@ export default function HomePage() {
         transition={{ duration: 1 }}
       >
         {/* Spacer for title */}
-        <div className="h-32 md:h-40"></div>
+        <div className="h-48 md:h-56"></div>
 
         {/* Subtitle */}
         <motion.p
-          className="text-xl md:text-2xl text-white/90 mb-8 text-center font-medium"
+          className="text-lg md:text-xl text-white/90 mb-8 text-center font-medium px-4"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: showContent ? 1 : 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
