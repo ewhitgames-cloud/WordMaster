@@ -350,7 +350,7 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
     style.id = 'dynamic-font-style';
     
     style.textContent = `
-      /* Game tiles - all states */
+      /* Game tiles - font and structure */
       .tile,
       .tile-correct,
       .tile-present, 
@@ -359,10 +359,21 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
       .tile-empty,
       [data-testid*="tile"] {
         font-family: ${fontStack} !important;
-        color: ${colorValue} !important;
       }
       
-      /* Keyboard keys - all states */
+      /* Game tiles - text color only */
+      .tile *,
+      .tile-correct *,
+      .tile-present *,
+      .tile-absent *,
+      .tile-current *,
+      .tile-empty *,
+      [data-testid*="tile"] * {
+        color: ${colorValue} !important;
+        font-family: ${fontStack} !important;
+      }
+      
+      /* Keyboard keys - font and structure */
       .keyboard-key,
       .keyboard-key-default,
       .keyboard-key-correct,
@@ -371,15 +382,17 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
       .keyboard-key-special,
       [data-testid*="key"] {
         font-family: ${fontStack} !important;
-        color: ${colorValue} !important;
       }
       
-      /* Additional game elements */
-      .aspect-square,
-      .border-2,
-      .text-2xl,
-      .font-bold,
-      .text-white {
+      /* Keyboard keys - text color only */
+      .keyboard-key *,
+      .keyboard-key-default *,
+      .keyboard-key-correct *,
+      .keyboard-key-present *,
+      .keyboard-key-absent *,
+      .keyboard-key-special *,
+      [data-testid*="key"] * {
+        color: ${colorValue} !important;
         font-family: ${fontStack} !important;
       }
     `;

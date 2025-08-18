@@ -40,7 +40,33 @@ export default function FontSettings() {
     };
   }, []);
 
-  const ownedFonts = FontStoreAPI.getState().ownedFonts.map(id => FontStoreAPI.getEquippedFont()).filter(Boolean);
+  const currentState = FontStoreAPI.getState();
+  const ownedFonts = currentState.ownedFonts.map(id => {
+    const allFonts = [
+      { id: 'default', name: 'Classic', family: 'Inter', fallback: 'system-ui, sans-serif', price: 0, category: 'sans' as const },
+      { id: 'playfair', name: 'Elegant', family: 'Playfair Display', fallback: 'Georgia, serif', price: 100, category: 'serif' as const },
+      { id: 'merriweather', name: 'Reader', family: 'Merriweather', fallback: 'Times, serif', price: 80, category: 'serif' as const },
+      { id: 'roboto-slab', name: 'Strong', family: 'Roboto Slab', fallback: 'Georgia, serif', price: 110, category: 'serif' as const },
+      { id: 'crimson-text', name: 'Literary', family: 'Crimson Text', fallback: 'Times, serif', price: 95, category: 'serif' as const },
+      { id: 'poppins', name: 'Modern', family: 'Poppins', fallback: 'Arial, sans-serif', price: 90, category: 'sans' as const },
+      { id: 'space-grotesk', name: 'Futuristic', family: 'Space Grotesk', fallback: 'Arial, sans-serif', price: 140, category: 'sans' as const },
+      { id: 'nunito', name: 'Friendly', family: 'Nunito', fallback: 'Arial, sans-serif', price: 85, category: 'sans' as const },
+      { id: 'montserrat', name: 'Clean', family: 'Montserrat', fallback: 'Arial, sans-serif', price: 100, category: 'sans' as const },
+      { id: 'fira-code', name: 'Code Style', family: 'Fira Code', fallback: 'Monaco, monospace', price: 150, category: 'mono' as const },
+      { id: 'jetbrains-mono', name: 'Terminal', family: 'JetBrains Mono', fallback: 'Courier, monospace', price: 160, category: 'mono' as const },
+      { id: 'source-code-pro', name: 'Developer', family: 'Source Code Pro', fallback: 'Courier, monospace', price: 140, category: 'mono' as const },
+      { id: 'comfortaa', name: 'Rounded', family: 'Comfortaa', fallback: 'Arial, sans-serif', price: 120, category: 'playful' as const },
+      { id: 'fredoka', name: 'Bubbly', family: 'Fredoka', fallback: 'Arial, sans-serif', price: 130, category: 'playful' as const },
+      { id: 'quicksand', name: 'Smooth', family: 'Quicksand', fallback: 'Arial, sans-serif', price: 110, category: 'playful' as const },
+      { id: 'bangers', name: 'Comic Book', family: 'Bangers', fallback: 'Arial, sans-serif', price: 180, category: 'fun' as const },
+      { id: 'luckiest-guy', name: 'Bold Fun', family: 'Luckiest Guy', fallback: 'Arial, sans-serif', price: 170, category: 'fun' as const },
+      { id: 'amatic-sc', name: 'Hand Drawn', family: 'Amatic SC', fallback: 'Arial, sans-serif', price: 160, category: 'fun' as const },
+      { id: 'bungee', name: 'Street Art', family: 'Bungee', fallback: 'Arial, sans-serif', price: 190, category: 'fun' as const },
+      { id: 'creepster', name: 'Spooky', family: 'Creepster', fallback: 'Arial, sans-serif', price: 200, category: 'fun' as const },
+      { id: 'kalam', name: 'Handwriting', family: 'Kalam', fallback: 'Arial, sans-serif', price: 150, category: 'fun' as const }
+    ];
+    return allFonts.find(f => f.id === id);
+  }).filter(Boolean);
   const ownedColors = state.ownedColors.map(id => AVAILABLE_COLORS.find(c => c.id === id)).filter(Boolean);
 
   const equipFont = (fontId: string) => {
@@ -69,7 +95,7 @@ export default function FontSettings() {
       style.id = 'dynamic-font-style';
       
       style.textContent = `
-        /* Game tiles - all states */
+        /* Game tiles - text content only */
         .tile,
         .tile-correct,
         .tile-present, 
@@ -78,10 +104,20 @@ export default function FontSettings() {
         .tile-empty,
         [data-testid*="tile"] {
           font-family: ${fontStack} !important;
-          color: ${colorValue} !important;
         }
         
-        /* Keyboard keys - all states */
+        .tile *,
+        .tile-correct *,
+        .tile-present *,
+        .tile-absent *,
+        .tile-current *,
+        .tile-empty *,
+        [data-testid*="tile"] * {
+          color: ${colorValue} !important;
+          font-family: ${fontStack} !important;
+        }
+        
+        /* Keyboard keys - text content only */
         .keyboard-key,
         .keyboard-key-default,
         .keyboard-key-correct,
@@ -90,15 +126,16 @@ export default function FontSettings() {
         .keyboard-key-special,
         [data-testid*="key"] {
           font-family: ${fontStack} !important;
-          color: ${colorValue} !important;
         }
         
-        /* Additional game elements */
-        .aspect-square,
-        .border-2,
-        .text-2xl,
-        .font-bold,
-        .text-white {
+        .keyboard-key *,
+        .keyboard-key-default *,
+        .keyboard-key-correct *,
+        .keyboard-key-present *,
+        .keyboard-key-absent *,
+        .keyboard-key-special *,
+        [data-testid*="key"] * {
+          color: ${colorValue} !important;
           font-family: ${fontStack} !important;
         }
       `;
@@ -124,7 +161,7 @@ export default function FontSettings() {
               No fonts owned yet. Visit the Style Store to purchase fonts!
             </p>
           ) : (
-            ownedFonts.map((font) => (
+            ownedFonts.map((font) => font && (
               <div
                 key={font.id}
                 className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
@@ -171,7 +208,7 @@ export default function FontSettings() {
               No colors owned yet. Visit the Style Store to purchase colors!
             </p>
           ) : (
-            ownedColors.map((color) => (
+            ownedColors.map((color) => color && (
               <div
                 key={color.id}
                 className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
