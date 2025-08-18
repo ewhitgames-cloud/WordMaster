@@ -134,7 +134,7 @@
     @apply rounded-xl font-black transition-all duration-300 shadow-lg border-2 border-white/30 flex items-center justify-center;
     height: clamp(2.5rem, 8vh, 3rem);
     min-width: clamp(1.8rem, 6vw, 2.5rem);
-    font-size: clamp(0.875rem, 3.5vw, 1rem);
+    font-size: clamp(1rem, 4vw, 1.25rem);
     font-weight: 900;
   }
 
@@ -157,7 +157,7 @@
   .keyboard-key-special {
     @apply bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white shadow-xl flex items-center justify-center;
     padding: 0 clamp(0.5rem, 2vw, 0.75rem);
-    font-size: clamp(0.75rem, 3vw, 0.875rem);
+    font-size: clamp(0.625rem, 2.5vw, 0.75rem);
   }
 }
 
