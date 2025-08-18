@@ -80,18 +80,6 @@ export default function Game({ mode: propMode }: GameProps = {}) {
   // Use the persistent coin system
   const { coins: persistentCoins, addCoins } = useCoins();
   
-  // Background music control
-  useEffect(() => {
-    if (settings?.soundEnabled && settings?.musicVolume > 0) {
-      startBackgroundMusic();
-    } else {
-      stopBackgroundMusic();
-    }
-    
-    return () => {
-      stopBackgroundMusic();
-    };
-  }, [settings?.soundEnabled, settings?.musicVolume, startBackgroundMusic, stopBackgroundMusic]);
   
   // Load coin balance on mount and listen for changes
   useEffect(() => {
