@@ -1,6 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
 
 interface HowToPlayModalProps {
   isOpen: boolean;
@@ -12,17 +11,7 @@ export default function HowToPlayModal({ isOpen, onClose }: HowToPlayModalProps)
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <div className="flex items-center justify-between">
-            <DialogTitle className="font-bold text-2xl text-gray-800">How to Play</DialogTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              data-testid="button-close-help"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
+          <DialogTitle className="font-bold text-2xl text-gray-800">How to Play</DialogTitle>
         </DialogHeader>
 
         <div className="p-6 space-y-6">
