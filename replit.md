@@ -40,7 +40,7 @@ Preferred communication style: Simple, everyday language.
 - **Game State Management**: Custom React hook (`useWordle`) managing game state
 - **Scoring System**: Points calculation based on attempts, time, and challenge mode
 - **Statistics Tracking**: Persistent game statistics with guess distribution
-- **Massive Word Dictionary**: Comprehensive 5000+ word dictionary with 1000+ curated answer words and 4000+ valid guess words for maximum coverage
+- **Massive Word Dictionary**: Comprehensive 10,000+ word dictionary with 3000+ curated answer words and 7000+ valid guess words for maximum English vocabulary coverage
 - **Performance-Optimized Validation**: Fast Set-based word lookups for smooth gameplay despite massive dictionary size
 - **OpenAI-Enhanced Word Generation**: Intelligent word generation using OpenAI GPT-4o with automatic fallback to comprehensive built-in word library
 - **Dynamic Word Pools**: Multiple generation modes (random, daily, challenge, category-specific) with smart caching and theme-based organization
@@ -75,13 +75,13 @@ Preferred communication style: Simple, everyday language.
 ### Notable Features
 - **Challenge Mode**: Time-limited gameplay with bonus scoring and 3-minute countdown timer
 - **Daily Challenge System**: Sophisticated daily words that reset daily and never repeat using date-based seeding
-- **Comprehensive Word Library**: 5000+ offline words including extensive dictionary coverage (no API required)
+- **Comprehensive Word Library**: 10,000+ offline words including massive dictionary coverage (no API required)
 - **Statistics Tracking**: Comprehensive game statistics with visual distribution
 - **Nintendo-Style UI**: Vibrant gradients, colorful animations, and playful design throughout
 - **Responsive Design**: Mobile-optimized interface with touch-friendly interactions
 - **Dark/Light Mode**: Theme support via CSS variables
 - **Auto-submission**: Automatic word checking when 5 letters are entered
-- **Massive Word Variety**: 1000+ answer words and 4000+ valid guess words for maximum English vocabulary coverage
+- **Massive Word Variety**: 3000+ answer words and 7000+ valid guess words for comprehensive English vocabulary coverage
 - **Colorful Game Elements**: Gradient tiles, animated backgrounds, and glassmorphism effects
 
 ## Deployment Strategy
