@@ -279,16 +279,11 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     setCurrentGuess('');
   }, [currentGuess, currentRow, grid, targetWord, startTime, challengeMode, gameState, toast, updateKeyboardState, playWordSubmit, playGameWin, playGameLose, playCorrectGuess, playInvalidWord]);
 
-  // Auto-submit when 5 letters are typed (if enabled in settings)
+  // Auto-submit disabled to prevent bouncing invalid word notifications
+  // Users must manually press Enter to submit words
   useEffect(() => {
-    if (currentGuess.length === 5 && gameState === 'playing') {
-      // Note: Auto-submit setting will be handled when settings are fully integrated
-      const timer = setTimeout(() => {
-        onEnter();
-      }, 200); // Small delay to allow UI to update
-
-      return () => clearTimeout(timer);
-    }
+    // Auto-submit functionality removed to prevent repeated invalid word notifications
+    // Players now must manually press Enter to submit their guesses
   }, [currentGuess, gameState, onEnter]);
 
   const resetGame = useCallback(async () => {

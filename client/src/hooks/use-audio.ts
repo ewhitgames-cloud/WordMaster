@@ -1,11 +1,6 @@
 export function useAudio() {
-  // Placeholder audio hook - keeps the interface but removes actual audio
-  const vibrate = (pattern: number | number[] = 100) => {
-    if ('vibrate' in navigator) {
-      navigator.vibrate(pattern);
-    }
-  };
-
+  // Placeholder audio hook - keeps the interface but removes actual audio and vibration
+  
   // No-op functions for all audio actions
   const playKeyPress = () => {};
   const playWordSubmit = () => {};
@@ -14,11 +9,13 @@ export function useAudio() {
   const playGameWin = () => {};
   const playGameLose = () => {};
   const playInvalidWord = () => {
-    // Keep haptic feedback for invalid words
-    vibrate([100, 50, 100]);
+    // Removed vibration - no feedback for invalid words
   };
   const startBackgroundMusic = () => {};
   const stopBackgroundMusic = () => {};
+  const vibrate = () => {
+    // Vibration disabled
+  };
 
   return {
     playKeyPress,
