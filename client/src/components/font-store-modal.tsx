@@ -485,6 +485,9 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
       equippedFont: font.id
     }));
 
+    // Apply the new font styles immediately
+    applyStyles(font);
+
     toast({
       title: "Font Equipped!",
       description: `${font.name} is now active.`,
@@ -518,6 +521,9 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
       ...prev,
       equippedColor: color.id
     }));
+
+    // Apply the new color styles immediately
+    applyStyles(undefined, color);
 
     toast({
       title: "Color Equipped!",
@@ -893,5 +899,89 @@ export const FontStoreAPI = {
   getEquippedColor: (): ColorOption => {
     const state = FontStoreAPI.getState();
     return AVAILABLE_COLORS.find(c => c.id === state.equippedColor) || AVAILABLE_COLORS[0];
+  },
+
+  applyStoredStyles: () => {
+    const state = FontStoreAPI.getState();
+    const currentFont = AVAILABLE_FONTS.find(f => f.id === state.equippedFont);
+    const currentColor = AVAILABLE_COLORS.find(c => c.id === state.equippedColor);
+    
+    if (!currentFont || !currentColor) return;
+    
+    const fontStack = `"${currentFont.family}", ${currentFont.fallback}`;
+    const colorValue = currentColor.value;
+    
+    const style = document.getElementById('dynamic-font-style') || document.createElement('style');
+    style.id = 'dynamic-font-style';
+    
+    style.textContent = `
+      /* Game tiles - font and structure */
+      .tile,
+      .tile-correct,
+      .tile-present, 
+      .tile-absent,
+      .tile-current,
+      .tile-empty,
+      [data-testid*="tile"] {
+        font-family: ${fontStack} !important;
+      }
+      
+      /* Game tiles - text color with outline */
+      .tile *,
+      .tile-correct *,
+      .tile-present *,
+      .tile-absent *,
+      .tile-current *,
+      .tile-empty *,
+      [data-testid*="tile"] * {
+        color: ${colorValue} !important;
+        font-family: ${fontStack} !important;
+        text-shadow: 
+          -1px -1px 0 #000,
+          1px -1px 0 #000,
+          -1px 1px 0 #000,
+          1px 1px 0 #000,
+          0 -1px 0 #000,
+          0 1px 0 #000,
+          -1px 0 0 #000,
+          1px 0 0 #000 !important;
+      }
+      
+      /* Keyboard keys - font and structure */
+      .keyboard-key,
+      .keyboard-key-default,
+      .keyboard-key-correct,
+      .keyboard-key-present,
+      .keyboard-key-absent,
+      .keyboard-key-special,
+      [data-testid*="key"] {
+        font-family: ${fontStack} !important;
+      }
+      
+      /* Keyboard keys - text color with outline */
+      .keyboard-key *,
+      .keyboard-key-default *,
+      .keyboard-key-correct *,
+      .keyboard-key-present *,
+      .keyboard-key-absent *,
+      .keyboard-key-special *,
+      [data-testid*="key"] * {
+        color: ${colorValue} !important;
+        font-family: ${fontStack} !important;
+        text-shadow: 
+          -1px -1px 0 #000,
+          1px -1px 0 #000,
+          -1px 1px 0 #000,
+          1px 1px 0 #000,
+          0 -1px 0 #000,
+          0 1px 0 #000,
+          -1px 0 0 #000,
+          1px 0 0 #000 !important;
+      }
+    `;
+    
+    if (!document.head.contains(style)) {
+      document.head.appendChild(style);
+    }
   }
 };

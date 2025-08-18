@@ -79,6 +79,9 @@ export default function Game({ mode: propMode }: GameProps = {}) {
     const updateCoins = () => setCoins(FontStoreAPI.getState().coins);
     updateCoins();
     
+    // Apply stored font styles on game load
+    FontStoreAPI.applyStoredStyles();
+    
     window.addEventListener('storage', updateCoins);
     return () => window.removeEventListener('storage', updateCoins);
   }, []);
