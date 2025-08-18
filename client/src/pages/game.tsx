@@ -105,6 +105,8 @@ export default function Game({ mode: propMode }: GameProps = {}) {
       FontStoreAPI.addCoins(5);
       setCoins(FontStoreAPI.getState().coins);
       
+      setTimeout(() => setShowCelebration(true), 500);
+      
       toast({
         title: "Game Over",
         description: `The word was ${targetWord} (+5 consolation coins)`,
@@ -361,6 +363,10 @@ export default function Game({ mode: propMode }: GameProps = {}) {
           setShowCelebration(false);
           setShowStats(true);
         }}
+        coinsEarned={gameState === 'won' ? Math.floor((20 + Math.max(0, (7 - (currentRow + 1)) * 5) + (challengeMode ? Math.max(0, Math.floor(timeRemaining / 10)) : 0)) * (challengeMode ? 1.5 : blindChallengeMode ? 2 : 1)) : gameState === 'lost' ? 5 : 0}
+        onHome={() => window.location.href = '/'}
+        targetWord={targetWord}
+        won={gameState === 'won'}
       />
 
       <StatsModal
