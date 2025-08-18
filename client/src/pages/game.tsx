@@ -14,6 +14,7 @@ import { useWordle } from "@/hooks/use-wordle-simple";
 import { Menu, Clock, Home, Store, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FontStoreAPI } from "@/components/font-store-modal";
+import { useCoins } from "@/components/ad-manager";
 
 // Format time as MM:SS
 const formatTime = (seconds: number): string => {
@@ -70,6 +71,9 @@ export default function Game({ mode: propMode }: GameProps = {}) {
     });
   });
 
+  // Use the persistent coin system
+  const { coins: persistentCoins, addCoins } = useCoins();
+  
   // Load coin balance on mount and listen for changes
   useEffect(() => {
     const updateCoins = () => setCoins(FontStoreAPI.getState().coins);
@@ -214,7 +218,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
                 whileTap={{ scale: 0.95 }}
               >
                 <Coins className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" />
-                <span data-testid="text-coins">{coins}</span>
+                <span data-testid="text-coins">{persistentCoins}</span>
               </motion.div>
               
               <Button
@@ -309,7 +313,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
               className="text-center flex-1"
               whileHover={{ scale: 1.1 }}
             >
-              <div className="font-bold text-2xl bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent" data-testid="text-coins">{coins}</div>
+              <div className="font-bold text-2xl bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent" data-testid="text-coins">{persistentCoins}</div>
               <div className="text-gray-600 text-xs font-semibold">Coins</div>
             </motion.div>
             <motion.div 

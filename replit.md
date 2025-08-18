@@ -83,6 +83,9 @@ Preferred communication style: Simple, everyday language.
 - **Auto-submission**: Automatic word checking when 5 letters are entered
 - **Massive Word Variety**: 3000+ answer words and 7000+ valid guess words for comprehensive English vocabulary coverage
 - **Colorful Game Elements**: Gradient tiles, animated backgrounds, and glassmorphism effects
+- **AdMob Integration**: Rewarded video ads for earning coins, ready for mobile app deployment
+- **Coin Economy**: Simple coin-based currency system with persistent localStorage storage
+- **Font Store with Ads**: Players can watch ads to earn 25-50 coins for purchasing fonts and themes
 
 ## Deployment Strategy
 

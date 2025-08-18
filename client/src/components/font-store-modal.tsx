@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { X, Coins, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { AdManager } from "./ad-manager";
 
 export interface Font {
   id: string;
@@ -558,6 +559,15 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
             Customize your game with fonts and colors. Buy once, equip anytime!
           </p>
         </DialogHeader>
+
+        {/* Ad Banner for Free Coins */}
+        <AdManager
+          onCoinsEarned={(coins) => {
+            setState(prev => ({ ...prev, coins: prev.coins + coins }));
+          }}
+          variant="store"
+          className="mb-4"
+        />
 
         {/* Tabs */}
         <div className="flex space-x-1 bg-gray-100 rounded-lg p-1 mt-4">
