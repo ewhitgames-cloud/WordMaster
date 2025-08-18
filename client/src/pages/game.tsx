@@ -9,7 +9,7 @@ import StatsModal from "@/components/stats-modal";
 import MenuModal from "@/components/menu-modal";
 import FontStoreModal from "@/components/font-store-modal";
 import HowToPlayModal from "@/components/how-to-play-modal";
-import { WordSuggestionPrompt } from "@/components/word-suggestion-prompt";
+
 import { useWordle } from "@/hooks/use-wordle-simple";
 import { Menu, Star, Clock, Home, Store, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -182,7 +182,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  className="p-2 sm:p-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-cyan-400 hover:text-white rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  className="p-2 sm:p-3 bg-white/20 text-gray-800 rounded-xl shadow-lg border border-white/30"
                   data-testid="button-home"
                 >
                   <Home className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -190,7 +190,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
               </Link>
               <button 
                 onClick={() => setShowMenu(true)}
-                className="p-2 sm:p-3 hover:bg-gradient-to-r hover:from-purple-400 hover:to-pink-400 hover:text-white rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                className="p-2 sm:p-3 bg-white/20 text-gray-800 rounded-xl shadow-lg border border-white/30"
                 data-testid="button-menu"
               >
                 <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -229,7 +229,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
               <Button
                 variant="ghost"
                 size="sm"
-                className="p-2 sm:p-3 hover:bg-gradient-to-r hover:from-green-400 hover:to-emerald-400 hover:text-white rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                className="p-2 sm:p-3 bg-white/20 text-gray-800 rounded-xl shadow-lg border border-white/30"
                 onClick={() => setShowFontStore(true)}
                 data-testid="button-store"
               >
@@ -347,15 +347,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
           evaluatedRows={evaluatedRows}
         />
 
-        {/* Word suggestion prompt */}
-        {invalidWord && (
-          <div className="mb-4">
-            <WordSuggestionPrompt 
-              word={invalidWord}
-              onClose={clearInvalidWord}
-            />
-          </div>
-        )}
+
 
         {/* Keyboard */}
         <Keyboard

@@ -43,7 +43,7 @@ export default function MenuModal({
           <Button 
             onClick={onStats}
             variant="outline"
-            className="w-full flex items-center justify-center space-x-2 bg-white/20 hover:bg-white/30 text-gray-800 border-gray-300"
+            className="w-full flex items-center justify-center space-x-2 bg-white/90 text-gray-800 border-gray-300 hover:bg-white"
             data-testid="button-statistics"
           >
             <BarChart3 className="w-4 h-4" />
@@ -52,7 +52,7 @@ export default function MenuModal({
 
           <Button 
             variant="outline"
-            className="w-full flex items-center justify-center space-x-2 bg-white/20 hover:bg-white/30 text-gray-800 border-gray-300"
+            className="w-full flex items-center justify-center space-x-2 bg-white/90 text-gray-800 border-gray-300 hover:bg-white"
             data-testid="button-settings"
           >
             <Settings className="w-4 h-4" />
@@ -62,7 +62,7 @@ export default function MenuModal({
           <Button 
             onClick={onHowToPlay}
             variant="outline"
-            className="w-full flex items-center justify-center space-x-2 bg-white/20 hover:bg-white/30 text-gray-800 border-gray-300"
+            className="w-full flex items-center justify-center space-x-2 bg-white/90 text-gray-800 border-gray-300 hover:bg-white"
             data-testid="button-help"
           >
             <HelpCircle className="w-4 h-4" />
