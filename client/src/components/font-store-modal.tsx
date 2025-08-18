@@ -130,7 +130,7 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
   const [state, setState] = useState<FontStoreState>(DEFAULT_STATE);
   const [loadedFonts, setLoadedFonts] = useState<Set<string>>(new Set(['default']));
 
-  // Load state from localStorage on mount
+  // Load state from localStorage on mount and preload fonts
   useEffect(() => {
     const savedState = localStorage.getItem('wordpop-font-store');
     if (savedState) {
@@ -141,7 +141,16 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
         console.error('Error loading font store state:', error);
       }
     }
-  }, []);
+
+    // Preload all Google Fonts when modal opens
+    if (isOpen) {
+      AVAILABLE_FONTS.forEach(font => {
+        if (font.googleFont) {
+          loadFont(font);
+        }
+      });
+    }
+  }, [isOpen]);
 
   // Save state to localStorage whenever it changes
   useEffect(() => {
@@ -160,19 +169,37 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
 
   // Load Google Fonts when needed
   const loadFont = async (font: Font) => {
-    if (loadedFonts.has(font.id) || !font.googleFont) return;
+    if (loadedFonts.has(font.id) || !font.googleFont) {
+      return;
+    }
 
     try {
+      // Check if font link already exists
+      const existingLink = document.querySelector(`link[href="${font.googleFont}"]`);
+      if (existingLink) {
+        setLoadedFonts(prev => new Set(Array.from(prev).concat(font.id)));
+        return;
+      }
+
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = font.googleFont;
+      link.onload = () => {
+        setLoadedFonts(prev => new Set(Array.from(prev).concat(font.id)));
+      };
       document.head.appendChild(link);
       
-      // Wait for font to load
-      await document.fonts.load(`16px "${font.family}"`);
-      setLoadedFonts(prev => new Set(Array.from(prev).concat(font.id)));
+      // Wait for font to load with timeout
+      const fontLoadPromise = document.fonts.load(`16px "${font.family}"`);
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Font load timeout')), 3000)
+      );
+      
+      await Promise.race([fontLoadPromise, timeoutPromise]);
     } catch (error) {
       console.error(`Failed to load font ${font.name}:`, error);
+      // Still mark as loaded to show fallback
+      setLoadedFonts(prev => new Set(Array.from(prev).concat(font.id)));
     }
   };
 
@@ -183,23 +210,34 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
     style.id = 'dynamic-font-style';
     
     style.textContent = `
-      /* Game tiles */
-      .game-tile, .game-tile *, 
-      .tile, .tile *,
-      .grid-tile, .grid-tile *,
+      /* Game tiles - all states */
+      .tile,
+      .tile-correct,
+      .tile-present, 
+      .tile-absent,
+      .tile-current,
+      .tile-empty,
       [data-testid*="tile"] {
         font-family: ${fontStack} !important;
       }
       
-      /* Keyboard keys */
-      .keyboard-key, .keyboard-key *,
+      /* Keyboard keys - all states */
+      .keyboard-key,
+      .keyboard-key-default,
+      .keyboard-key-correct,
+      .keyboard-key-present,
+      .keyboard-key-absent,
+      .keyboard-key-special,
       [data-testid*="key"] {
         font-family: ${fontStack} !important;
       }
       
-      /* Game board wrapper */
-      .game-grid, .game-grid *,
-      .wordle-grid, .wordle-grid * {
+      /* Additional game elements */
+      .aspect-square,
+      .border-2,
+      .text-2xl,
+      .font-bold,
+      .text-white {
         font-family: ${fontStack} !important;
       }
     `;
@@ -314,16 +352,15 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
                   </div>
 
                   <div 
-                    className="bg-gray-50 rounded-lg p-3 mb-4 min-h-[80px] flex items-center justify-center text-center transition-all duration-200"
+                    className="bg-gray-50 rounded-lg p-3 mb-4 min-h-[80px] flex items-center justify-center text-center transition-all duration-200 border"
                     style={{
-                      fontFamily: isLoaded ? `"${font.family}", ${font.fallback}` : font.fallback
+                      fontFamily: `"${font.family}", ${font.fallback}`
                     }}
-                    onMouseEnter={() => loadFont(font)}
                   >
                     <div>
-                      <div className="text-lg font-semibold">ABCDE</div>
-                      <div className="text-sm">abcde</div>
-                      <div className="text-xs text-gray-600">12345</div>
+                      <div className="text-lg font-semibold text-gray-800">WORD</div>
+                      <div className="text-sm text-gray-600">guess</div>
+                      <div className="text-xs text-gray-500">letter</div>
                     </div>
                   </div>
 

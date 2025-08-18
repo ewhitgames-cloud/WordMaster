@@ -132,23 +132,34 @@ export default function FontSettings() {
       style.id = 'dynamic-font-style';
       
       style.textContent = `
-        /* Game tiles */
-        .game-tile, .game-tile *, 
-        .tile, .tile *,
-        .grid-tile, .grid-tile *,
+        /* Game tiles - all states */
+        .tile,
+        .tile-correct,
+        .tile-present, 
+        .tile-absent,
+        .tile-current,
+        .tile-empty,
         [data-testid*="tile"] {
           font-family: ${fontStack} !important;
         }
         
-        /* Keyboard keys */
-        .keyboard-key, .keyboard-key *,
+        /* Keyboard keys - all states */
+        .keyboard-key,
+        .keyboard-key-default,
+        .keyboard-key-correct,
+        .keyboard-key-present,
+        .keyboard-key-absent,
+        .keyboard-key-special,
         [data-testid*="key"] {
           font-family: ${fontStack} !important;
         }
         
-        /* Game board wrapper */
-        .game-grid, .game-grid *,
-        .wordle-grid, .wordle-grid * {
+        /* Additional game elements */
+        .aspect-square,
+        .border-2,
+        .text-2xl,
+        .font-bold,
+        .text-white {
           font-family: ${fontStack} !important;
         }
       `;
