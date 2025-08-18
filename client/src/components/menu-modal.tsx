@@ -7,6 +7,7 @@ interface MenuModalProps {
   onClose: () => void;
   onNewGame: () => void;
   onStats: () => void;
+  onSettings: () => void;
   onHowToPlay: () => void;
   challengeMode: boolean;
   blindChallengeMode?: boolean;
@@ -17,6 +18,7 @@ export default function MenuModal({
   onClose, 
   onNewGame, 
   onStats,
+  onSettings,
   onHowToPlay,
   challengeMode,
   blindChallengeMode = false
@@ -51,6 +53,7 @@ export default function MenuModal({
           </Button>
 
           <Button 
+            onClick={onSettings}
             variant="outline"
             className="w-full flex items-center justify-center space-x-2 bg-white/90 text-gray-800 border-gray-300 hover:bg-white"
             data-testid="button-settings"

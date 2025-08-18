@@ -9,6 +9,7 @@ import StatsModal from "@/components/stats-modal";
 import MenuModal from "@/components/menu-modal";
 import FontStoreModal from "@/components/font-store-modal";
 import HowToPlayModal from "@/components/how-to-play-modal";
+import { WordSettingsModal } from "@/components/word-settings-modal";
 
 import { useWordle } from "@/hooks/use-wordle-simple";
 import { Menu, Clock, Home, Store, Coins } from "lucide-react";
@@ -35,6 +36,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
   const [showMenu, setShowMenu] = useState(false);
   const [showFontStore, setShowFontStore] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
+  const [showWordSettings, setShowWordSettings] = useState(false);
   const [coins, setCoins] = useState(0);
   
   // Determine game mode from props or URL
@@ -394,6 +396,10 @@ export default function Game({ mode: propMode }: GameProps = {}) {
           setShowMenu(false);
           setShowStats(true);
         }}
+        onSettings={() => {
+          setShowMenu(false);
+          setShowWordSettings(true);
+        }}
         onHowToPlay={() => {
           setShowMenu(false);
           setShowHowToPlay(true);
@@ -410,6 +416,11 @@ export default function Game({ mode: propMode }: GameProps = {}) {
       <HowToPlayModal
         isOpen={showHowToPlay}
         onClose={() => setShowHowToPlay(false)}
+      />
+
+      <WordSettingsModal
+        isOpen={showWordSettings}
+        onClose={() => setShowWordSettings(false)}
       />
     </div>
   );
