@@ -11,7 +11,7 @@ import FontStoreModal from "@/components/font-store-modal";
 import HowToPlayModal from "@/components/how-to-play-modal";
 
 import { useWordle } from "@/hooks/use-wordle-simple";
-import { Menu, Star, Clock, Home, Store, Coins } from "lucide-react";
+import { Menu, Clock, Home, Store, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FontStoreAPI } from "@/components/font-store-modal";
 
@@ -206,15 +206,6 @@ export default function Game({ mode: propMode }: GameProps = {}) {
             
             <div className="flex items-center space-x-1.5 sm:space-x-3">
               <motion.div 
-                className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg border-2 border-white"
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <Star className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" />
-                <span data-testid="text-score">{score}</span>
-              </motion.div>
-              
-              <motion.div 
                 className="bg-gradient-to-r from-purple-500 to-blue-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg border-2 border-white cursor-pointer"
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
@@ -318,8 +309,8 @@ export default function Game({ mode: propMode }: GameProps = {}) {
               className="text-center flex-1"
               whileHover={{ scale: 1.1 }}
             >
-              <div className="font-bold text-2xl bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent" data-testid="text-total-points">{stats.totalPoints}</div>
-              <div className="text-gray-600 text-xs font-semibold">Points</div>
+              <div className="font-bold text-2xl bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent" data-testid="text-coins">{coins}</div>
+              <div className="text-gray-600 text-xs font-semibold">Coins</div>
             </motion.div>
             <motion.div 
               className="text-center flex-1"
