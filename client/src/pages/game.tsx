@@ -8,6 +8,7 @@ import CelebrationModal from "@/components/celebration-modal";
 import StatsModal from "@/components/stats-modal";
 import MenuModal from "@/components/menu-modal";
 import FontStoreModal from "@/components/font-store-modal";
+import { WordSuggestionPrompt } from "@/components/word-suggestion-prompt";
 import { useWordle } from "@/hooks/use-wordle-simple";
 import { Menu, Star, Clock, Home, Store, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,9 @@ export default function Game({ mode: propMode }: GameProps = {}) {
     onEnter,
     onBackspace,
     resetGame,
-    submitResult
+    submitResult,
+    invalidWord,
+    clearInvalidWord
   } = useWordle(challengeMode, dailyChallengeMode, () => {
     toast({
       title: "Time's Up!",
@@ -320,6 +323,16 @@ export default function Game({ mode: propMode }: GameProps = {}) {
           targetWord={targetWord}
           evaluatedRows={evaluatedRows}
         />
+
+        {/* Word suggestion prompt */}
+        {invalidWord && (
+          <div className="mb-4">
+            <WordSuggestionPrompt 
+              word={invalidWord}
+              onClose={clearInvalidWord}
+            />
+          </div>
+        )}
 
         {/* Keyboard */}
         <Keyboard

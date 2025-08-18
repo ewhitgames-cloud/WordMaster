@@ -1,8 +1,8 @@
 // Import comprehensive word dictionary
-import { VALID_GUESS_WORD_SET } from '@shared/comprehensive-word-list';
+import { getWordSets } from '@shared/comprehensive-word-list';
 
 // Use the comprehensive word set for validation
-export const VALID_WORDS = VALID_GUESS_WORD_SET;
+export const VALID_WORDS = getWordSets().guessSet;
 
 // Word categories for dynamic selection
 export const WORD_CATEGORIES = {

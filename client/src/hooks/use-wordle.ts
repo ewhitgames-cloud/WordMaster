@@ -19,6 +19,7 @@ export function useWordle(challengeMode: boolean = false) {
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [score, setScore] = useState(0);
   const [evaluatedRows, setEvaluatedRows] = useState<Set<number>>(new Set());
+  const [invalidWord, setInvalidWord] = useState<string>('');
 
   // Fetch stats
   const { data: stats } = useQuery<GameStats>({
@@ -91,6 +92,7 @@ export function useWordle(challengeMode: boolean = false) {
     }
 
     if (!isValidWord(currentGuess)) {
+      setInvalidWord(currentGuess);
       toast({
         title: "Invalid word",
         description: "Not in word list",
@@ -105,7 +107,11 @@ export function useWordle(challengeMode: boolean = false) {
     setGrid(newGrid);
 
     // Mark this row as evaluated
-    setEvaluatedRows(prev => new Set([...prev, currentRow]));
+    setEvaluatedRows(prev => {
+      const newSet = new Set(prev);
+      newSet.add(currentRow);
+      return newSet;
+    });
 
     // Update keyboard state
     updateKeyboardState(currentGuess, targetWord);
@@ -226,5 +232,7 @@ export function useWordle(challengeMode: boolean = false) {
     onBackspace,
     resetGame,
     submitResult,
+    invalidWord,
+    clearInvalidWord: () => setInvalidWord(''),
   };
 }

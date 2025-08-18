@@ -1,3 +1,4 @@
+import React from "react";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -25,6 +26,16 @@ function Router() {
         {(params) => <Game mode="blind" />}
       </Route>
       <Route path="/stats" component={Stats} />
+      <Route path="/admin">
+        {() => {
+          const Admin = React.lazy(() => import("@/pages/admin"));
+          return (
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <Admin />
+            </React.Suspense>
+          );
+        }}
+      </Route>
       <Route component={NotFound} />
     </Switch>
   );

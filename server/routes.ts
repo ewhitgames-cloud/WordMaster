@@ -5,7 +5,8 @@ import { insertGameStatsSchema, insertGameResultSchema } from "@shared/schema";
 import { z } from "zod";
 import { WordManager } from "./word-manager";
 import { validateWordExpanded } from "./word-validator";
-import { VALID_GUESS_WORD_SET } from '@shared/comprehensive-word-list';
+import { getWordSets, addCustomWordsToSet } from '@shared/comprehensive-word-list';
+import { initializeCustomWords, getCustomWords, addCustomWord, addPendingWord, getPendingWords, approvePendingWord, rejectPendingWord } from './custom-word-manager';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get game statistics
@@ -322,12 +323,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const isValid = await validateWordExpanded(word, VALID_GUESS_WORD_SET);
+      const { guessSet } = getWordSets();
+      const isValid = await validateWordExpanded(word, guessSet);
       
       res.json({ 
         word: word.toUpperCase(),
         isValid,
-        source: VALID_GUESS_WORD_SET.has(word.toUpperCase()) ? 'built-in' : 'OpenAI',
+        source: guessSet.has(word.toUpperCase()) ? 'built-in' : 'OpenAI',
         hasOpenAI: !!process.env.OPENAI_API_KEY
       });
     } catch (error) {
@@ -354,9 +356,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const results: Record<string, boolean> = {};
       
       // Process words in parallel for better performance
+      const { guessSet } = getWordSets();
       const validationPromises = words.map(async (word: string) => {
         if (typeof word === 'string' && word.length === 5) {
-          const isValid = await validateWordExpanded(word, VALID_GUESS_WORD_SET);
+          const isValid = await validateWordExpanded(word, guessSet);
           return { word: word.toUpperCase(), isValid };
         }
         return { word: word.toUpperCase(), isValid: false };
@@ -380,6 +383,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
         message: "Failed to validate words",
         results: {}
       });
+    }
+  });
+
+  // Initialize custom words system
+  await initializeCustomWords();
+  const customWords = getCustomWords();
+  addCustomWordsToSet(customWords);
+
+  // Admin routes for custom word management
+  app.post("/api/admin/words", async (req, res) => {
+    try {
+      const { word } = req.body;
+      if (!word || typeof word !== 'string') {
+        return res.status(400).json({ message: "Word is required" });
+      }
+
+      const added = await addCustomWord(word);
+      if (added) {
+        // Update the word sets immediately
+        const updatedCustomWords = getCustomWords();
+        addCustomWordsToSet(new Set([word.toUpperCase()]));
+        res.json({ message: "Word added successfully", word: word.toUpperCase() });
+      } else {
+        res.status(400).json({ message: "Invalid word or already exists" });
+      }
+    } catch (error) {
+      console.error('Add word error:', error);
+      res.status(500).json({ message: "Failed to add word" });
+    }
+  });
+
+  app.post("/api/admin/words/suggest", async (req, res) => {
+    try {
+      const { word } = req.body;
+      if (!word || typeof word !== 'string') {
+        return res.status(400).json({ message: "Word is required" });
+      }
+
+      const added = await addPendingWord(word);
+      res.json({ 
+        message: added ? "Word suggestion added for review" : "Word already exists or invalid",
+        word: word.toUpperCase() 
+      });
+    } catch (error) {
+      console.error('Suggest word error:', error);
+      res.status(500).json({ message: "Failed to suggest word" });
+    }
+  });
+
+  app.get("/api/admin/words/pending", async (req, res) => {
+    try {
+      const pending = getPendingWords();
+      res.json({ words: pending });
+    } catch (error) {
+      console.error('Get pending words error:', error);
+      res.status(500).json({ message: "Failed to get pending words" });
+    }
+  });
+
+  app.post("/api/admin/words/approve", async (req, res) => {
+    try {
+      const { word } = req.body;
+      if (!word || typeof word !== 'string') {
+        return res.status(400).json({ message: "Word is required" });
+      }
+
+      const approved = await approvePendingWord(word);
+      if (approved) {
+        // Update the word sets immediately
+        addCustomWordsToSet(new Set([word.toUpperCase()]));
+        res.json({ message: "Word approved and added", word: word.toUpperCase() });
+      } else {
+        res.status(400).json({ message: "Word not found in pending list" });
+      }
+    } catch (error) {
+      console.error('Approve word error:', error);
+      res.status(500).json({ message: "Failed to approve word" });
+    }
+  });
+
+  app.post("/api/admin/words/reject", async (req, res) => {
+    try {
+      const { word } = req.body;
+      if (!word || typeof word !== 'string') {
+        return res.status(400).json({ message: "Word is required" });
+      }
+
+      const rejected = await rejectPendingWord(word);
+      res.json({ 
+        message: rejected ? "Word rejected" : "Word not found in pending list",
+        word: word.toUpperCase() 
+      });
+    } catch (error) {
+      console.error('Reject word error:', error);
+      res.status(500).json({ message: "Failed to reject word" });
     }
   });
 

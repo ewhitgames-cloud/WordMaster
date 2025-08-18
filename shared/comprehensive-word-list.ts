@@ -746,9 +746,25 @@ export const VALID_GUESS_WORDS = [
   'HYMNS', 'HYNDE', 'HYOID', 'HYPED', 'HYPER', 'HYPES', 'HYPHA', 'HYPOS', 'HYRAX', 'HYSON'
 ];
 
-// Fast lookup sets for performance
-export const ANSWER_WORD_SET = new Set(ANSWER_WORDS);
-export const VALID_GUESS_WORD_SET = new Set(VALID_GUESS_WORDS);
+// Dynamic sets that can be updated with custom words
+let ANSWER_WORD_SET = new Set(ANSWER_WORDS);
+let VALID_GUESS_WORD_SET = new Set(VALID_GUESS_WORDS);
+
+// Function to add custom words to the valid guess set
+export function addCustomWordsToSet(customWords: Set<string>): void {
+  for (const word of customWords) {
+    VALID_GUESS_WORD_SET.add(word.toUpperCase());
+  }
+  console.log(`Added ${customWords.size} custom words to valid guess set`);
+}
+
+// Function to get current sets (for external access)
+export function getWordSets(): { answerSet: Set<string>; guessSet: Set<string> } {
+  return {
+    answerSet: ANSWER_WORD_SET,
+    guessSet: VALID_GUESS_WORD_SET
+  };
+}
 
 // Functions for word selection and validation
 export function getRandomAnswerWord(): string {
