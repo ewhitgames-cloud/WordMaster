@@ -53,7 +53,7 @@ export default function Keyboard({ onKeyPress, onEnter, onBackspace, keyboardSta
 
   return (
     <motion.div 
-      className="space-y-2 sm:space-y-3 px-2 py-4 bg-white/20 backdrop-blur-sm rounded-2xl border-4 border-white/30 shadow-2xl"
+      className="space-y-2 sm:space-y-3 px-4 py-6 bg-white/20 backdrop-blur-sm rounded-2xl border-4 border-white/30 shadow-2xl"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
