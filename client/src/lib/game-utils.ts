@@ -4,7 +4,9 @@ export type TileState = 'empty' | 'current' | 'correct' | 'present' | 'absent';
 export type KeyState = 'default' | 'correct' | 'present' | 'absent';
 
 export function isValidWord(word: string): boolean {
-  return isOfficialWordleWord(word.toUpperCase());
+  const result = isOfficialWordleWord(word.toUpperCase());
+  console.log('Word validation debug:', word, 'uppercase:', word.toUpperCase(), 'result:', result);
+  return result;
 }
 
 export async function isValidWordExpanded(word: string): Promise<boolean> {
@@ -31,8 +33,11 @@ export function calculateScore(attempts: number, timeElapsed: number, challengeM
 export function getTileState(guess: string, target: string, position: number): TileState {
   const guessLetter = guess[position];
   
+  console.log('getTileState debug:', { guess, target, position, guessLetter, targetLetter: target[position] });
+  
   // If the letter is in the correct position
   if (guessLetter === target[position]) {
+    console.log('Found correct letter at position', position);
     return 'correct';
   }
   

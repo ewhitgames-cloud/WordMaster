@@ -271,6 +271,7 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     setEvaluatedRows(prev => new Set([...Array.from(prev), currentRow]));
 
     // Update keyboard state
+    console.log('About to update keyboard state with:', { currentGuess, targetWord });
     updateKeyboardState(currentGuess, targetWord);
 
     // Check win condition
