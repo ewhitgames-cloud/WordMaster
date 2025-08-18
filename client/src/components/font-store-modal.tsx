@@ -549,14 +549,9 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-2xl font-bold">Style Store</DialogTitle>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full">
-                <Coins className="w-4 h-4" />
-                <span className="font-bold">{state.coins}</span>
-              </div>
-              <Button variant="ghost" size="icon" onClick={onClose}>
-                <X className="h-4 w-4" />
-              </Button>
+            <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full">
+              <Coins className="w-4 h-4" />
+              <span className="font-bold">{state.coins}</span>
             </div>
           </div>
           <p className="text-gray-600 text-sm">

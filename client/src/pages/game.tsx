@@ -8,6 +8,7 @@ import CelebrationModal from "@/components/celebration-modal";
 import StatsModal from "@/components/stats-modal";
 import MenuModal from "@/components/menu-modal";
 import FontStoreModal from "@/components/font-store-modal";
+import HowToPlayModal from "@/components/how-to-play-modal";
 import { WordSuggestionPrompt } from "@/components/word-suggestion-prompt";
 import { useWordle } from "@/hooks/use-wordle-simple";
 import { Menu, Star, Clock, Home, Store, Coins } from "lucide-react";
@@ -32,6 +33,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
   const [showStats, setShowStats] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showFontStore, setShowFontStore] = useState(false);
+  const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [coins, setCoins] = useState(0);
   
   // Determine game mode from props or URL
@@ -145,6 +147,25 @@ export default function Game({ mode: propMode }: GameProps = {}) {
         <div className="absolute top-32 right-16 w-16 h-16 bg-green-300 rounded-full animate-bounce" style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
         <div className="absolute bottom-20 left-20 w-24 h-24 bg-pink-300 rounded-full animate-bounce" style={{ animationDelay: '2s', animationDuration: '3.5s' }}></div>
         <div className="absolute bottom-40 right-10 w-12 h-12 bg-cyan-300 rounded-full animate-bounce" style={{ animationDelay: '0.5s', animationDuration: '2.5s' }}></div>
+      </div>
+      
+      {/* Falling letters animation */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {['W', 'O', 'R', 'D', 'S', 'P', 'L', 'A', 'Y', 'F', 'U', 'N'].map((letter, index) => (
+          <div
+            key={`falling-${letter}-${index}`}
+            className="absolute text-6xl font-bold opacity-10 text-white animate-pulse"
+            style={{
+              left: `${(index * 8.33) % 100}%`,
+              top: `-10%`,
+              animation: `fall-${index % 4} ${12 + (index % 8)}s linear infinite`,
+              animationDelay: `${index * 2}s`,
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+            }}
+          >
+            {letter}
+          </div>
+        ))}
       </div>
 
       {/* Header */}
@@ -383,6 +404,10 @@ export default function Game({ mode: propMode }: GameProps = {}) {
           setShowMenu(false);
           setShowStats(true);
         }}
+        onHowToPlay={() => {
+          setShowMenu(false);
+          setShowHowToPlay(true);
+        }}
         challengeMode={challengeMode}
         blindChallengeMode={blindChallengeMode}
       />
@@ -390,6 +415,11 @@ export default function Game({ mode: propMode }: GameProps = {}) {
       <FontStoreModal
         isOpen={showFontStore}
         onClose={() => setShowFontStore(false)}
+      />
+
+      <HowToPlayModal
+        isOpen={showHowToPlay}
+        onClose={() => setShowHowToPlay(false)}
       />
     </div>
   );
