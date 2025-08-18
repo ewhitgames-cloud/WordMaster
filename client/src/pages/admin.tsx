@@ -1,7 +1,8 @@
 import React from 'react';
-import { WordAdminPanel } from '@/components/word-admin-panel';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Settings } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'wouter';
 
 export default function AdminPage() {
   return (
@@ -14,12 +15,21 @@ export default function AdminPage() {
               Word Pop! Admin Panel
             </CardTitle>
             <CardDescription>
-              Manage custom words and review player suggestions for the game dictionary.
+              Admin panel has been simplified - now using official Wordle words exclusively (2,309 answers + 10,657 valid guesses).
+              Custom word management is no longer available.
             </CardDescription>
           </CardHeader>
+          <CardContent>
+            <div className="text-center space-y-4">
+              <p className="text-muted-foreground">
+                Word Pop! now uses the official NYT Wordle word list for the most authentic experience.
+              </p>
+              <Link href="/">
+                <Button>Return to Home</Button>
+              </Link>
+            </div>
+          </CardContent>
         </Card>
-
-        <WordAdminPanel />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { GameStats, InsertGameResult } from "@shared/schema";
-import { calculateScore, isValidWord, isValidWordExpanded, getTileState } from "@/lib/game-utils";
+import { calculateScore, isValidWord, getTileState } from "@/lib/game-utils";
 import { useToast } from "@/hooks/use-toast";
 import { useAudio } from "@/hooks/use-audio";
 
@@ -226,30 +226,20 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
       return;
     }
 
-    // Check word validity with expanded OpenAI validation
+    // Check word validity using official Wordle words
     setIsValidatingWord(true);
-    try {
-      const isValid = await isValidWordExpanded(currentGuess);
-      if (!isValid) {
-        setInvalidWord(currentGuess);
-        playInvalidWord();
-        toast({
-          title: "Invalid word", 
-          description: "Not in word list",
-          variant: "destructive"
-        });
-        return;
-      }
-    } catch (error) {
-      console.error('Word validation error:', error);
+    const isValid = isValidWord(currentGuess);
+    setIsValidatingWord(false);
+    
+    if (!isValid) {
+      setInvalidWord(currentGuess);
+      playInvalidWord();
       toast({
-        title: "Validation error", 
-        description: "Unable to validate word, please try again",
+        title: "Invalid word", 
+        description: "Not in official Wordle word list",
         variant: "destructive"
       });
       return;
-    } finally {
-      setIsValidatingWord(false);
     }
 
     // Play word submit sound

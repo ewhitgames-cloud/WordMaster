@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import SettingsModal from '@/components/settings-modal';
 import FontStoreModal from '@/components/font-store-modal';
-import { WordExpansionButton } from '@/components/word-expansion-button';
+// Word expansion functionality removed - now using official Wordle words only
 import { useSettings } from '@/hooks/use-settings';
 import { Sparkles, Calendar, Trophy, BarChart3, Settings, Store, Coins } from 'lucide-react';
 import { FontStoreAPI } from '@/components/font-store-modal';
@@ -365,7 +365,7 @@ export default function HomePage() {
           animate={{ y: 0, opacity: showContent ? 1 : 0 }}
           transition={{ delay: 0.9, duration: 0.8 }}
         >
-          <WordExpansionButton />
+          {/* Word expansion removed - using official Wordle words only */}
         </motion.div>
 
         {/* Footer */}
