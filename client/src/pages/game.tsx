@@ -9,9 +9,10 @@ import StatsModal from "@/components/stats-modal";
 import MenuModal from "@/components/menu-modal";
 import FontStoreModal from "@/components/font-store-modal";
 import HowToPlayModal from "@/components/how-to-play-modal";
-import { WordSettingsModal } from "@/components/word-settings-modal";
+import SettingsModal from "@/components/settings-modal";
 
 import { useWordle } from "@/hooks/use-wordle-simple";
+import { useSettings } from "@/hooks/use-settings";
 import { Menu, Clock, Home, Store, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FontStoreAPI } from "@/components/font-store-modal";
@@ -31,12 +32,13 @@ interface GameProps {
 export default function Game({ mode: propMode }: GameProps = {}) {
   const { toast } = useToast();
   const [location] = useLocation();
+  const { settings, updateSettings } = useSettings();
   const [showCelebration, setShowCelebration] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showFontStore, setShowFontStore] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
-  const [showWordSettings, setShowWordSettings] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [coins, setCoins] = useState(0);
   
   // Determine game mode from props or URL
@@ -398,7 +400,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
         }}
         onSettings={() => {
           setShowMenu(false);
-          setShowWordSettings(true);
+          setShowSettings(true);
         }}
         onHowToPlay={() => {
           setShowMenu(false);
@@ -418,10 +420,14 @@ export default function Game({ mode: propMode }: GameProps = {}) {
         onClose={() => setShowHowToPlay(false)}
       />
 
-      <WordSettingsModal
-        isOpen={showWordSettings}
-        onClose={() => setShowWordSettings(false)}
-      />
+      {settings && (
+        <SettingsModal
+          isOpen={showSettings}
+          onClose={() => setShowSettings(false)}
+          settings={settings}
+          onSettingsChange={updateSettings}
+        />
+      )}
     </div>
   );
 }
