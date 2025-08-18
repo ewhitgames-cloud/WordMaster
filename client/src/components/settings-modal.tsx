@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Settings, Volume2, VolumeX, Palette, Timer, Gamepad2, RotateCcw } from "lucide-react";
+import FontSettings from "./font-settings";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -249,6 +250,11 @@ export default function SettingsModal({
               </Select>
             </div>
           </div>
+
+          <Separator />
+
+          {/* Font Settings Section */}
+          <FontSettings />
 
           <Separator />
 

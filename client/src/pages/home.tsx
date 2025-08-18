@@ -4,9 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import SettingsModal from '@/components/settings-modal';
+import FontStoreModal from '@/components/font-store-modal';
 import { WordExpansionButton } from '@/components/word-expansion-button';
 import { useSettings } from '@/hooks/use-settings';
-import { Sparkles, Calendar, Trophy, BarChart3, Settings } from 'lucide-react';
+import { Sparkles, Calendar, Trophy, BarChart3, Settings, Store, Coins } from 'lucide-react';
+import { FontStoreAPI } from '@/components/font-store-modal';
 
 interface FallingLetter {
   id: string;
@@ -32,6 +34,8 @@ export default function HomePage() {
   const [backgroundLetters, setBackgroundLetters] = useState<BackgroundLetter[]>([]);
   const [showContent, setShowContent] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showFontStore, setShowFontStore] = useState(false);
+  const [coins, setCoins] = useState(0);
   const { settings, updateSettings } = useSettings();
 
   // Title letters for "WORD POP!"
@@ -124,6 +128,15 @@ export default function HomePage() {
       clearTimeout(timer);
       clearInterval(backgroundInterval);
     };
+  }, []);
+
+  // Load coins on mount and listen for changes
+  useEffect(() => {
+    const updateCoins = () => setCoins(FontStoreAPI.getState().coins);
+    updateCoins();
+    
+    window.addEventListener('storage', updateCoins);
+    return () => window.removeEventListener('storage', updateCoins);
   }, []);
 
   return (
@@ -287,6 +300,29 @@ export default function HomePage() {
             </CardContent>
           </Card>
 
+          {/* Font Store with Coin Balance */}
+          <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center space-x-2">
+                  <Store className="h-5 w-5 text-white" />
+                  <span className="text-white font-semibold">Font Store</span>
+                </div>
+                <div className="flex items-center space-x-1 bg-gradient-to-r from-purple-500 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                  <Coins className="w-3 h-3" />
+                  <span>{coins}</span>
+                </div>
+              </div>
+              <Button 
+                className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0 shadow-lg"
+                onClick={() => setShowFontStore(true)}
+                data-testid="button-font-store"
+              >
+                Browse Fonts
+              </Button>
+            </CardContent>
+          </Card>
+
           {/* Bottom row with Statistics and Settings */}
           <div className="grid grid-cols-2 gap-4">
             {/* Statistics */}
@@ -356,6 +392,12 @@ export default function HomePage() {
         onClose={() => setShowSettingsModal(false)}
         settings={settings}
         onSettingsChange={updateSettings}
+      />
+
+      {/* Font Store Modal */}
+      <FontStoreModal
+        isOpen={showFontStore}
+        onClose={() => setShowFontStore(false)}
       />
     </div>
   );

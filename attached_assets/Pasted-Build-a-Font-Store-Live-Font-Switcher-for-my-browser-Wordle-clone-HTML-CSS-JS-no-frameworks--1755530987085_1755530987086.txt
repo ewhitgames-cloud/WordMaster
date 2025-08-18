@@ -1,0 +1,157 @@
+Build a “Font Store + Live Font Switcher” for my browser Wordle clone (HTML/CSS/JS, no frameworks).
+
+Context & Goal
+
+Add a Font Store where players can spend in-game coins to unlock fonts.
+
+When a player equips a font, it should instantly apply to both the game grid/tiles and the on-screen keyboard, without page reloads.
+
+All purchases and the currently equipped font must persist across sessions.
+
+Scope
+
+Implement: Store UI (modal), font previews, buy/equip flow, coin economy, persistence, live application to game UI.
+
+Don’t change gameplay rules or colors; only font-family.
+
+UI Requirements
+
+Add a visible “Store” button in the game header. Show the player’s coin balance next to it.
+
+Clicking “Store” opens a modal overlay with:
+
+A grid of font cards. Each card includes: font name, short sample preview (“ABCDE abcde 12345” or similar), price in coins, and a button that is context-aware:
+
+“Buy” if not owned; “Equip” if owned; “Equipped” (disabled) if currently active.
+
+A short explanation text: “Buy a font once, equip anytime.”
+
+Add a simple “Fonts” section in Settings that lists Owned Fonts with “Equip” actions (same behavior as the Store).
+
+Make the modal keyboard-navigable (Tab focus trap, ESC to close, Enter activates focused button).
+
+Font Application Targets
+
+The equipped font must apply to:
+
+Game board tiles and any text rendered inside tiles (guesses, feedback text).
+
+On-screen keyboard keys (all keycaps).
+
+Ensure selectors include the board wrapper, tile elements, and keyboard keys. Search the existing codebase and apply to all relevant elements consistently.
+
+Fonts & Loading
+
+Seed with 8–10 distinct fonts (serif, sans, slab, mono, playful). Use reputable free sources (e.g., Google Fonts).
+
+Provide live previews in the Store (each card should show its own sample text in that font).
+
+Load fonts efficiently and only when needed for preview/store; avoid blocking gameplay. The UI should not freeze while fonts load.
+
+Use a robust fallback stack for each font (e.g., serif/sans/monospace as appropriate).
+
+Economy & Rules
+
+Start players with a small coin balance suitable for testing (e.g., enough to buy 1–2 fonts).
+
+Buying a font:
+
+Check balance; if sufficient, deduct coins and mark the font as owned permanently.
+
+Immediately update the UI (button switches to “Equip”).
+
+Equipping a font:
+
+Apply the font immediately to tiles and keyboard.
+
+Indicate which font is currently equipped (“Equipped” state on its card).
+
+State & Persistence
+
+Persist across sessions using local storage (or equivalent) with keys for:
+
+Player coin balance.
+
+Owned font IDs.
+
+Currently equipped font ID.
+
+On boot:
+
+Initialize default values if missing.
+
+Re-apply the previously equipped font to the board and keyboard.
+
+Events & Integrations
+
+Emit a simple global event (e.g., a custom “font changed” event) when the equipped font changes so other modules can react if needed.
+
+Ensure existing input handling and animations are unaffected by font switching.
+
+Performance & UX
+
+The font change should feel instant. If fonts are not yet loaded, show the preview/sample in fallback and swap seamlessly when ready.
+
+Avoid layout thrash: limit reflows; font switch should not cause lag during typing.
+
+Add a subtle, fast transition for readability if it doesn’t cause flashing. If it does, keep it snappy with no animation.
+
+Accessibility
+
+Maintain existing color contrast; do not alter colors.
+
+Keep text sizes and spacing unchanged; only change font family.
+
+Ensure the Store modal is fully accessible by keyboard (focus states, trapping, ESC to close, return to previously focused element on close).
+
+Consider dyslexia-friendly or high-legibility options in the future (leave TODO notes).
+
+Data Definition (no code, just structure)
+
+Font item fields: id, display name, CSS stack/fallback description, price, ownership status, source (e.g., Google Fonts URL), category (serif/sans/mono/playful).
+
+App state: coins (number), ownedFonts (list of ids), equippedFont (id).
+
+Edge Cases
+
+Buying with insufficient coins shows a friendly message and no change.
+
+Re-buy attempts for owned fonts are disabled.
+
+If a font fails to load, keep the current font and show a non-blocking error/toast.
+
+If a saved equipped font is missing or unavailable, fall back to the default.
+
+QA & Acceptance Criteria
+
+Store opens/closes correctly via button, overlay click, ESC key.
+
+Coin balance displays accurately and updates after purchases.
+
+Buying a font immediately changes the button to “Equip” and deducts coins.
+
+Equipping changes the game board and keyboard font instantly.
+
+Refreshing the page preserves owned fonts and equipped font.
+
+Previews show each font correctly inside the Store before purchasing.
+
+No gameplay regressions (typing, guess submission, keyboard clicks work normally).
+
+Works in modern desktop and mobile browsers.
+
+Deliverables
+
+Integrated Store modal with font previews and buy/equip flow.
+
+Persistent coin and ownership state.
+
+Instant, reliable font switching applied to the board and keyboard.
+
+Clear inline comments and a short README section explaining how to add new fonts, where to include font sources, and how the persistence keys work.
+
+Important
+
+Do not include any code back in this response; implement directly in my project files.
+
+If any of my current selectors differ, search and adapt so the font applies to all tile and keyboard elements.

@@ -7,9 +7,11 @@ import Keyboard from "@/components/keyboard";
 import CelebrationModal from "@/components/celebration-modal";
 import StatsModal from "@/components/stats-modal";
 import MenuModal from "@/components/menu-modal";
+import FontStoreModal from "@/components/font-store-modal";
 import { useWordle } from "@/hooks/use-wordle-simple";
-import { Menu, Star, Clock, Home } from "lucide-react";
+import { Menu, Star, Clock, Home, Store, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FontStoreAPI } from "@/components/font-store-modal";
 
 // Format time as MM:SS
 const formatTime = (seconds: number): string => {
@@ -28,6 +30,8 @@ export default function Game({ mode: propMode }: GameProps = {}) {
   const [showCelebration, setShowCelebration] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showFontStore, setShowFontStore] = useState(false);
+  const [coins, setCoins] = useState(0);
   
   // Determine game mode from props or URL
   const params = new URLSearchParams(location.split('?')[1] || '');
@@ -61,26 +65,57 @@ export default function Game({ mode: propMode }: GameProps = {}) {
     });
   });
 
+  // Load coin balance on mount and listen for changes
+  useEffect(() => {
+    const updateCoins = () => setCoins(FontStoreAPI.getState().coins);
+    updateCoins();
+    
+    window.addEventListener('storage', updateCoins);
+    return () => window.removeEventListener('storage', updateCoins);
+  }, []);
+
   // Timer is now handled in the hook
 
-  // Handle game state changes
+  // Handle game state changes and award coins
   useEffect(() => {
     if (gameState === 'won') {
+      // Award coins based on performance
+      const baseReward = 20;
+      const attemptBonus = Math.max(0, (7 - (currentRow + 1)) * 5); // Bonus for fewer attempts
+      const timeBonus = challengeMode ? Math.max(0, Math.floor(timeRemaining / 10)) : 0;
+      const modeMultiplier = challengeMode ? 1.5 : blindChallengeMode ? 2 : 1;
+      
+      const totalReward = Math.floor((baseReward + attemptBonus + timeBonus) * modeMultiplier);
+      
+      FontStoreAPI.addCoins(totalReward);
+      setCoins(FontStoreAPI.getState().coins);
+      
       setTimeout(() => setShowCelebration(true), 1000);
+      
+      toast({
+        title: "Coins Earned!",
+        description: `+${totalReward} coins for winning!`,
+        duration: 3000,
+      });
     } else if (gameState === 'lost') {
+      // Small consolation prize
+      FontStoreAPI.addCoins(5);
+      setCoins(FontStoreAPI.getState().coins);
+      
       toast({
         title: "Game Over",
-        description: `The word was ${targetWord}`,
+        description: `The word was ${targetWord} (+5 consolation coins)`,
         variant: "destructive"
       });
     }
-  }, [gameState, targetWord, toast]);
+  }, [gameState, targetWord, toast, currentRow, challengeMode, blindChallengeMode, timeRemaining]);
 
   const handleNewGame = () => {
     resetGame();
     setShowCelebration(false);
     setShowStats(false);
     setShowMenu(false);
+    setShowFontStore(false);
   };
 
   // Mode display text
@@ -152,6 +187,28 @@ export default function Game({ mode: propMode }: GameProps = {}) {
                 <Star className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" />
                 <span data-testid="text-score">{score}</span>
               </motion.div>
+              
+              <motion.div 
+                className="bg-gradient-to-r from-purple-500 to-blue-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg border-2 border-white cursor-pointer"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                onClick={() => setShowFontStore(true)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Coins className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" />
+                <span data-testid="text-coins">{coins}</span>
+              </motion.div>
+              
+              <Button
+                variant="ghost"
+                size="sm"
+                className="p-2 sm:p-3 hover:bg-gradient-to-r hover:from-green-400 hover:to-emerald-400 hover:text-white rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                onClick={() => setShowFontStore(true)}
+                data-testid="button-store"
+              >
+                <Store className="w-4 h-4 sm:w-5 sm:h-5" />
+              </Button>
               
               {challengeMode && (
                 <motion.div 
@@ -310,6 +367,11 @@ export default function Game({ mode: propMode }: GameProps = {}) {
         }}
         challengeMode={challengeMode}
         blindChallengeMode={blindChallengeMode}
+      />
+
+      <FontStoreModal
+        isOpen={showFontStore}
+        onClose={() => setShowFontStore(false)}
       />
     </div>
   );
