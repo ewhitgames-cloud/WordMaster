@@ -265,6 +265,7 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     const newGrid = [...grid];
     newGrid[currentRow] = currentGuess.split('');
     setGrid(newGrid);
+    console.log('Grid updated with guess:', currentGuess, 'on row:', currentRow);
 
     // Mark this row as evaluated
     setEvaluatedRows(prev => new Set([...Array.from(prev), currentRow]));
@@ -273,7 +274,9 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     updateKeyboardState(currentGuess, targetWord);
 
     // Check win condition
+    console.log('Checking win condition:', { currentGuess, targetWord, matches: currentGuess === targetWord });
     if (currentGuess === targetWord) {
+      console.log('WIN DETECTED! Setting game state to won');
       setGameState('won');
       playGameWin();
       const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
