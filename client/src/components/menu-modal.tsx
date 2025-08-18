@@ -1,12 +1,11 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X, Play, Clock, BarChart3, Settings, HelpCircle } from "lucide-react";
+import { X, Play, BarChart3, Settings, HelpCircle } from "lucide-react";
 
 interface MenuModalProps {
   isOpen: boolean;
   onClose: () => void;
   onNewGame: () => void;
-  onChallengeMode: () => void;
   onStats: () => void;
   challengeMode: boolean;
   blindChallengeMode?: boolean;
@@ -16,7 +15,6 @@ export default function MenuModal({
   isOpen, 
   onClose, 
   onNewGame, 
-  onChallengeMode, 
   onStats,
   challengeMode,
   blindChallengeMode = false
@@ -38,18 +36,7 @@ export default function MenuModal({
             <span>New Game</span>
           </Button>
           
-          <Button 
-            onClick={onChallengeMode}
-            className={`w-full flex items-center justify-center space-x-2 ${
-              challengeMode 
-                ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600' 
-                : 'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600'
-            }`}
-            data-testid="button-challenge-mode-menu"
-          >
-            <Clock className="w-4 h-4" />
-            <span>{challengeMode ? 'Exit Timed Challenge' : 'Timed Challenge'}</span>
-          </Button>
+
 
           <Button 
             onClick={onStats}
