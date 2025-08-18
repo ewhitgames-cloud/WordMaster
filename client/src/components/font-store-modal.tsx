@@ -12,8 +12,15 @@ export interface Font {
   family: string;
   fallback: string;
   price: number;
-  category: 'serif' | 'sans' | 'mono' | 'playful';
+  category: 'serif' | 'sans' | 'mono' | 'playful' | 'fun';
   googleFont?: string;
+}
+
+export interface ColorOption {
+  id: string;
+  name: string;
+  value: string;
+  price: number;
 }
 
 const AVAILABLE_FONTS: Font[] = [
@@ -25,6 +32,7 @@ const AVAILABLE_FONTS: Font[] = [
     price: 0,
     category: 'sans'
   },
+  // Serif fonts
   {
     id: 'playfair',
     name: 'Elegant',
@@ -33,24 +41,6 @@ const AVAILABLE_FONTS: Font[] = [
     price: 100,
     category: 'serif',
     googleFont: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap'
-  },
-  {
-    id: 'fira-code',
-    name: 'Code Style',
-    family: 'Fira Code',
-    fallback: 'Monaco, monospace',
-    price: 150,
-    category: 'mono',
-    googleFont: 'https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&display=swap'
-  },
-  {
-    id: 'comfortaa',
-    name: 'Playful',
-    family: 'Comfortaa',
-    fallback: 'Arial, sans-serif',
-    price: 120,
-    category: 'playful',
-    googleFont: 'https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600&display=swap'
   },
   {
     id: 'merriweather',
@@ -62,15 +52,6 @@ const AVAILABLE_FONTS: Font[] = [
     googleFont: 'https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap'
   },
   {
-    id: 'poppins',
-    name: 'Modern',
-    family: 'Poppins',
-    fallback: 'Arial, sans-serif',
-    price: 90,
-    category: 'sans',
-    googleFont: 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap'
-  },
-  {
     id: 'roboto-slab',
     name: 'Strong',
     family: 'Roboto Slab',
@@ -78,6 +59,25 @@ const AVAILABLE_FONTS: Font[] = [
     price: 110,
     category: 'serif',
     googleFont: 'https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;700&display=swap'
+  },
+  {
+    id: 'crimson-text',
+    name: 'Literary',
+    family: 'Crimson Text',
+    fallback: 'Times, serif',
+    price: 95,
+    category: 'serif',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap'
+  },
+  // Sans fonts
+  {
+    id: 'poppins',
+    name: 'Modern',
+    family: 'Poppins',
+    fallback: 'Arial, sans-serif',
+    price: 90,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap'
   },
   {
     id: 'space-grotesk',
@@ -89,6 +89,34 @@ const AVAILABLE_FONTS: Font[] = [
     googleFont: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&display=swap'
   },
   {
+    id: 'nunito',
+    name: 'Friendly',
+    family: 'Nunito',
+    fallback: 'Arial, sans-serif',
+    price: 85,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap'
+  },
+  {
+    id: 'montserrat',
+    name: 'Clean',
+    family: 'Montserrat',
+    fallback: 'Arial, sans-serif',
+    price: 100,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap'
+  },
+  // Mono fonts
+  {
+    id: 'fira-code',
+    name: 'Code Style',
+    family: 'Fira Code',
+    fallback: 'Monaco, monospace',
+    price: 150,
+    category: 'mono',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&display=swap'
+  },
+  {
     id: 'jetbrains-mono',
     name: 'Terminal',
     family: 'JetBrains Mono',
@@ -98,6 +126,25 @@ const AVAILABLE_FONTS: Font[] = [
     googleFont: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap'
   },
   {
+    id: 'source-code-pro',
+    name: 'Developer',
+    family: 'Source Code Pro',
+    fallback: 'Courier, monospace',
+    price: 140,
+    category: 'mono',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500&display=swap'
+  },
+  // Playful fonts
+  {
+    id: 'comfortaa',
+    name: 'Rounded',
+    family: 'Comfortaa',
+    fallback: 'Arial, sans-serif',
+    price: 120,
+    category: 'playful',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600&display=swap'
+  },
+  {
     id: 'fredoka',
     name: 'Bubbly',
     family: 'Fredoka',
@@ -105,19 +152,102 @@ const AVAILABLE_FONTS: Font[] = [
     price: 130,
     category: 'playful',
     googleFont: 'https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600&display=swap'
+  },
+  {
+    id: 'quicksand',
+    name: 'Smooth',
+    family: 'Quicksand',
+    fallback: 'Arial, sans-serif',
+    price: 110,
+    category: 'playful',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap'
+  },
+  // Fun fonts
+  {
+    id: 'bangers',
+    name: 'Comic Book',
+    family: 'Bangers',
+    fallback: 'Arial, sans-serif',
+    price: 180,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Bangers&display=swap'
+  },
+  {
+    id: 'luckiest-guy',
+    name: 'Bold Fun',
+    family: 'Luckiest Guy',
+    fallback: 'Arial, sans-serif',
+    price: 170,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap'
+  },
+  {
+    id: 'amatic-sc',
+    name: 'Hand Drawn',
+    family: 'Amatic SC',
+    fallback: 'Arial, sans-serif',
+    price: 160,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap'
+  },
+  {
+    id: 'bungee',
+    name: 'Street Art',
+    family: 'Bungee',
+    fallback: 'Arial, sans-serif',
+    price: 190,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Bungee&display=swap'
+  },
+  {
+    id: 'creepster',
+    name: 'Spooky',
+    family: 'Creepster',
+    fallback: 'Arial, sans-serif',
+    price: 200,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Creepster&display=swap'
+  },
+  {
+    id: 'kalam',
+    name: 'Handwriting',
+    family: 'Kalam',
+    fallback: 'Arial, sans-serif',
+    price: 150,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap'
   }
+];
+
+const AVAILABLE_COLORS: ColorOption[] = [
+  { id: 'default', name: 'Black', value: '#000000', price: 0 },
+  { id: 'white', name: 'White', value: '#ffffff', price: 50 },
+  { id: 'yellow', name: 'Sunny Yellow', value: '#fbbf24', price: 75 },
+  { id: 'purple', name: 'Royal Purple', value: '#8b5cf6', price: 100 },
+  { id: 'cyan', name: 'Electric Cyan', value: '#06b6d4', price: 100 },
+  { id: 'red', name: 'Crimson Red', value: '#ef4444', price: 90 },
+  { id: 'green', name: 'Forest Green', value: '#10b981', price: 90 },
+  { id: 'orange', name: 'Sunset Orange', value: '#f97316', price: 85 },
+  { id: 'pink', name: 'Hot Pink', value: '#ec4899', price: 110 },
+  { id: 'blue', name: 'Ocean Blue', value: '#3b82f6', price: 95 },
+  { id: 'gold', name: 'Golden', value: '#d97706', price: 120 },
+  { id: 'silver', name: 'Silver', value: '#6b7280', price: 110 }
 ];
 
 interface FontStoreState {
   coins: number;
   ownedFonts: string[];
   equippedFont: string;
+  ownedColors: string[];
+  equippedColor: string;
 }
 
 const DEFAULT_STATE: FontStoreState = {
-  coins: 250, // Start with enough to buy 2-3 fonts
+  coins: 400, // Start with enough to buy multiple fonts and colors
   ownedFonts: ['default'],
-  equippedFont: 'default'
+  equippedFont: 'default',
+  ownedColors: ['default'],
+  equippedColor: 'default'
 };
 
 interface FontStoreModalProps {
@@ -129,6 +259,8 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
   const { toast } = useToast();
   const [state, setState] = useState<FontStoreState>(DEFAULT_STATE);
   const [loadedFonts, setLoadedFonts] = useState<Set<string>>(new Set(['default']));
+  const [activeTab, setActiveTab] = useState<'fonts' | 'colors'>('fonts');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   // Load state from localStorage on mount and preload fonts
   useEffect(() => {
@@ -157,15 +289,16 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
     localStorage.setItem('wordpop-font-store', JSON.stringify(state));
   }, [state]);
 
-  // Apply equipped font to game elements
+  // Apply equipped font and color to game elements
   useEffect(() => {
     const font = AVAILABLE_FONTS.find(f => f.id === state.equippedFont);
-    if (font) {
-      applyFont(font);
+    const color = AVAILABLE_COLORS.find(c => c.id === state.equippedColor);
+    if (font && color) {
+      applyStyles(font, color);
       // Emit global event for other modules
-      window.dispatchEvent(new CustomEvent('fontChanged', { detail: font }));
+      window.dispatchEvent(new CustomEvent('stylesChanged', { detail: { font, color } }));
     }
-  }, [state.equippedFont]);
+  }, [state.equippedFont, state.equippedColor]);
 
   // Load Google Fonts when needed
   const loadFont = async (font: Font) => {
@@ -203,9 +336,16 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
     }
   };
 
-  // Apply font to game elements
-  const applyFont = (font: Font) => {
-    const fontStack = `"${font.family}", ${font.fallback}`;
+  // Apply font and color to game elements
+  const applyStyles = (font?: Font, color?: ColorOption) => {
+    const currentFont = font || AVAILABLE_FONTS.find(f => f.id === state.equippedFont);
+    const currentColor = color || AVAILABLE_COLORS.find(c => c.id === state.equippedColor);
+    
+    if (!currentFont || !currentColor) return;
+    
+    const fontStack = `"${currentFont.family}", ${currentFont.fallback}`;
+    const colorValue = currentColor.value;
+    
     const style = document.getElementById('dynamic-font-style') || document.createElement('style');
     style.id = 'dynamic-font-style';
     
@@ -219,6 +359,7 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
       .tile-empty,
       [data-testid*="tile"] {
         font-family: ${fontStack} !important;
+        color: ${colorValue} !important;
       }
       
       /* Keyboard keys - all states */
@@ -230,6 +371,7 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
       .keyboard-key-special,
       [data-testid*="key"] {
         font-family: ${fontStack} !important;
+        color: ${colorValue} !important;
       }
       
       /* Additional game elements */
@@ -287,6 +429,40 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
     });
   };
 
+  const buyColor = (color: ColorOption) => {
+    if (state.coins < color.price) {
+      toast({
+        title: "Insufficient Coins",
+        description: `You need ${color.price} coins but only have ${state.coins}.`,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setState(prev => ({
+      ...prev,
+      coins: prev.coins - color.price,
+      ownedColors: [...prev.ownedColors, color.id]
+    }));
+
+    toast({
+      title: "Color Purchased!",
+      description: `${color.name} has been added to your collection.`,
+    });
+  };
+
+  const equipColor = (color: ColorOption) => {
+    setState(prev => ({
+      ...prev,
+      equippedColor: color.id
+    }));
+
+    toast({
+      title: "Color Equipped!",
+      description: `${color.name} is now active.`,
+    });
+  };
+
   const getButtonState = (font: Font) => {
     const isOwned = state.ownedFonts.includes(font.id);
     const isEquipped = state.equippedFont === font.id;
@@ -296,7 +472,16 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
     return { text: `Buy (${font.price})`, disabled: state.coins < font.price, variant: 'default' as const };
   };
 
-  const handleAction = (font: Font) => {
+  const getColorButtonState = (color: ColorOption) => {
+    const isOwned = state.ownedColors.includes(color.id);
+    const isEquipped = state.equippedColor === color.id;
+
+    if (isEquipped) return { text: 'Equipped', disabled: true, variant: 'secondary' as const };
+    if (isOwned) return { text: 'Equip', disabled: false, variant: 'default' as const };
+    return { text: `Buy (${color.price})`, disabled: state.coins < color.price, variant: 'default' as const };
+  };
+
+  const handleFontAction = (font: Font) => {
     const isOwned = state.ownedFonts.includes(font.id);
     if (isOwned) {
       equipFont(font);
@@ -305,12 +490,34 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
     }
   };
 
+  const handleColorAction = (color: ColorOption) => {
+    const isOwned = state.ownedColors.includes(color.id);
+    if (isOwned) {
+      equipColor(color);
+    } else {
+      buyColor(color);
+    }
+  };
+
+  const filteredFonts = selectedCategory === 'all' 
+    ? AVAILABLE_FONTS 
+    : AVAILABLE_FONTS.filter(font => font.category === selectedCategory);
+
+  const categories = [
+    { id: 'all', name: 'All Fonts' },
+    { id: 'sans', name: 'Sans Serif' },
+    { id: 'serif', name: 'Serif' },
+    { id: 'mono', name: 'Monospace' },
+    { id: 'playful', name: 'Playful' },
+    { id: 'fun', name: 'Fun Fonts' }
+  ];
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-4xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl font-bold">Font Store</DialogTitle>
+            <DialogTitle className="text-2xl font-bold">Style Store</DialogTitle>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full">
                 <Coins className="w-4 h-4" />
@@ -322,61 +529,151 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
             </div>
           </div>
           <p className="text-gray-600 text-sm">
-            Buy a font once, equip anytime. Fonts apply instantly to your game board and keyboard.
+            Customize your game with fonts and colors. Buy once, equip anytime!
           </p>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-          {AVAILABLE_FONTS.map((font) => {
-            const buttonState = getButtonState(font);
-            const isLoaded = loadedFonts.has(font.id);
-
-            return (
-              <Card 
-                key={font.id} 
-                className={`transition-all duration-200 hover:shadow-lg ${
-                  state.equippedFont === font.id ? 'ring-2 ring-blue-500' : ''
-                }`}
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h3 className="font-semibold text-lg">{font.name}</h3>
-                      <Badge variant="outline" className="text-xs">
-                        {font.category}
-                      </Badge>
-                    </div>
-                    {state.equippedFont === font.id && (
-                      <Check className="w-5 h-5 text-green-500" />
-                    )}
-                  </div>
-
-                  <div 
-                    className="bg-gray-50 rounded-lg p-3 mb-4 min-h-[80px] flex items-center justify-center text-center transition-all duration-200 border"
-                    style={{
-                      fontFamily: `"${font.family}", ${font.fallback}`
-                    }}
-                  >
-                    <div>
-                      <div className="text-lg font-semibold text-gray-800">WORD</div>
-                      <div className="text-sm text-gray-600">guess</div>
-                      <div className="text-xs text-gray-500">letter</div>
-                    </div>
-                  </div>
-
-                  <Button
-                    className="w-full"
-                    variant={buttonState.variant}
-                    disabled={buttonState.disabled}
-                    onClick={() => handleAction(font)}
-                  >
-                    {buttonState.text}
-                  </Button>
-                </CardContent>
-              </Card>
-            );
-          })}
+        {/* Tabs */}
+        <div className="flex space-x-1 bg-gray-100 rounded-lg p-1 mt-4">
+          <Button
+            variant={activeTab === 'fonts' ? 'default' : 'ghost'}
+            className="flex-1"
+            onClick={() => setActiveTab('fonts')}
+          >
+            Fonts
+          </Button>
+          <Button
+            variant={activeTab === 'colors' ? 'default' : 'ghost'}
+            className="flex-1"
+            onClick={() => setActiveTab('colors')}
+          >
+            Colors
+          </Button>
         </div>
+
+        {/* Fonts Tab */}
+        {activeTab === 'fonts' && (
+          <div>
+            {/* Category Filter */}
+            <div className="flex flex-wrap gap-2 mt-4 mb-6">
+              {categories.map((category) => (
+                <Button
+                  key={category.id}
+                  variant={selectedCategory === category.id ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category.id)}
+                >
+                  {category.name}
+                </Button>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredFonts.map((font) => {
+                const buttonState = getButtonState(font);
+
+                return (
+                  <Card 
+                    key={font.id} 
+                    className={`transition-all duration-200 hover:shadow-lg ${
+                      state.equippedFont === font.id ? 'ring-2 ring-blue-500' : ''
+                    }`}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="font-semibold text-lg">{font.name}</h3>
+                          <Badge variant="outline" className="text-xs">
+                            {font.category}
+                          </Badge>
+                        </div>
+                        {state.equippedFont === font.id && (
+                          <Check className="w-5 h-5 text-green-500" />
+                        )}
+                      </div>
+
+                      <div 
+                        className="bg-gray-50 rounded-lg p-3 mb-4 min-h-[80px] flex items-center justify-center text-center transition-all duration-200 border"
+                        style={{
+                          fontFamily: `"${font.family}", ${font.fallback}`
+                        }}
+                      >
+                        <div>
+                          <div className="text-lg font-semibold text-gray-800">WORD</div>
+                          <div className="text-sm text-gray-600">guess</div>
+                          <div className="text-xs text-gray-500">letter</div>
+                        </div>
+                      </div>
+
+                      <Button
+                        className="w-full"
+                        variant={buttonState.variant}
+                        disabled={buttonState.disabled}
+                        onClick={() => handleFontAction(font)}
+                      >
+                        {buttonState.text}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Colors Tab */}
+        {activeTab === 'colors' && (
+          <div className="mt-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {AVAILABLE_COLORS.map((color) => {
+                const buttonState = getColorButtonState(color);
+
+                return (
+                  <Card 
+                    key={color.id} 
+                    className={`transition-all duration-200 hover:shadow-lg ${
+                      state.equippedColor === color.id ? 'ring-2 ring-blue-500' : ''
+                    }`}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="font-semibold text-sm">{color.name}</h3>
+                        </div>
+                        {state.equippedColor === color.id && (
+                          <Check className="w-4 h-4 text-green-500" />
+                        )}
+                      </div>
+
+                      <div 
+                        className="rounded-lg p-4 mb-4 min-h-[60px] flex items-center justify-center text-center transition-all duration-200 border-2"
+                        style={{
+                          backgroundColor: color.value === '#ffffff' ? '#f3f4f6' : color.value,
+                          color: color.value === '#ffffff' ? '#000000' : 
+                                color.value === '#000000' ? '#ffffff' : 
+                                '#ffffff',
+                          borderColor: color.value === '#ffffff' ? '#d1d5db' : color.value
+                        }}
+                      >
+                        <div style={{ fontWeight: 'bold' }}>Aa</div>
+                      </div>
+
+                      <Button
+                        className="w-full"
+                        variant={buttonState.variant}
+                        disabled={buttonState.disabled}
+                        onClick={() => handleColorAction(color)}
+                        size="sm"
+                      >
+                        {buttonState.text}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
@@ -406,5 +703,10 @@ export const FontStoreAPI = {
   getEquippedFont: (): Font => {
     const state = FontStoreAPI.getState();
     return AVAILABLE_FONTS.find(f => f.id === state.equippedFont) || AVAILABLE_FONTS[0];
+  },
+
+  getEquippedColor: (): ColorOption => {
+    const state = FontStoreAPI.getState();
+    return AVAILABLE_COLORS.find(c => c.id === state.equippedColor) || AVAILABLE_COLORS[0];
   }
 };

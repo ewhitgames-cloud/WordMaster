@@ -306,7 +306,7 @@ export default function HomePage() {
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-2">
                   <Store className="h-5 w-5 text-white" />
-                  <span className="text-white font-semibold">Font Store</span>
+                  <span className="text-white font-semibold">Style Store</span>
                 </div>
                 <div className="flex items-center space-x-1 bg-gradient-to-r from-purple-500 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">
                   <Coins className="w-3 h-3" />
@@ -318,7 +318,7 @@ export default function HomePage() {
                 onClick={() => setShowFontStore(true)}
                 data-testid="button-font-store"
               >
-                Browse Fonts
+                Browse Styles
               </Button>
             </CardContent>
           </Card>
