@@ -269,6 +269,24 @@ export default function HomePage() {
             </CardContent>
           </Card>
 
+          {/* Blind Challenge */}
+          <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
+            <CardContent className="p-6">
+              <Link href="/blind" data-testid="link-blind-challenge">
+                <Button 
+                  className="w-full h-16 text-lg font-bold bg-gradient-to-r from-gray-700 to-black hover:from-gray-800 hover:to-gray-900 text-white border-0 shadow-lg"
+                  data-testid="button-blind-challenge"
+                >
+                  <span className="mr-2">👁️</span>
+                  Blind Challenge
+                </Button>
+              </Link>
+              <p className="text-white/80 text-xs mt-2 text-center">
+                Hardcore mode - no keyboard colors!
+              </p>
+            </CardContent>
+          </Card>
+
           {/* Bottom row with Statistics and Settings */}
           <div className="grid grid-cols-2 gap-4">
             {/* Statistics */}

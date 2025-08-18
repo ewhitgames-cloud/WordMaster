@@ -11,6 +11,7 @@ interface CelebrationModalProps {
   score: number;
   attempts: number;
   challengeMode: boolean;
+  blindChallengeMode?: boolean;
   timeElapsed: number;
   onPlayAgain: () => void;
   onChallengeMode: () => void;
@@ -24,6 +25,7 @@ export default function CelebrationModal({
   score,
   attempts,
   challengeMode,
+  blindChallengeMode = false,
   timeElapsed,
   onPlayAgain,
   onChallengeMode,
@@ -74,10 +76,15 @@ export default function CelebrationModal({
               transition={{ duration: 0.3 }}
               className="text-center p-6"
             >
-              <div className="text-6xl mb-4">🎉</div>
-              <h2 className="font-bold text-3xl text-gray-800 mb-2">Fantastic!</h2>
+              <div className="text-6xl mb-4">{blindChallengeMode ? '🔥' : '🎉'}</div>
+              <h2 className="font-bold text-3xl text-gray-800 mb-2">
+                {blindChallengeMode ? 'Incredible!' : 'Fantastic!'}
+              </h2>
               <p className="text-gray-600 mb-6">
-                You solved it in {attempts} attempt{attempts !== 1 ? 's' : ''}!
+                {blindChallengeMode 
+                  ? `Amazing memory skills! You solved it blind in ${attempts} attempt${attempts !== 1 ? 's' : ''}!`
+                  : `You solved it in ${attempts} attempt${attempts !== 1 ? 's' : ''}!`
+                }
               </p>
               
               <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl p-4 mb-6">

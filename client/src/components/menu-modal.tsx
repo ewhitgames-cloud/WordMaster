@@ -9,6 +9,7 @@ interface MenuModalProps {
   onChallengeMode: () => void;
   onStats: () => void;
   challengeMode: boolean;
+  blindChallengeMode?: boolean;
 }
 
 export default function MenuModal({ 
@@ -17,7 +18,8 @@ export default function MenuModal({
   onNewGame, 
   onChallengeMode, 
   onStats,
-  challengeMode 
+  challengeMode,
+  blindChallengeMode = false
 }: MenuModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

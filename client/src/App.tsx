@@ -21,6 +21,9 @@ function Router() {
       <Route path="/daily">
         {(params) => <Game mode="daily" />}
       </Route>
+      <Route path="/blind">
+        {(params) => <Game mode="blind" />}
+      </Route>
       <Route path="/stats" component={Stats} />
       <Route component={NotFound} />
     </Switch>

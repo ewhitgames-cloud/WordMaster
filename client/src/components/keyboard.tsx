@@ -8,6 +8,7 @@ interface KeyboardProps {
   onBackspace: () => void;
   keyboardState: Record<string, KeyState>;
   disabled: boolean;
+  blindMode?: boolean;
 }
 
 const KEYBOARD_ROWS = [
@@ -16,15 +17,20 @@ const KEYBOARD_ROWS = [
   ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'BACKSPACE']
 ];
 
-export default function Keyboard({ onKeyPress, onEnter, onBackspace, keyboardState, disabled }: KeyboardProps) {
+export default function Keyboard({ onKeyPress, onEnter, onBackspace, keyboardState, disabled, blindMode = false }: KeyboardProps) {
   const getKeyClass = (key: string) => {
     const baseClass = "keyboard-key";
-    const state = keyboardState[key] || 'default';
     
     if (key === 'ENTER' || key === 'BACKSPACE') {
       return `${baseClass} keyboard-key-special`;
     }
     
+    // In blind mode, all keys use default styling regardless of state
+    if (blindMode) {
+      return `${baseClass} keyboard-key-default`;
+    }
+    
+    const state = keyboardState[key] || 'default';
     switch (state) {
       case 'correct': return `${baseClass} keyboard-key-correct`;
       case 'present': return `${baseClass} keyboard-key-present`;

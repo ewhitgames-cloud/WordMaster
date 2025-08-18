@@ -19,7 +19,7 @@ const formatTime = (seconds: number): string => {
 };
 
 interface GameProps {
-  mode?: 'classic' | 'challenge' | 'daily';
+  mode?: 'classic' | 'challenge' | 'daily' | 'blind';
 }
 
 export default function Game({ mode: propMode }: GameProps = {}) {
@@ -34,6 +34,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
   const mode = propMode || params.get('mode') || 'classic';
   const challengeMode = mode === 'challenge';
   const dailyChallengeMode = mode === 'daily';
+  const blindChallengeMode = mode === 'blind';
   
   const {
     grid,
@@ -86,6 +87,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
   const getModeText = () => {
     if (dailyChallengeMode) return 'Daily Challenge';
     if (challengeMode) return 'Timed Challenge';
+    if (blindChallengeMode) return 'Blind Challenge';
     return 'Classic Game';
   };
 
@@ -171,6 +173,16 @@ export default function Game({ mode: propMode }: GameProps = {}) {
                   <span data-testid="text-daily-indicator">🔥 DAILY</span>
                 </motion.div>
               )}
+              
+              {blindChallengeMode && (
+                <motion.div 
+                  className="bg-gradient-to-r from-gray-700 to-black text-white px-3 py-2 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg border-2 border-white"
+                  animate={{ opacity: [1, 0.7, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <span data-testid="text-blind-indicator">👁️ BLIND</span>
+                </motion.div>
+              )}
             </div>
           </div>
         </div>
@@ -178,6 +190,23 @@ export default function Game({ mode: propMode }: GameProps = {}) {
 
       <main className="flex-1 w-full px-3 py-4 sm:px-4 sm:py-6 max-w-sm sm:max-w-lg mx-auto relative z-10">
         {/* Stats Bar */}
+        {/* Blind Challenge Info */}
+        {blindChallengeMode && (
+          <motion.div 
+            className="bg-gradient-to-r from-gray-800 to-black text-white rounded-2xl p-4 mb-4 shadow-2xl border-2 border-white/30"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="text-center">
+              <div className="text-2xl mb-2">👁️ BLIND CHALLENGE</div>
+              <p className="text-sm opacity-90">
+                No keyboard colors shown. Track used letters mentally!
+              </p>
+            </div>
+          </motion.div>
+        )}
+
         <motion.div 
           className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-5 mb-4 sm:mb-6 shadow-2xl border-4 border-white/50"
           initial={{ opacity: 0, y: 20 }}
@@ -242,6 +271,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
           onBackspace={onBackspace}
           keyboardState={keyboardState}
           disabled={gameState !== 'playing' || (challengeMode && timeRemaining === 0)}
+          blindMode={blindChallengeMode}
         />
       </main>
 
@@ -252,6 +282,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
         score={score}
         attempts={currentRow + 1}
         challengeMode={challengeMode}
+        blindChallengeMode={blindChallengeMode}
         timeElapsed={challengeMode ? 180 - timeRemaining : 0}
         onPlayAgain={handleNewGame}
         onChallengeMode={() => window.location.href = '/game?mode=challenge'}
@@ -278,6 +309,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
           setShowStats(true);
         }}
         challengeMode={challengeMode}
+        blindChallengeMode={blindChallengeMode}
       />
     </div>
   );
