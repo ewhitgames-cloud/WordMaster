@@ -4,6 +4,10 @@
 
 This is a modern React-based Wordle game application built with a full-stack TypeScript architecture. The application features a web-based word guessing game with statistics tracking, challenge modes, and a vibrant Nintendo-style UI using shadcn/ui components with colorful gradients and animations throughout.
 
+## Recent Changes
+
+**August 18, 2025**: Fixed critical case sensitivity bug in win detection logic that prevented celebration modal from showing when players won games. The win condition now properly compares guesses case-insensitively, ensuring proper game completion notifications.
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
