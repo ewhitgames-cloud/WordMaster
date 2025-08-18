@@ -90,7 +90,7 @@ export default function CelebrationModal({
               
               {!won && targetWord && (
                 <p className="text-white/90 mb-4 text-lg">
-                  The word was: <span className="font-bold text-yellow-300">{targetWord}</span>
+                  The word was: <span className="font-bold text-yellow-300">{targetWord.toUpperCase()}</span>
                 </p>
               )}
               
