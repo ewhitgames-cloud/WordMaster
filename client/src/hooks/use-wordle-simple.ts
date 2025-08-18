@@ -270,12 +270,13 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     // Mark this row as evaluated
     setEvaluatedRows(prev => new Set([...Array.from(prev), currentRow]));
 
-    // Update keyboard state
-    updateKeyboardState(currentGuess, targetWord);
+    // Update keyboard state (ensure consistent case)
+    updateKeyboardState(currentGuess.toUpperCase(), targetWord.toUpperCase());
 
-    // Check win condition
-    console.log('Checking win condition:', { currentGuess, targetWord, matches: currentGuess === targetWord });
-    if (currentGuess === targetWord) {
+    // Check win condition (case-insensitive)
+    const isWin = currentGuess.toUpperCase() === targetWord.toUpperCase();
+    console.log('Checking win condition:', { currentGuess, targetWord, matches: isWin });
+    if (isWin) {
       console.log('WIN DETECTED! Setting game state to won');
       setGameState('won');
       playGameWin();
