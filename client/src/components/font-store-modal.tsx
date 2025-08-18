@@ -24,6 +24,14 @@ export interface ColorOption {
   price: number;
 }
 
+export interface BackgroundOption {
+  id: string;
+  name: string;
+  value: string;
+  type: 'gradient' | 'solid' | 'pattern';
+  price: number;
+}
+
 const AVAILABLE_FONTS: Font[] = [
   {
     id: 'default',
@@ -39,7 +47,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Elegant',
     family: 'Playfair Display',
     fallback: 'Georgia, serif',
-    price: 100,
+    price: 1500,
     category: 'serif',
     googleFont: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap'
   },
@@ -48,7 +56,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Reader',
     family: 'Merriweather',
     fallback: 'Times, serif',
-    price: 80,
+    price: 1200,
     category: 'serif',
     googleFont: 'https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap'
   },
@@ -57,7 +65,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Strong',
     family: 'Roboto Slab',
     fallback: 'Georgia, serif',
-    price: 110,
+    price: 1800,
     category: 'serif',
     googleFont: 'https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;700&display=swap'
   },
@@ -66,7 +74,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Literary',
     family: 'Crimson Text',
     fallback: 'Times, serif',
-    price: 95,
+    price: 1600,
     category: 'serif',
     googleFont: 'https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap'
   },
@@ -76,7 +84,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Modern',
     family: 'Poppins',
     fallback: 'Arial, sans-serif',
-    price: 90,
+    price: 1400,
     category: 'sans',
     googleFont: 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap'
   },
@@ -85,7 +93,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Futuristic',
     family: 'Space Grotesk',
     fallback: 'Arial, sans-serif',
-    price: 140,
+    price: 2200,
     category: 'sans',
     googleFont: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&display=swap'
   },
@@ -94,7 +102,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Friendly',
     family: 'Nunito',
     fallback: 'Arial, sans-serif',
-    price: 85,
+    price: 1300,
     category: 'sans',
     googleFont: 'https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap'
   },
@@ -103,7 +111,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Clean',
     family: 'Montserrat',
     fallback: 'Arial, sans-serif',
-    price: 100,
+    price: 1500,
     category: 'sans',
     googleFont: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap'
   },
@@ -113,7 +121,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Code Style',
     family: 'Fira Code',
     fallback: 'Monaco, monospace',
-    price: 150,
+    price: 1700,
     category: 'mono',
     googleFont: 'https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&display=swap'
   },
@@ -122,7 +130,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Terminal',
     family: 'JetBrains Mono',
     fallback: 'Courier, monospace',
-    price: 160,
+    price: 1900,
     category: 'mono',
     googleFont: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap'
   },
@@ -131,7 +139,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Developer',
     family: 'Source Code Pro',
     fallback: 'Courier, monospace',
-    price: 140,
+    price: 1600,
     category: 'mono',
     googleFont: 'https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500&display=swap'
   },
@@ -141,7 +149,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Rounded',
     family: 'Comfortaa',
     fallback: 'Arial, sans-serif',
-    price: 120,
+    price: 2000,
     category: 'playful',
     googleFont: 'https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600&display=swap'
   },
@@ -150,7 +158,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Bubbly',
     family: 'Fredoka',
     fallback: 'Arial, sans-serif',
-    price: 130,
+    price: 2300,
     category: 'playful',
     googleFont: 'https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600&display=swap'
   },
@@ -159,7 +167,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Smooth',
     family: 'Quicksand',
     fallback: 'Arial, sans-serif',
-    price: 110,
+    price: 1800,
     category: 'playful',
     googleFont: 'https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap'
   },
@@ -169,7 +177,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Comic Book',
     family: 'Bangers',
     fallback: 'Arial, sans-serif',
-    price: 180,
+    price: 3200,
     category: 'fun',
     googleFont: 'https://fonts.googleapis.com/css2?family=Bangers&display=swap'
   },
@@ -178,7 +186,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Bold Fun',
     family: 'Luckiest Guy',
     fallback: 'Arial, sans-serif',
-    price: 170,
+    price: 3000,
     category: 'fun',
     googleFont: 'https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap'
   },
@@ -187,7 +195,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Hand Drawn',
     family: 'Amatic SC',
     fallback: 'Arial, sans-serif',
-    price: 160,
+    price: 2800,
     category: 'fun',
     googleFont: 'https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap'
   },
@@ -196,7 +204,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Street Art',
     family: 'Bungee',
     fallback: 'Arial, sans-serif',
-    price: 190,
+    price: 3500,
     category: 'fun',
     googleFont: 'https://fonts.googleapis.com/css2?family=Bungee&display=swap'
   },
@@ -205,7 +213,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Spooky',
     family: 'Creepster',
     fallback: 'Arial, sans-serif',
-    price: 200,
+    price: 4000,
     category: 'fun',
     googleFont: 'https://fonts.googleapis.com/css2?family=Creepster&display=swap'
   },
@@ -214,7 +222,7 @@ const AVAILABLE_FONTS: Font[] = [
     name: 'Handwriting',
     family: 'Kalam',
     fallback: 'Arial, sans-serif',
-    price: 150,
+    price: 2500,
     category: 'fun',
     googleFont: 'https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap'
   }
@@ -222,17 +230,35 @@ const AVAILABLE_FONTS: Font[] = [
 
 const AVAILABLE_COLORS: ColorOption[] = [
   { id: 'default', name: 'Black', value: '#000000', price: 0 },
-  { id: 'white', name: 'White', value: '#ffffff', price: 50 },
-  { id: 'yellow', name: 'Sunny Yellow', value: '#fbbf24', price: 75 },
-  { id: 'purple', name: 'Royal Purple', value: '#8b5cf6', price: 100 },
-  { id: 'cyan', name: 'Electric Cyan', value: '#06b6d4', price: 100 },
-  { id: 'red', name: 'Crimson Red', value: '#ef4444', price: 90 },
-  { id: 'green', name: 'Forest Green', value: '#10b981', price: 90 },
-  { id: 'orange', name: 'Sunset Orange', value: '#f97316', price: 85 },
-  { id: 'pink', name: 'Hot Pink', value: '#ec4899', price: 110 },
-  { id: 'blue', name: 'Ocean Blue', value: '#3b82f6', price: 95 },
-  { id: 'gold', name: 'Golden', value: '#d97706', price: 120 },
-  { id: 'silver', name: 'Silver', value: '#6b7280', price: 110 }
+  { id: 'white', name: 'White', value: '#ffffff', price: 1000 },
+  { id: 'yellow', name: 'Sunny Yellow', value: '#fbbf24', price: 1200 },
+  { id: 'purple', name: 'Royal Purple', value: '#8b5cf6', price: 1600 },
+  { id: 'cyan', name: 'Electric Cyan', value: '#06b6d4', price: 1600 },
+  { id: 'red', name: 'Crimson Red', value: '#ef4444', price: 1400 },
+  { id: 'green', name: 'Forest Green', value: '#10b981', price: 1400 },
+  { id: 'orange', name: 'Sunset Orange', value: '#f97316', price: 1300 },
+  { id: 'pink', name: 'Hot Pink', value: '#ec4899', price: 1800 },
+  { id: 'blue', name: 'Ocean Blue', value: '#3b82f6', price: 1500 },
+  { id: 'gold', name: 'Golden', value: '#d97706', price: 2400 },
+  { id: 'silver', name: 'Silver', value: '#6b7280', price: 2200 }
+];
+
+const AVAILABLE_BACKGROUNDS: BackgroundOption[] = [
+  { id: 'default', name: 'Classic', value: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', type: 'gradient', price: 0 },
+  // Solid backgrounds
+  { id: 'midnight', name: 'Midnight Black', value: '#1a1a2e', type: 'solid', price: 1500 },
+  { id: 'ocean', name: 'Deep Ocean', value: '#0f3460', type: 'solid', price: 1800 },
+  { id: 'forest', name: 'Forest Night', value: '#16423c', type: 'solid', price: 1600 },
+  { id: 'wine', name: 'Wine Red', value: '#722f37', type: 'solid', price: 2000 },
+  // Gradient backgrounds
+  { id: 'sunset', name: 'Sunset Paradise', value: 'linear-gradient(135deg, #ff6b6b 0%, #ffa726 50%, #ff5722 100%)', type: 'gradient', price: 2500 },
+  { id: 'aurora', name: 'Aurora Borealis', value: 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)', type: 'gradient', price: 3500 },
+  { id: 'galaxy', name: 'Galaxy Dreams', value: 'linear-gradient(135deg, #000051 0%, #1e0845 25%, #5b2c6f 50%, #a17c6b 75%, #c9b037 100%)', type: 'gradient', price: 4000 },
+  { id: 'rainbow', name: 'Rainbow Burst', value: 'linear-gradient(135deg, #ff0000 0%, #ff8c00 14%, #ffd700 28%, #adff2f 42%, #00ff7f 57%, #00bfff 71%, #8a2be2 85%, #ff1493 100%)', type: 'gradient', price: 5000 },
+  { id: 'cyberpunk', name: 'Cyberpunk Neon', value: 'linear-gradient(135deg, #0f0f23 0%, #ff006e 25%, #8338ec 50%, #3a86ff 75%, #06ffa5 100%)', type: 'gradient', price: 4500 },
+  { id: 'pastel', name: 'Pastel Dreams', value: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 25%, #ffecd2 50%, #c3cfe2 75%, #a8e6cf 100%)', type: 'gradient', price: 3000 },
+  { id: 'fire', name: 'Fire Blaze', value: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 25%, #fecfef 50%, #ff6b6b 75%, #ff4757 100%)', type: 'gradient', price: 3800 },
+  { id: 'ice', name: 'Ice Crystal', value: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 25%, #d299c2 50%, #fef9d7 75%, #84fab0 100%)', type: 'gradient', price: 3200 }
 ];
 
 interface FontStoreState {
@@ -241,14 +267,18 @@ interface FontStoreState {
   equippedFont: string;
   ownedColors: string[];
   equippedColor: string;
+  ownedBackgrounds: string[];
+  equippedBackground: string;
 }
 
 const DEFAULT_STATE: FontStoreState = {
-  coins: 400, // Start with enough to buy multiple fonts and colors
+  coins: 1500, // Start with enough to buy some fonts and colors
   ownedFonts: ['default'],
   equippedFont: 'default',
   ownedColors: ['default'],
-  equippedColor: 'default'
+  equippedColor: 'default',
+  ownedBackgrounds: ['default'],
+  equippedBackground: 'default'
 };
 
 interface FontStoreModalProps {
@@ -260,7 +290,7 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
   const { toast } = useToast();
   const [state, setState] = useState<FontStoreState>(DEFAULT_STATE);
   const [loadedFonts, setLoadedFonts] = useState<Set<string>>(new Set(['default']));
-  const [activeTab, setActiveTab] = useState<'fonts' | 'colors'>('fonts');
+  const [activeTab, setActiveTab] = useState<'fonts' | 'colors' | 'backgrounds'>('fonts');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   // Load state from localStorage on mount and preload fonts
@@ -513,6 +543,49 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
     return { text: `Buy (${color.price})`, disabled: state.coins < color.price, variant: 'default' as const };
   };
 
+  const buyBackground = (background: BackgroundOption) => {
+    if (state.coins < background.price) {
+      toast({
+        title: "Insufficient Coins",
+        description: `You need ${background.price} coins but only have ${state.coins}.`,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setState(prev => ({
+      ...prev,
+      coins: prev.coins - background.price,
+      ownedBackgrounds: [...prev.ownedBackgrounds, background.id]
+    }));
+
+    toast({
+      title: "Background Purchased!",
+      description: `${background.name} has been added to your collection.`,
+    });
+  };
+
+  const equipBackground = (background: BackgroundOption) => {
+    setState(prev => ({
+      ...prev,
+      equippedBackground: background.id
+    }));
+
+    toast({
+      title: "Background Equipped!",
+      description: `${background.name} is now active.`,
+    });
+  };
+
+  const getBackgroundButtonState = (background: BackgroundOption) => {
+    const isOwned = state.ownedBackgrounds.includes(background.id);
+    const isEquipped = state.equippedBackground === background.id;
+
+    if (isEquipped) return { text: 'Equipped', disabled: true, variant: 'secondary' as const };
+    if (isOwned) return { text: 'Equip', disabled: false, variant: 'default' as const };
+    return { text: `Buy (${background.price})`, disabled: state.coins < background.price, variant: 'default' as const };
+  };
+
   const handleFontAction = (font: Font) => {
     const isOwned = state.ownedFonts.includes(font.id);
     if (isOwned) {
@@ -528,6 +601,15 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
       equipColor(color);
     } else {
       buyColor(color);
+    }
+  };
+
+  const handleBackgroundAction = (background: BackgroundOption) => {
+    const isOwned = state.ownedBackgrounds.includes(background.id);
+    if (isOwned) {
+      equipBackground(background);
+    } else {
+      buyBackground(background);
     }
   };
 
@@ -573,17 +655,24 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
         <div className="flex space-x-1 bg-gray-100 rounded-lg p-1 mt-4">
           <Button
             variant={activeTab === 'fonts' ? 'default' : 'outline'}
-            className={`flex-1 ${activeTab === 'fonts' ? 'bg-blue-600 text-white' : 'bg-white/90 text-gray-800 border-gray-300'}`}
+            className={`flex-1 text-xs sm:text-sm ${activeTab === 'fonts' ? 'bg-blue-600 text-white' : 'bg-white/90 text-gray-800 border-gray-300'}`}
             onClick={() => setActiveTab('fonts')}
           >
             Fonts
           </Button>
           <Button
             variant={activeTab === 'colors' ? 'default' : 'outline'}
-            className={`flex-1 ${activeTab === 'colors' ? 'bg-blue-600 text-white' : 'bg-white/90 text-gray-800 border-gray-300'}`}
+            className={`flex-1 text-xs sm:text-sm ${activeTab === 'colors' ? 'bg-blue-600 text-white' : 'bg-white/90 text-gray-800 border-gray-300'}`}
             onClick={() => setActiveTab('colors')}
           >
             Colors
+          </Button>
+          <Button
+            variant={activeTab === 'backgrounds' ? 'default' : 'outline'}
+            className={`flex-1 text-xs sm:text-sm ${activeTab === 'backgrounds' ? 'bg-blue-600 text-white' : 'bg-white/90 text-gray-800 border-gray-300'}`}
+            onClick={() => setActiveTab('backgrounds')}
+          >
+            Backgrounds
           </Button>
         </div>
 
@@ -700,6 +789,66 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
                         disabled={buttonState.disabled}
                         onClick={() => handleColorAction(color)}
                         size="sm"
+                      >
+                        {buttonState.text}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Backgrounds Tab */}
+        {activeTab === 'backgrounds' && (
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+              {AVAILABLE_BACKGROUNDS.map((background) => {
+                const buttonState = getBackgroundButtonState(background);
+
+                return (
+                  <Card 
+                    key={background.id} 
+                    className={`transition-all duration-200 hover:shadow-lg ${
+                      state.equippedBackground === background.id ? 'ring-2 ring-blue-500' : ''
+                    }`}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="font-semibold text-lg">{background.name}</h3>
+                          <Badge variant="outline" className="text-xs">
+                            {background.type}
+                          </Badge>
+                        </div>
+                        {state.equippedBackground === background.id && (
+                          <Check className="w-5 h-5 text-green-500" />
+                        )}
+                      </div>
+
+                      <div 
+                        className="rounded-lg p-4 mb-4 min-h-[80px] flex items-center justify-center text-center transition-all duration-200 border relative overflow-hidden"
+                        style={{
+                          background: background.value
+                        }}
+                      >
+                        <div className="text-white font-bold text-lg drop-shadow-lg">
+                          Preview
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm text-gray-600">
+                          {background.price === 0 ? 'Free' : `${background.price} coins`}
+                        </span>
+                      </div>
+
+                      <Button
+                        className="w-full"
+                        variant={buttonState.variant}
+                        disabled={buttonState.disabled}
+                        onClick={() => handleBackgroundAction(background)}
                       >
                         {buttonState.text}
                       </Button>
