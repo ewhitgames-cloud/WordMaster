@@ -1,7 +1,10 @@
 // Comprehensive 5-letter word dictionary for Wordle
 // Contains thousands of valid English words for both answers and guesses
+// NOTE: This file is being replaced with refined-word-lists.ts for better filtering
 
-// Common answer words (3000+ carefully curated words)
+import { getFilteredAnswerWords, getFilteredGuessWords } from './refined-word-lists';
+
+// Legacy answer words - now using filtered lists
 export const ANSWER_WORDS = [
   'ABOUT', 'ABOVE', 'ABUSE', 'ACTOR', 'ACUTE', 'ADMIT', 'ADOPT', 'ADULT', 'AFTER', 'AGAIN',
   'AGENT', 'AGREE', 'AHEAD', 'ALARM', 'ALBUM', 'ALERT', 'ALIEN', 'ALIGN', 'ALIKE', 'ALIVE',
@@ -747,8 +750,9 @@ export const VALID_GUESS_WORDS = [
 ];
 
 // Dynamic sets that can be updated with custom words
-let ANSWER_WORD_SET = new Set(ANSWER_WORDS);
-let VALID_GUESS_WORD_SET = new Set(VALID_GUESS_WORDS);
+// Use filtered word sets instead of raw lists
+let ANSWER_WORD_SET = new Set(getFilteredAnswerWords());
+let VALID_GUESS_WORD_SET = new Set(getFilteredGuessWords());
 
 // Function to add custom words to the valid guess set
 export function addCustomWordsToSet(customWords: Set<string>): void {
@@ -756,6 +760,15 @@ export function addCustomWordsToSet(customWords: Set<string>): void {
     VALID_GUESS_WORD_SET.add(word.toUpperCase());
   }
   console.log(`Added ${customWords.size} custom words to valid guess set`);
+  
+  // Regenerate filtered sets to include custom words
+  refreshWordSets();
+}
+
+// Function to refresh word sets (call after settings change)
+export function refreshWordSets(): void {
+  ANSWER_WORD_SET = new Set(getFilteredAnswerWords());
+  VALID_GUESS_WORD_SET = new Set(getFilteredGuessWords());
 }
 
 // Function to get current sets (for external access)

@@ -1,0 +1,63 @@
+“My Wordle clone is surfacing obscure words (e.g., ERVIL, EMPTS). Please refine the word library so it only uses guessable, common 5-letter English words.
+
+Requirements
+
+Maintain two lists:
+
+Answers: curated, common words only (2–4k items).
+
+Valid Guesses: larger, but still sensible (no Scrabble-only junk).
+
+Exclude from both lists:
+
+Archaic/rare Scrabble-isms (e.g., ERVIL, EMPTS, QOPHS).
+
+Abbreviations, acronyms, initialisms, Roman numerals, chemical symbols.
+
+Hyphenated, apostrophized, or diacritic-only variants.
+
+Offensive/slur terms.
+
+Answers list must:
+
+Prefer high-frequency everyday vocabulary.
+
+Default to American English (add a toggle for UK variants).
+
+Avoid proper nouns; keep base forms and very common inflections.
+
+Heuristics:
+
+Use a frequency list (e.g., SUBTLEX/wordfreq Zipf) or similar to rank words.
+
+Set a minimum frequency threshold for answers (higher bar) and a slightly lower one for valid guesses.
+
+Require at least one vowel or ‘Y’ acting as a vowel, except allow a small, hand-picked exception list (e.g., NYMPH, GYPSY) for fairness.
+
+Controls for me:
+
+Add a Blocklist (e.g., starts with ERVIL, EMPTS) that is always removed from both lists and never scheduled as an answer.
+
+Add an Allowlist so I can force-include specific words as valid guesses (but not necessarily answers).
+
+Add a simple Settings tool where I can add/remove words from Blocklist/Allowlist at runtime; persist changes.
+
+Scheduling safety:
+
+If an already-scheduled answer is later blocked, automatically replace it with the next eligible word.
+
+Validation:
+
+Normalize everything to lowercase; comparisons must be case-insensitive.
+
+Keep lookups O(1) (Sets/Maps) after merging base list + allowlist – blocklist.
+
+QA checks:
+
+Confirm common words like APPLE, WATER, MUSIC are in answers.
+
+Confirm ERVIL, EMPTS, QOPHS are out (both answers and guesses).
+
+Keep the larger guess list flexible, but still filtered of garbage.
+
+Please implement the frequency-based filtering, blocklist/allowlist system, the Settings controls, and update the existing answer scheduler accordingly. Do not include code in your reply—apply changes directly to my files and tell me where the new lists/settings live.”
