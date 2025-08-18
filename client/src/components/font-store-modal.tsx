@@ -41,7 +41,8 @@ const AVAILABLE_FONTS: Font[] = [
     price: 0,
     category: 'sans'
   },
-  // Serif fonts
+  
+  // SERIF FONTS (15 total)
   {
     id: 'playfair',
     name: 'Elegant',
@@ -78,7 +79,107 @@ const AVAILABLE_FONTS: Font[] = [
     category: 'serif',
     googleFont: 'https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap'
   },
-  // Sans fonts
+  {
+    id: 'libre-baskerville',
+    name: 'Classic Book',
+    family: 'Libre Baskerville',
+    fallback: 'Times, serif',
+    price: 1400,
+    category: 'serif',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap'
+  },
+  {
+    id: 'lora',
+    name: 'Scholarly',
+    family: 'Lora',
+    fallback: 'Times, serif',
+    price: 1300,
+    category: 'serif',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap'
+  },
+  {
+    id: 'cormorant-garamond',
+    name: 'Royal',
+    family: 'Cormorant Garamond',
+    fallback: 'Times, serif',
+    price: 2000,
+    category: 'serif',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap'
+  },
+  {
+    id: 'eb-garamond',
+    name: 'Vintage',
+    family: 'EB Garamond',
+    fallback: 'Times, serif',
+    price: 1700,
+    category: 'serif',
+    googleFont: 'https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&display=swap'
+  },
+  {
+    id: 'domine',
+    name: 'Bold Serif',
+    family: 'Domine',
+    fallback: 'Times, serif',
+    price: 1600,
+    category: 'serif',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Domine:wght@400;500;600;700&display=swap'
+  },
+  {
+    id: 'spectral',
+    name: 'Magazine',
+    family: 'Spectral',
+    fallback: 'Times, serif',
+    price: 1900,
+    category: 'serif',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Spectral:wght@300;400;500;600;700&display=swap'
+  },
+  {
+    id: 'bitter',
+    name: 'Modern Slab',
+    family: 'Bitter',
+    fallback: 'Times, serif',
+    price: 1500,
+    category: 'serif',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Bitter:wght@300;400;500;600;700&display=swap'
+  },
+  {
+    id: 'zilla-slab',
+    name: 'Tech Slab',
+    family: 'Zilla Slab',
+    fallback: 'Times, serif',
+    price: 1800,
+    category: 'serif',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@300;400;500;600;700&display=swap'
+  },
+  {
+    id: 'alegreya',
+    name: 'Warm Serif',
+    family: 'Alegreya',
+    fallback: 'Times, serif',
+    price: 1400,
+    category: 'serif',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Alegreya:wght@400;500;700&display=swap'
+  },
+  {
+    id: 'frank-ruhl-libre',
+    name: 'Hebrew Style',
+    family: 'Frank Ruhl Libre',
+    fallback: 'Times, serif',
+    price: 2100,
+    category: 'serif',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&display=swap'
+  },
+  {
+    id: 'source-serif-pro',
+    name: 'Code Serif',
+    family: 'Source Serif Pro',
+    fallback: 'Times, serif',
+    price: 1700,
+    category: 'serif',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@300;400;600;700&display=swap'
+  },
+
+  // SANS SERIF FONTS (15 total)
   {
     id: 'poppins',
     name: 'Modern',
@@ -115,7 +216,107 @@ const AVAILABLE_FONTS: Font[] = [
     category: 'sans',
     googleFont: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap'
   },
-  // Mono fonts
+  {
+    id: 'open-sans',
+    name: 'Professional',
+    family: 'Open Sans',
+    fallback: 'Arial, sans-serif',
+    price: 1200,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap'
+  },
+  {
+    id: 'raleway',
+    name: 'Elegant Sans',
+    family: 'Raleway',
+    fallback: 'Arial, sans-serif',
+    price: 1600,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap'
+  },
+  {
+    id: 'rubik',
+    name: 'Rounded Sans',
+    family: 'Rubik',
+    fallback: 'Arial, sans-serif',
+    price: 1400,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap'
+  },
+  {
+    id: 'work-sans',
+    name: 'Work Style',
+    family: 'Work Sans',
+    fallback: 'Arial, sans-serif',
+    price: 1300,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap'
+  },
+  {
+    id: 'dm-sans',
+    name: 'Digital',
+    family: 'DM Sans',
+    fallback: 'Arial, sans-serif',
+    price: 1800,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap'
+  },
+  {
+    id: 'inter',
+    name: 'Interface',
+    family: 'Inter',
+    fallback: 'Arial, sans-serif',
+    price: 1500,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
+  },
+  {
+    id: 'lato',
+    name: 'Humanist',
+    family: 'Lato',
+    fallback: 'Arial, sans-serif',
+    price: 1200,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap'
+  },
+  {
+    id: 'source-sans-pro',
+    name: 'Adobe Sans',
+    family: 'Source Sans Pro',
+    fallback: 'Arial, sans-serif',
+    price: 1400,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap'
+  },
+  {
+    id: 'archivo',
+    name: 'Archive',
+    family: 'Archivo',
+    fallback: 'Arial, sans-serif',
+    price: 1700,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap'
+  },
+  {
+    id: 'manrope',
+    name: 'Modern Geometric',
+    family: 'Manrope',
+    fallback: 'Arial, sans-serif',
+    price: 1900,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap'
+  },
+  {
+    id: 'public-sans',
+    name: 'Government',
+    family: 'Public Sans',
+    fallback: 'Arial, sans-serif',
+    price: 1600,
+    category: 'sans',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap'
+  },
+
+  // MONOSPACE FONTS (8 total)
   {
     id: 'fira-code',
     name: 'Code Style',
@@ -143,7 +344,53 @@ const AVAILABLE_FONTS: Font[] = [
     category: 'mono',
     googleFont: 'https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500&display=swap'
   },
-  // Playful fonts
+  {
+    id: 'roboto-mono',
+    name: 'Robot Code',
+    family: 'Roboto Mono',
+    fallback: 'Courier, monospace',
+    price: 1500,
+    category: 'mono',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap'
+  },
+  {
+    id: 'space-mono',
+    name: 'Space Code',
+    family: 'Space Mono',
+    fallback: 'Courier, monospace',
+    price: 2000,
+    category: 'mono',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap'
+  },
+  {
+    id: 'inconsolata',
+    name: 'Programmer',
+    family: 'Inconsolata',
+    fallback: 'Courier, monospace',
+    price: 1400,
+    category: 'mono',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400;500;700&display=swap'
+  },
+  {
+    id: 'courier-prime',
+    name: 'Typewriter',
+    family: 'Courier Prime',
+    fallback: 'Courier, monospace',
+    price: 1800,
+    category: 'mono',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap'
+  },
+  {
+    id: 'ubuntu-mono',
+    name: 'Linux Code',
+    family: 'Ubuntu Mono',
+    fallback: 'Courier, monospace',
+    price: 1600,
+    category: 'mono',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap'
+  },
+
+  // PLAYFUL FONTS (10 total)
   {
     id: 'comfortaa',
     name: 'Rounded',
@@ -171,7 +418,71 @@ const AVAILABLE_FONTS: Font[] = [
     category: 'playful',
     googleFont: 'https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap'
   },
-  // Fun fonts
+  {
+    id: 'varela-round',
+    name: 'Circle',
+    family: 'Varela Round',
+    fallback: 'Arial, sans-serif',
+    price: 1700,
+    category: 'playful',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Varela+Round&display=swap'
+  },
+  {
+    id: 'baloo-2',
+    name: 'Friendly Bear',
+    family: 'Baloo 2',
+    fallback: 'Arial, sans-serif',
+    price: 2100,
+    category: 'playful',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&display=swap'
+  },
+  {
+    id: 'nunito-sans',
+    name: 'Soft Sans',
+    family: 'Nunito Sans',
+    fallback: 'Arial, sans-serif',
+    price: 1600,
+    category: 'playful',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap'
+  },
+  {
+    id: 'cabin',
+    name: 'Cozy',
+    family: 'Cabin',
+    fallback: 'Arial, sans-serif',
+    price: 1500,
+    category: 'playful',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Cabin:wght@400;500;600;700&display=swap'
+  },
+  {
+    id: 'righteous',
+    name: 'Bold Play',
+    family: 'Righteous',
+    fallback: 'Arial, sans-serif',
+    price: 2400,
+    category: 'playful',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Righteous&display=swap'
+  },
+  {
+    id: 'pacifico',
+    name: 'Surf Style',
+    family: 'Pacifico',
+    fallback: 'Arial, sans-serif',
+    price: 2600,
+    category: 'playful',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Pacifico&display=swap'
+  },
+  {
+    id: 'indie-flower',
+    name: 'Garden',
+    family: 'Indie Flower',
+    fallback: 'Arial, sans-serif',
+    price: 2200,
+    category: 'playful',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap'
+  },
+
+  // FUN FONTS (12 total)
   {
     id: 'bangers',
     name: 'Comic Book',
@@ -225,6 +536,60 @@ const AVAILABLE_FONTS: Font[] = [
     price: 2500,
     category: 'fun',
     googleFont: 'https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap'
+  },
+  {
+    id: 'permanent-marker',
+    name: 'Marker Pen',
+    family: 'Permanent Marker',
+    fallback: 'Arial, sans-serif',
+    price: 2900,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap'
+  },
+  {
+    id: 'press-start-2p',
+    name: 'Pixel Game',
+    family: 'Press Start 2P',
+    fallback: 'Arial, sans-serif',
+    price: 3800,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'
+  },
+  {
+    id: 'shadows-into-light',
+    name: 'Shadow Script',
+    family: 'Shadows Into Light',
+    fallback: 'Arial, sans-serif',
+    price: 2700,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap'
+  },
+  {
+    id: 'orbitron',
+    name: 'Sci-Fi',
+    family: 'Orbitron',
+    fallback: 'Arial, sans-serif',
+    price: 3600,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap'
+  },
+  {
+    id: 'cabin-sketch',
+    name: 'Sketch',
+    family: 'Cabin Sketch',
+    fallback: 'Arial, sans-serif',
+    price: 3100,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&display=swap'
+  },
+  {
+    id: 'special-elite',
+    name: 'Vintage Type',
+    family: 'Special Elite',
+    fallback: 'Arial, sans-serif',
+    price: 3300,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Special+Elite&display=swap'
   }
 ];
 
