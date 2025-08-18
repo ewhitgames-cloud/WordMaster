@@ -241,6 +241,9 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     const isValid = isValidWord(currentGuess);
     setIsValidatingWord(false);
     
+    // Debug logging
+    console.log('Validating word:', currentGuess, 'Valid:', isValid, 'Target:', targetWord);
+    
     if (!isValid) {
       // Only show the toast if we're not already showing one for this word
       if (!showingInvalidToast || invalidWord !== currentGuess) {
