@@ -4,9 +4,7 @@ export type TileState = 'empty' | 'current' | 'correct' | 'present' | 'absent';
 export type KeyState = 'default' | 'correct' | 'present' | 'absent';
 
 export function isValidWord(word: string): boolean {
-  const result = isOfficialWordleWord(word.toUpperCase());
-  console.log('Word validation debug:', word, 'uppercase:', word.toUpperCase(), 'result:', result);
-  return result;
+  return isOfficialWordleWord(word.toUpperCase());
 }
 
 export async function isValidWordExpanded(word: string): Promise<boolean> {
@@ -31,18 +29,19 @@ export function calculateScore(attempts: number, timeElapsed: number, challengeM
 }
 
 export function getTileState(guess: string, target: string, position: number): TileState {
-  const guessLetter = guess[position];
-  
-  console.log('getTileState debug:', { guess, target, position, guessLetter, targetLetter: target[position] });
+  // Normalize both to uppercase for comparison
+  const normalizedGuess = guess.toUpperCase();
+  const normalizedTarget = target.toUpperCase();
+  const guessLetter = normalizedGuess[position];
+  const targetLetter = normalizedTarget[position];
   
   // If the letter is in the correct position
-  if (guessLetter === target[position]) {
-    console.log('Found correct letter at position', position);
+  if (guessLetter === targetLetter) {
     return 'correct';
   }
   
   // Check if the letter exists in the target word at all
-  if (!target.includes(guessLetter)) {
+  if (!normalizedTarget.includes(guessLetter)) {
     return 'absent';
   }
   
@@ -50,12 +49,12 @@ export function getTileState(guess: string, target: string, position: number): T
   // we need to check if there are available instances
   
   // Count total occurrences of this letter in target
-  const targetCount = target.split('').filter(letter => letter === guessLetter).length;
+  const targetCount = normalizedTarget.split('').filter(letter => letter === guessLetter).length;
   
   // Count how many of this letter are already correctly placed in the guess
   let correctlyPlaced = 0;
-  for (let i = 0; i < guess.length; i++) {
-    if (guess[i] === guessLetter && target[i] === guessLetter) {
+  for (let i = 0; i < normalizedGuess.length; i++) {
+    if (normalizedGuess[i] === guessLetter && normalizedTarget[i] === guessLetter) {
       correctlyPlaced++;
     }
   }
@@ -63,7 +62,7 @@ export function getTileState(guess: string, target: string, position: number): T
   // Count how many of this letter appear before current position in wrong positions
   let wrongPositionsBefore = 0;
   for (let i = 0; i < position; i++) {
-    if (guess[i] === guessLetter && target[i] !== guessLetter) {
+    if (normalizedGuess[i] === guessLetter && normalizedTarget[i] !== guessLetter) {
       wrongPositionsBefore++;
     }
   }
@@ -78,12 +77,14 @@ export function getTileState(guess: string, target: string, position: number): T
 }
 
 export function getKeyboardState(guesses: string[], target: string): Record<string, KeyState> {
+  // Normalize target to uppercase for consistency
+  const normalizedTarget = target.toUpperCase();
   const keyboardState: Record<string, KeyState> = {};
   
   guesses.forEach(guess => {
     for (let i = 0; i < guess.length; i++) {
       const letter = guess[i];
-      const tileState = getTileState(guess, target, i);
+      const tileState = getTileState(guess, normalizedTarget, i);
       
       // Convert TileState to KeyState
       let keyState: KeyState = 'default';

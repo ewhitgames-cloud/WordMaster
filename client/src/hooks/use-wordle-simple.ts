@@ -241,8 +241,7 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     const isValid = isValidWord(currentGuess);
     setIsValidatingWord(false);
     
-    // Debug logging
-    console.log('Validating word:', currentGuess, 'Valid:', isValid, 'Target:', targetWord);
+    // Clear debug logging - validation working correctly
     
     if (!isValid) {
       // Only show the toast if we're not already showing one for this word
@@ -271,7 +270,6 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     setEvaluatedRows(prev => new Set([...Array.from(prev), currentRow]));
 
     // Update keyboard state
-    console.log('About to update keyboard state with:', { currentGuess, targetWord });
     updateKeyboardState(currentGuess, targetWord);
 
     // Check win condition
