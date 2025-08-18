@@ -25,17 +25,7 @@ export default function MenuModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <div className="flex items-center justify-between">
-            <DialogTitle className="font-bold text-2xl text-gray-800">Game Menu</DialogTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              data-testid="button-close-menu"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
+          <DialogTitle className="font-bold text-2xl text-gray-800">Game Menu</DialogTitle>
         </DialogHeader>
 
         <div className="p-6 space-y-3">
@@ -58,7 +48,7 @@ export default function MenuModal({
             data-testid="button-challenge-mode-menu"
           >
             <Clock className="w-4 h-4" />
-            <span>{challengeMode ? 'Exit Challenge Mode' : 'Challenge Mode'}</span>
+            <span>{challengeMode ? 'Exit Timed Challenge' : 'Timed Challenge'}</span>
           </Button>
 
           <Button 

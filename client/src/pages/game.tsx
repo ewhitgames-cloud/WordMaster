@@ -357,7 +357,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
         blindChallengeMode={blindChallengeMode}
         timeElapsed={challengeMode ? 180 - timeRemaining : 0}
         onPlayAgain={handleNewGame}
-        onChallengeMode={() => window.location.href = '/game?mode=challenge'}
+        onChallengeMode={() => window.location.href = challengeMode ? '/game' : '/game?mode=challenge'}
         gameEndedByTime={gameEndedByTime}
         onViewStats={() => {
           setShowCelebration(false);
@@ -379,7 +379,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
         isOpen={showMenu}
         onClose={() => setShowMenu(false)}
         onNewGame={handleNewGame}
-        onChallengeMode={() => window.location.href = '/game?mode=challenge'}
+        onChallengeMode={() => window.location.href = challengeMode ? '/game' : '/game?mode=challenge'}
         onStats={() => {
           setShowMenu(false);
           setShowStats(true);
