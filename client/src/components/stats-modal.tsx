@@ -1,7 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { GameStats } from "@shared/schema";
-import { X } from "lucide-react";
 
 interface StatsModalProps {
   isOpen: boolean;
@@ -20,17 +19,7 @@ export default function StatsModal({ isOpen, onClose, stats }: StatsModalProps) 
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <div className="flex items-center justify-between">
-            <DialogTitle className="font-bold text-2xl text-gray-800">Your Stats</DialogTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              data-testid="button-close-stats"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
+          <DialogTitle className="font-bold text-2xl text-gray-800">Your Stats</DialogTitle>
         </DialogHeader>
 
         <div className="p-6 space-y-6">
