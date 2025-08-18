@@ -562,15 +562,15 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
         {/* Tabs */}
         <div className="flex space-x-1 bg-gray-100 rounded-lg p-1 mt-4">
           <Button
-            variant={activeTab === 'fonts' ? 'default' : 'ghost'}
-            className="flex-1"
+            variant={activeTab === 'fonts' ? 'default' : 'outline'}
+            className={`flex-1 ${activeTab === 'fonts' ? 'bg-blue-600 text-white' : 'bg-white/90 text-gray-800 border-gray-300'}`}
             onClick={() => setActiveTab('fonts')}
           >
             Fonts
           </Button>
           <Button
-            variant={activeTab === 'colors' ? 'default' : 'ghost'}
-            className="flex-1"
+            variant={activeTab === 'colors' ? 'default' : 'outline'}
+            className={`flex-1 ${activeTab === 'colors' ? 'bg-blue-600 text-white' : 'bg-white/90 text-gray-800 border-gray-300'}`}
             onClick={() => setActiveTab('colors')}
           >
             Colors
