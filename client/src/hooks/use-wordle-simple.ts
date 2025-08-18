@@ -4,10 +4,20 @@ import { apiRequest } from "@/lib/queryClient";
 import { GameStats, InsertGameResult } from "@shared/schema";
 import { calculateScore, isValidWord, isValidWordExpanded, getTileState } from "@/lib/game-utils";
 import { useToast } from "@/hooks/use-toast";
+import { useAudio } from "@/hooks/use-audio";
 
 export function useWordle(challengeMode: boolean = false, dailyChallengeMode: boolean = false, onTimeUp?: () => void) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { 
+    playKeyPress, 
+    playWordSubmit, 
+    playCorrectGuess, 
+    playWrongGuess, 
+    playGameWin, 
+    playGameLose, 
+    playInvalidWord 
+  } = useAudio();
   
   // Game state
   const [grid, setGrid] = useState<string[][]>(Array(6).fill(null).map(() => Array(5).fill('')));
@@ -138,8 +148,9 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     if (gameState !== 'playing') return;
     if (currentGuess.length < 5) {
       setCurrentGuess(prev => prev + key);
+      playKeyPress();
     }
-  }, [currentGuess, gameState]);
+  }, [currentGuess, gameState, playKeyPress]);
 
   const onBackspace = useCallback(() => {
     if (gameState !== 'playing') return;
@@ -221,6 +232,7 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
       const isValid = await isValidWordExpanded(currentGuess);
       if (!isValid) {
         setInvalidWord(currentGuess);
+        playInvalidWord();
         toast({
           title: "Invalid word", 
           description: "Not in word list",
@@ -240,6 +252,9 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
       setIsValidatingWord(false);
     }
 
+    // Play word submit sound
+    playWordSubmit();
+
     // Update grid
     const newGrid = [...grid];
     newGrid[currentRow] = currentGuess.split('');
@@ -254,6 +269,7 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
     // Check win condition
     if (currentGuess === targetWord) {
       setGameState('won');
+      playGameWin();
       const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
       const gameScore = calculateScore(currentRow + 1, timeElapsed, challengeMode);
       setScore(gameScore);
@@ -262,14 +278,16 @@ export function useWordle(challengeMode: boolean = false, dailyChallengeMode: bo
       await submitResult(currentRow + 1, timeElapsed, gameScore, true);
     } else if (currentRow === 5) {
       setGameState('lost');
+      playGameLose();
       const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
       await submitResult(6, timeElapsed, 0, false);
     } else {
       setCurrentRow(prev => prev + 1);
+      playWrongGuess();
     }
 
     setCurrentGuess('');
-  }, [currentGuess, currentRow, grid, targetWord, startTime, challengeMode, gameState, toast, updateKeyboardState]);
+  }, [currentGuess, currentRow, grid, targetWord, startTime, challengeMode, gameState, toast, updateKeyboardState, playWordSubmit, playGameWin, playGameLose, playCorrectGuess, playInvalidWord]);
 
   // Auto-submit when 5 letters are typed (if enabled in settings)
   useEffect(() => {

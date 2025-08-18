@@ -84,7 +84,7 @@ export default function SettingsModal({
             <div className="flex items-center justify-between">
               <Label htmlFor="sound-enabled" className="flex items-center gap-2">
                 {settings.soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-                Sound Effects
+                Sound Effects & Music
               </Label>
               <Switch
                 id="sound-enabled"
@@ -95,16 +95,36 @@ export default function SettingsModal({
             </div>
 
             <div className="space-y-2">
-              <Label>Music Volume</Label>
+              <div className="flex items-center justify-between">
+                <Label>Volume</Label>
+                <span className="text-sm text-gray-500">{settings.musicVolume}%</span>
+              </div>
               <Slider
                 value={[settings.musicVolume]}
                 onValueChange={([value]) => updateSetting('musicVolume', value)}
                 max={100}
                 step={5}
                 className="w-full"
+                disabled={!settings.soundEnabled}
                 data-testid="slider-music-volume"
               />
-              <div className="text-sm text-gray-500 text-center">{settings.musicVolume}%</div>
+              
+              <div className="text-xs text-gray-400 mt-2">
+                Controls volume for both sound effects and background music. 
+                {!settings.soundEnabled && " Enable sound effects above to use volume control."}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <Label htmlFor="haptic-feedback" className="flex items-center gap-2">
+                📳 Haptic Feedback
+              </Label>
+              <Switch
+                id="haptic-feedback"
+                checked={settings.soundEnabled} // Link to sound enabled for now
+                onCheckedChange={(checked) => updateSetting('soundEnabled', checked)}
+                data-testid="switch-haptic-feedback"
+              />
             </div>
           </div>
 

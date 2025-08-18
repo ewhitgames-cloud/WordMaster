@@ -13,6 +13,7 @@ import SettingsModal from "@/components/settings-modal";
 
 import { useWordle } from "@/hooks/use-wordle-simple";
 import { useSettings } from "@/hooks/use-settings";
+import { useAudio } from "@/hooks/use-audio";
 import { Menu, Clock, Home, Store, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FontStoreAPI } from "@/components/font-store-modal";
@@ -33,6 +34,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
   const { toast } = useToast();
   const [location] = useLocation();
   const { settings, updateSettings } = useSettings();
+  const { startBackgroundMusic, stopBackgroundMusic } = useAudio();
   const [showCelebration, setShowCelebration] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -77,6 +79,19 @@ export default function Game({ mode: propMode }: GameProps = {}) {
 
   // Use the persistent coin system
   const { coins: persistentCoins, addCoins } = useCoins();
+  
+  // Background music control
+  useEffect(() => {
+    if (settings?.soundEnabled && settings?.musicVolume > 0) {
+      startBackgroundMusic();
+    } else {
+      stopBackgroundMusic();
+    }
+    
+    return () => {
+      stopBackgroundMusic();
+    };
+  }, [settings?.soundEnabled, settings?.musicVolume, startBackgroundMusic, stopBackgroundMusic]);
   
   // Load coin balance on mount and listen for changes
   useEffect(() => {
