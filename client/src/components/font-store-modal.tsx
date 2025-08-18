@@ -482,7 +482,7 @@ const AVAILABLE_FONTS: Font[] = [
     googleFont: 'https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap'
   },
 
-  // FUN FONTS (12 total)
+  // FUN FONTS (25 total - expanded collection!)
   {
     id: 'bangers',
     name: 'Comic Book',
@@ -590,6 +590,305 @@ const AVAILABLE_FONTS: Font[] = [
     price: 3300,
     category: 'fun',
     googleFont: 'https://fonts.googleapis.com/css2?family=Special+Elite&display=swap'
+  },
+  // NEW FUN FONTS ADDITIONS
+  {
+    id: 'fredoka-one',
+    name: 'Super Bubbly',
+    family: 'Fredoka One',
+    fallback: 'Arial, sans-serif',
+    price: 3400,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap'
+  },
+  {
+    id: 'ribeye',
+    name: 'Meat Lover',
+    family: 'Ribeye',
+    fallback: 'Arial, sans-serif',
+    price: 4200,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Ribeye&display=swap'
+  },
+  {
+    id: 'monoton',
+    name: 'Neon Sign',
+    family: 'Monoton',
+    fallback: 'Arial, sans-serif',
+    price: 4500,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Monoton&display=swap'
+  },
+  {
+    id: 'jolly-lodger',
+    name: 'Pirate Ship',
+    family: 'Jolly Lodger',
+    fallback: 'Arial, sans-serif',
+    price: 3700,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap'
+  },
+  {
+    id: 'bungee-shade',
+    name: 'Street Shadow',
+    family: 'Bungee Shade',
+    fallback: 'Arial, sans-serif',
+    price: 4000,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap'
+  },
+  {
+    id: 'nosifer',
+    name: 'Horror Movie',
+    family: 'Nosifer',
+    fallback: 'Arial, sans-serif',
+    price: 4300,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Nosifer&display=swap'
+  },
+  {
+    id: 'bungee-outline',
+    name: 'Hollow Block',
+    family: 'Bungee Outline',
+    fallback: 'Arial, sans-serif',
+    price: 3900,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Bungee+Outline&display=swap'
+  },
+  {
+    id: 'shrikhand',
+    name: 'Bollywood',
+    family: 'Shrikhand',
+    fallback: 'Arial, sans-serif',
+    price: 3800,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Shrikhand&display=swap'
+  },
+  {
+    id: 'modak',
+    name: 'Party Balloon',
+    family: 'Modak',
+    fallback: 'Arial, sans-serif',
+    price: 4100,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Modak&display=swap'
+  },
+  {
+    id: 'fascinate',
+    name: 'Carnival',
+    family: 'Fascinate',
+    fallback: 'Arial, sans-serif',
+    price: 4400,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Fascinate&display=swap'
+  },
+  {
+    id: 'fascinate-inline',
+    name: 'Circus Tent',
+    family: 'Fascinate Inline',
+    fallback: 'Arial, sans-serif',
+    price: 4600,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Fascinate+Inline&display=swap'
+  },
+  {
+    id: 'griffy',
+    name: 'Medieval Quest',
+    family: 'Griffy',
+    fallback: 'Arial, sans-serif',
+    price: 3600,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Griffy&display=swap'
+  },
+  {
+    id: 'butcherman',
+    name: 'Zombie Hunter',
+    family: 'Butcherman',
+    fallback: 'Arial, sans-serif',
+    price: 4700,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Butcherman&display=swap'
+  },
+  // EVEN MORE FUN FONTS!
+  {
+    id: 'chela-one',
+    name: 'Retro Diner',
+    family: 'Chela One',
+    fallback: 'Arial, sans-serif',
+    price: 3800,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Chela+One&display=swap'
+  },
+  {
+    id: 'lacquer',
+    name: 'Graffiti Tag',
+    family: 'Lacquer',
+    fallback: 'Arial, sans-serif',
+    price: 4200,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Lacquer&display=swap'
+  },
+  {
+    id: 'squada-one',
+    name: 'Robot Factory',
+    family: 'Squada One',
+    fallback: 'Arial, sans-serif',
+    price: 3900,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Squada+One&display=swap'
+  },
+  {
+    id: 'rye',
+    name: 'Wild West',
+    family: 'Rye',
+    fallback: 'Arial, sans-serif',
+    price: 4300,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Rye&display=swap'
+  },
+  {
+    id: 'metal-mania',
+    name: 'Heavy Metal',
+    family: 'Metal Mania',
+    fallback: 'Arial, sans-serif',
+    price: 4500,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap'
+  },
+  {
+    id: 'wallpoet',
+    name: 'Street Stencil',
+    family: 'Wallpoet',
+    fallback: 'Arial, sans-serif',
+    price: 4100,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Wallpoet&display=swap'
+  },
+  {
+    id: 'unlock',
+    name: 'Digital Matrix',
+    family: 'Unlock',
+    fallback: 'Arial, sans-serif',
+    price: 4400,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Unlock&display=swap'
+  },
+  {
+    id: 'rammetto-one',
+    name: 'Action Hero',
+    family: 'Rammetto One',
+    fallback: 'Arial, sans-serif',
+    price: 4000,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Rammetto+One&display=swap'
+  },
+  {
+    id: 'passion-one',
+    name: 'Love Letter',
+    family: 'Passion One',
+    fallback: 'Arial, sans-serif',
+    price: 3700,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700&display=swap'
+  },
+  {
+    id: 'diplomata-sc',
+    name: 'Royal Decree',
+    family: 'Diplomata SC',
+    fallback: 'Arial, sans-serif',
+    price: 4600,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Diplomata+SC&display=swap'
+  },
+  {
+    id: 'new-rocker',
+    name: 'Punk Rock',
+    family: 'New Rocker',
+    fallback: 'Arial, sans-serif',
+    price: 4300,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=New+Rocker&display=swap'
+  },
+  {
+    id: 'pirata-one',
+    name: 'Treasure Map',
+    family: 'Pirata One',
+    fallback: 'Arial, sans-serif',
+    price: 3900,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Pirata+One&display=swap'
+  },
+  {
+    id: 'eater',
+    name: 'Zombie Bite',
+    family: 'Eater',
+    fallback: 'Arial, sans-serif',
+    price: 4800,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Eater&display=swap'
+  },
+  {
+    id: 'iceberg',
+    name: 'Arctic Freeze',
+    family: 'Iceberg',
+    fallback: 'Arial, sans-serif',
+    price: 3600,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Iceberg&display=swap'
+  },
+  {
+    id: 'trade-winds',
+    name: 'Tropical Breeze',
+    family: 'Trade Winds',
+    fallback: 'Arial, sans-serif',
+    price: 3800,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap'
+  },
+  {
+    id: 'atomic-age',
+    name: 'Space Age',
+    family: 'Atomic Age',
+    fallback: 'Arial, sans-serif',
+    price: 4400,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Atomic+Age&display=swap'
+  },
+  {
+    id: 'bowlby-one',
+    name: 'Cartoon Bubble',
+    family: 'Bowlby One',
+    fallback: 'Arial, sans-serif',
+    price: 3500,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Bowlby+One&display=swap'
+  },
+  {
+    id: 'bungee-hairline',
+    name: 'Wire Frame',
+    family: 'Bungee Hairline',
+    fallback: 'Arial, sans-serif',
+    price: 4200,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Bungee+Hairline&display=swap'
+  },
+  {
+    id: 'faster-one',
+    name: 'Speed Racer',
+    family: 'Faster One',
+    fallback: 'Arial, sans-serif',
+    price: 4100,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Faster+One&display=swap'
+  },
+  {
+    id: 'stalinist-one',
+    name: 'Soviet Era',
+    family: 'Stalinist One',
+    fallback: 'Arial, sans-serif',
+    price: 4500,
+    category: 'fun',
+    googleFont: 'https://fonts.googleapis.com/css2?family=Stalinist+One&display=swap'
   }
 ];
 
