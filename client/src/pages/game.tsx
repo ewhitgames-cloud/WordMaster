@@ -379,7 +379,11 @@ export default function Game({ mode: propMode }: GameProps = {}) {
         isOpen={showMenu}
         onClose={() => setShowMenu(false)}
         onNewGame={handleNewGame}
-        onChallengeMode={() => window.location.href = challengeMode ? '/game' : '/game?mode=challenge'}
+        onChallengeMode={() => {
+          const newUrl = challengeMode ? '/game' : '/game?mode=challenge';
+          console.log('Menu Challenge Mode clicked - Current challengeMode:', challengeMode, 'Going to:', newUrl);
+          window.location.href = newUrl;
+        }}
         onStats={() => {
           setShowMenu(false);
           setShowStats(true);
