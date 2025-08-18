@@ -115,6 +115,15 @@ export default function FontSettings() {
         [data-testid*="tile"] * {
           color: ${colorValue} !important;
           font-family: ${fontStack} !important;
+          text-shadow: 
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000,
+            0 -1px 0 #000,
+            0 1px 0 #000,
+            -1px 0 0 #000,
+            1px 0 0 #000 !important;
         }
         
         /* Keyboard keys - text content only */
@@ -137,6 +146,15 @@ export default function FontSettings() {
         [data-testid*="key"] * {
           color: ${colorValue} !important;
           font-family: ${fontStack} !important;
+          text-shadow: 
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000,
+            0 -1px 0 #000,
+            0 1px 0 #000,
+            -1px 0 0 #000,
+            1px 0 0 #000 !important;
         }
       `;
       

@@ -361,7 +361,7 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
         font-family: ${fontStack} !important;
       }
       
-      /* Game tiles - text color only */
+      /* Game tiles - text color with outline */
       .tile *,
       .tile-correct *,
       .tile-present *,
@@ -371,6 +371,15 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
       [data-testid*="tile"] * {
         color: ${colorValue} !important;
         font-family: ${fontStack} !important;
+        text-shadow: 
+          -1px -1px 0 #000,
+          1px -1px 0 #000,
+          -1px 1px 0 #000,
+          1px 1px 0 #000,
+          0 -1px 0 #000,
+          0 1px 0 #000,
+          -1px 0 0 #000,
+          1px 0 0 #000 !important;
       }
       
       /* Keyboard keys - font and structure */
@@ -384,7 +393,7 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
         font-family: ${fontStack} !important;
       }
       
-      /* Keyboard keys - text color only */
+      /* Keyboard keys - text color with outline */
       .keyboard-key *,
       .keyboard-key-default *,
       .keyboard-key-correct *,
@@ -394,6 +403,15 @@ export default function FontStoreModal({ isOpen, onClose }: FontStoreModalProps)
       [data-testid*="key"] * {
         color: ${colorValue} !important;
         font-family: ${fontStack} !important;
+        text-shadow: 
+          -1px -1px 0 #000,
+          1px -1px 0 #000,
+          -1px 1px 0 #000,
+          1px 1px 0 #000,
+          0 -1px 0 #000,
+          0 1px 0 #000,
+          -1px 0 0 #000,
+          1px 0 0 #000 !important;
       }
     `;
     
