@@ -1,4 +1,5 @@
 import { generateWords, generateDailyChallengeWords, generateWordsByCategory } from './openai-words';
+import { getRandomAnswerWord, getThemedWord, ANSWER_WORDS } from '@shared/comprehensive-word-list';
 
 // Enhanced word categories with larger sets
 const ENHANCED_WORD_CATEGORIES = {
@@ -38,7 +39,7 @@ export class WordManager {
   }
 
   async getRandomWord(): Promise<string> {
-    // Try to get from OpenAI first, fallback to built-in words
+    // Use comprehensive built-in word list (500+ curated answer words)
     try {
       if (process.env.OPENAI_API_KEY) {
         const cacheKey = 'random_words';
@@ -61,9 +62,8 @@ export class WordManager {
       console.log('OpenAI unavailable, using built-in words');
     }
 
-    // Fallback to built-in words - ensure all are exactly 5 letters
-    const allBuiltInWords = Object.values(ENHANCED_WORD_CATEGORIES).flat().filter(word => word.length === 5);
-    return allBuiltInWords[Math.floor(Math.random() * allBuiltInWords.length)];
+    // Fallback to comprehensive built-in word list (500+ curated answer words)
+    return getRandomAnswerWord();
   }
 
   async getDailyWord(): Promise<string> {
@@ -71,9 +71,8 @@ export class WordManager {
     const today = new Date();
     const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
     
-    // Always use built-in words for reliability - ensure exactly 5 letters
-    const allBuiltInWords = Object.values(ENHANCED_WORD_CATEGORIES).flat().filter(word => word.length === 5);
-    return allBuiltInWords[dayOfYear % allBuiltInWords.length];
+    // Use comprehensive built-in word list for daily words
+    return ANSWER_WORDS[dayOfYear % ANSWER_WORDS.length];
   }
 
   private hashString(str: string): number {
@@ -109,10 +108,13 @@ export class WordManager {
       console.log(`OpenAI unavailable for category ${category}, using built-in words`);
     }
 
-    // Fallback to built-in category words - ensure exactly 5 letters
-    const categoryWords = (ENHANCED_WORD_CATEGORIES[category as keyof typeof ENHANCED_WORD_CATEGORIES] || 
-                         ENHANCED_WORD_CATEGORIES.nature).filter(word => word.length === 5);
-    return categoryWords[Math.floor(Math.random() * categoryWords.length)];
+    // Fallback to themed words from comprehensive list
+    try {
+      return getThemedWord(category as any);
+    } catch {
+      // If category not found, return random answer word
+      return getRandomAnswerWord();
+    }
   }
 
 

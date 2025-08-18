@@ -5,7 +5,7 @@ import { insertGameStatsSchema, insertGameResultSchema } from "@shared/schema";
 import { z } from "zod";
 import { WordManager } from "./word-manager";
 import { validateWordExpanded } from "./word-validator";
-import { VALID_WORDS } from "./word-dictionary";
+import { VALID_GUESS_WORD_SET } from '@shared/comprehensive-word-list';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get game statistics
@@ -322,12 +322,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const isValid = await validateWordExpanded(word, VALID_WORDS);
+      const isValid = await validateWordExpanded(word, VALID_GUESS_WORD_SET);
       
       res.json({ 
         word: word.toUpperCase(),
         isValid,
-        source: VALID_WORDS.has(word.toUpperCase()) ? 'built-in' : 'OpenAI',
+        source: VALID_GUESS_WORD_SET.has(word.toUpperCase()) ? 'built-in' : 'OpenAI',
         hasOpenAI: !!process.env.OPENAI_API_KEY
       });
     } catch (error) {
@@ -356,7 +356,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Process words in parallel for better performance
       const validationPromises = words.map(async (word: string) => {
         if (typeof word === 'string' && word.length === 5) {
-          const isValid = await validateWordExpanded(word, VALID_WORDS);
+          const isValid = await validateWordExpanded(word, VALID_GUESS_WORD_SET);
           return { word: word.toUpperCase(), isValid };
         }
         return { word: word.toUpperCase(), isValid: false };

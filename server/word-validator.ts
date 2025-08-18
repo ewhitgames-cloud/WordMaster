@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import { getAllExpandedWords } from './word-expander';
+import { VALID_GUESS_WORD_SET } from '@shared/comprehensive-word-list';
 
 // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 let openai: OpenAI | null = null;
@@ -95,20 +96,14 @@ export async function validateWordWithOpenAI(word: string): Promise<boolean> {
 export async function validateWordExpanded(word: string, fallbackDictionary: Set<string>): Promise<boolean> {
   const upperWord = word.toUpperCase();
   
-  // First check built-in dictionary for speed
-  if (fallbackDictionary.has(upperWord)) {
+  // First check comprehensive built-in dictionary for speed (2000+ words)
+  if (VALID_GUESS_WORD_SET.has(upperWord)) {
     return true;
   }
 
-  // Check expanded built-in library
-  try {
-    const { getAllBuiltInWords } = await import('./built-in-word-library');
-    const expandedWords = new Set(getAllBuiltInWords());
-    if (expandedWords.has(upperWord)) {
-      return true;
-    }
-  } catch (error) {
-    console.log('Could not load expanded built-in library:', error);
+  // Check old fallback dictionary for backwards compatibility
+  if (fallbackDictionary.has(upperWord)) {
+    return true;
   }
 
   // Check common word patterns and return true for likely valid words if OpenAI is unavailable

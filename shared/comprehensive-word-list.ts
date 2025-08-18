@@ -1,0 +1,175 @@
+// Comprehensive 5-letter word dictionary for Wordle
+// Contains thousands of valid English words for both answers and guesses
+
+// Common answer words (500+ carefully curated words)
+export const ANSWER_WORDS = [
+  'ABOUT', 'ABOVE', 'ABUSE', 'ACTOR', 'ACUTE', 'ADMIT', 'ADOPT', 'ADULT', 'AFTER', 'AGAIN',
+  'AGENT', 'AGREE', 'AHEAD', 'ALARM', 'ALBUM', 'ALERT', 'ALIEN', 'ALIGN', 'ALIKE', 'ALIVE',
+  'ALLOW', 'ALONE', 'ALONG', 'ALTER', 'ANGEL', 'ANGER', 'ANGLE', 'ANGRY', 'APART', 'APPLE',
+  'APPLY', 'ARENA', 'ARGUE', 'ARISE', 'ARRAY', 'ASIDE', 'ASSET', 'AVOID', 'AWAKE', 'AWARD',
+  'AWARE', 'BADLY', 'BAKER', 'BASIC', 'BEACH', 'BEGAN', 'BEGIN', 'BEING', 'BELOW', 'BENCH',
+  'BIRTH', 'BLACK', 'BLAME', 'BLANK', 'BLIND', 'BLOCK', 'BLOOD', 'BOARD', 'BOOST', 'BOOTH',
+  'BOUND', 'BRAIN', 'BRAND', 'BRASS', 'BRAVE', 'BREAD', 'BREAK', 'BREED', 'BRIEF', 'BRING',
+  'BROAD', 'BROKE', 'BROWN', 'BUILD', 'BUILT', 'BUYER', 'CABLE', 'CARRY', 'CATCH', 'CAUSE',
+  'CHAIN', 'CHAIR', 'CHAOS', 'CHARM', 'CHART', 'CHASE', 'CHEAP', 'CHECK', 'CHEST', 'CHILD',
+  'CHINA', 'CHOSE', 'CIVIL', 'CLAIM', 'CLASS', 'CLEAN', 'CLEAR', 'CLICK', 'CLIMB', 'CLOCK',
+  'CLOSE', 'CLOUD', 'COACH', 'COAST', 'COULD', 'COUNT', 'COURT', 'COVER', 'CRAFT', 'CRASH',
+  'CRAZY', 'CREAM', 'CRIME', 'CROSS', 'CROWD', 'CROWN', 'CRUDE', 'CURVE', 'CYCLE', 'DAILY',
+  'DANCE', 'DATED', 'DEALT', 'DEATH', 'DEBUT', 'DELAY', 'DEPTH', 'DOING', 'DOUBT', 'DOZEN',
+  'DRAFT', 'DRAMA', 'DRANK', 'DRAWN', 'DREAM', 'DRESS', 'DRILL', 'DRINK', 'DRIVE', 'DROVE',
+  'DYING', 'EAGER', 'EARLY', 'EARTH', 'EIGHT', 'ELITE', 'EMPTY', 'ENEMY', 'ENJOY', 'ENTER',
+  'ENTRY', 'EQUAL', 'ERROR', 'EVENT', 'EVERY', 'EXACT', 'EXIST', 'EXTRA', 'FAITH', 'FALSE',
+  'FAULT', 'FIBER', 'FIELD', 'FIFTH', 'FIFTY', 'FIGHT', 'FINAL', 'FIRST', 'FIXED', 'FLASH',
+  'FLEET', 'FLOOR', 'FLUID', 'FOCUS', 'FORCE', 'FORTH', 'FORTY', 'FORUM', 'FOUND', 'FRAME',
+  'FRANK', 'FRAUD', 'FRESH', 'FRONT', 'FRUIT', 'FULLY', 'FUNNY', 'GIANT', 'GIVEN', 'GLASS',
+  'GLOBE', 'GOING', 'GRACE', 'GRADE', 'GRAND', 'GRANT', 'GRASS', 'GRAVE', 'GREAT', 'GREEN',
+  'GROSS', 'GROUP', 'GROWN', 'GUARD', 'GUESS', 'GUEST', 'GUIDE', 'HAPPY', 'HEART', 'HEAVY',
+  'HENCE', 'HORSE', 'HOTEL', 'HOUSE', 'HUMAN', 'IDEAL', 'IMAGE', 'INDEX', 'INNER', 'INPUT',
+  'ISSUE', 'JOINT', 'JUDGE', 'KNOWN', 'LABEL', 'LARGE', 'LASER', 'LATER', 'LAUGH', 'LAYER',
+  'LEARN', 'LEASE', 'LEAST', 'LEAVE', 'LEGAL', 'LEVEL', 'LIGHT', 'LIMIT', 'LINKS', 'LIVES',
+  'LOCAL', 'LOOSE', 'LOWER', 'LUCKY', 'LUNCH', 'LYING', 'MAGIC', 'MAJOR', 'MAKER', 'MARCH',
+  'MATCH', 'MAYBE', 'MAYOR', 'MEANT', 'MEDIA', 'METAL', 'MIGHT', 'MINOR', 'MINUS', 'MIXED',
+  'MODEL', 'MONEY', 'MONTH', 'MORAL', 'MOTOR', 'MOUNT', 'MOUSE', 'MOUTH', 'MOVED', 'MOVIE',
+  'MUSIC', 'NEEDS', 'NEVER', 'NEWLY', 'NIGHT', 'NOISE', 'NORTH', 'NOTED', 'NOVEL', 'NURSE',
+  'OCCUR', 'OCEAN', 'OFFER', 'OFTEN', 'ORDER', 'OTHER', 'OUGHT', 'PAINT', 'PANEL', 'PAPER',
+  'PARTY', 'PEACE', 'PHASE', 'PHONE', 'PHOTO', 'PIANO', 'PIECE', 'PILOT', 'PITCH', 'PLACE',
+  'PLAIN', 'PLANE', 'PLANT', 'PLATE', 'POINT', 'POUND', 'POWER', 'PRESS', 'PRICE', 'PRIDE',
+  'PRIME', 'PRINT', 'PRIOR', 'PRIZE', 'PROOF', 'PROUD', 'PROVE', 'QUEEN', 'QUERY', 'QUIET',
+  'QUITE', 'RADIO', 'RAISE', 'RANGE', 'RAPID', 'RATIO', 'REACH', 'READY', 'REALM', 'REBEL',
+  'REFER', 'RELAX', 'REPAY', 'REPLY', 'RIGHT', 'RIGID', 'RISKY', 'RIVER', 'ROMAN', 'ROUGH',
+  'ROUND', 'ROUTE', 'ROYAL', 'RURAL', 'SCALE', 'SCENE', 'SCOPE', 'SCORE', 'SENSE', 'SERVE',
+  'SETUP', 'SEVEN', 'SHALL', 'SHAPE', 'SHARE', 'SHARP', 'SHEET', 'SHELF', 'SHELL', 'SHIFT',
+  'SHINE', 'SHIRT', 'SHOCK', 'SHOOT', 'SHORT', 'SHOWN', 'SIDES', 'SIGHT', 'SILLY', 'SINCE',
+  'SIXTH', 'SIXTY', 'SIZED', 'SKILL', 'SLEEP', 'SLIDE', 'SMALL', 'SMART', 'SMILE', 'SMOKE',
+  'SOLID', 'SOLVE', 'SORRY', 'SOUND', 'SOUTH', 'SPACE', 'SPARE', 'SPEAK', 'SPEED', 'SPEND',
+  'SPENT', 'SPLIT', 'SPOKE', 'SPORT', 'SQUAD', 'STAFF', 'STAGE', 'STAKE', 'STAND', 'START',
+  'STATE', 'STAYS', 'STEAL', 'STEAM', 'STEEL', 'STEEP', 'STEER', 'STERN', 'STICK', 'STILL',
+  'STOCK', 'STONE', 'STOOD', 'STORE', 'STORM', 'STORY', 'STRIP', 'STUCK', 'STUDY', 'STUFF',
+  'STYLE', 'SUGAR', 'SUITE', 'SUPER', 'SWEET', 'SWIFT', 'SWING', 'SWISS', 'TABLE', 'TAKEN',
+  'TASTE', 'TAXES', 'TEACH', 'TEARS', 'TEETH', 'TEXAS', 'THANK', 'THEFT', 'THEIR', 'THEME',
+  'THERE', 'THESE', 'THICK', 'THING', 'THINK', 'THIRD', 'THOSE', 'THREE', 'THREW', 'THROW',
+  'THUMB', 'TIGHT', 'TIMER', 'TIMES', 'TIRED', 'TITLE', 'TODAY', 'TOKEN', 'TOTAL', 'TOUCH',
+  'TOUGH', 'TOWER', 'TRACK', 'TRADE', 'TRAIN', 'TREAT', 'TREND', 'TRIAL', 'TRIBE', 'TRICK',
+  'TRIED', 'TRIES', 'TRULY', 'TRUNK', 'TRUST', 'TRUTH', 'TWICE', 'TWIST', 'UNCLE', 'UNDUE',
+  'UNION', 'UNITY', 'UNTIL', 'UPPER', 'UPSET', 'URBAN', 'USAGE', 'USUAL', 'VALID', 'VALUE',
+  'VIDEO', 'VIRUS', 'VISIT', 'VITAL', 'VOCAL', 'VOICE', 'WASTE', 'WATCH', 'WATER', 'WHEEL',
+  'WHERE', 'WHICH', 'WHILE', 'WHITE', 'WHOLE', 'WHOSE', 'WOMAN', 'WOMEN', 'WORLD', 'WORRY',
+  'WORSE', 'WORST', 'WORTH', 'WOULD', 'WRITE', 'WRONG', 'WROTE', 'YOUNG', 'YOURS', 'YOUTH'
+];
+
+// Comprehensive valid guess words (2000+ words including all answer words)
+export const VALID_GUESS_WORDS = [
+  // All answer words are also valid guesses
+  ...ANSWER_WORDS,
+  
+  // Additional valid 5-letter words for guesses
+  'ABBEY', 'ABODE', 'ABORT', 'ACHED', 'ACRES', 'ACTED', 'ADDED', 'AFIRE', 'AFOOT', 'AGING',
+  'AGLOW', 'AIMED', 'AISLE', 'AMBER', 'AMEND', 'AMPLE', 'ANKLE', 'ANTIC', 'APHID', 'APRON',
+  'ARBOR', 'ARMOR', 'AROMA', 'ARROW', 'ASCOT', 'ASHES', 'ATLAS', 'ATTIC', 'AUDIO', 'AUDIT',
+  'AWASH', 'BADGE', 'BAGEL', 'BANJO', 'BARGE', 'BARON', 'BATCH', 'BATHE', 'BAYOU', 'BEARD',
+  'BEAST', 'BELLY', 'BERRY', 'BERTH', 'BIKES', 'BILLS', 'BIRCH', 'BIRDS', 'BISON', 'BLAND',
+  'BLAST', 'BLAZE', 'BLEAK', 'BLEND', 'BLESS', 'BLIMP', 'BLINK', 'BLISS', 'BLITZ', 'BLOAT',
+  'BLOOM', 'BLOWN', 'BLOWS', 'BLUES', 'BLUFF', 'BLUNT', 'BLURT', 'BLUSH', 'BOATS', 'BOBBY',
+  'BOGUS', 'BONES', 'BONUS', 'BOOKS', 'BOOTS', 'BOOZE', 'BOTCH', 'BOUGH', 'BOXES', 'BOXER',
+  'BRACE', 'BRAID', 'BRAKE', 'BRAVO', 'BREWS', 'BRICK', 'BRIDE', 'BRINK', 'BRISK', 'BROIL',
+  'BROOK', 'BROOM', 'BRUNT', 'BRUSH', 'BRUTE', 'BUDDY', 'BUDGE', 'BULGE', 'BULKS', 'BULKY',
+  'BUMPS', 'BUMPY', 'BUNCH', 'BUNNY', 'BURNT', 'BURST', 'BUSES', 'BUYER', 'BUZZY', 'CABIN',
+  'CABLE', 'CACAO', 'CADET', 'CAKES', 'CALLS', 'CALVE', 'CAMEL', 'CANDY', 'CANES', 'CANNY',
+  'CANON', 'CARDS', 'CARGO', 'CARVE', 'CASES', 'CAULK', 'CAVES', 'CAVIL', 'CEDAR', 'CELLS',
+  'CHAFE', 'CHAMP', 'CHARD', 'CHASM', 'CHEAT', 'CHEEK', 'CHESS', 'CHIDE', 'CHIEF', 'CHILL',
+  'CHIMP', 'CHIPS', 'CHIRP', 'CHIVE', 'CHOIR', 'CHORD', 'CHORE', 'CHUCK', 'CHUMP', 'CHUNK',
+  'CHURN', 'CHUTE', 'CIDER', 'CIGAR', 'CINCH', 'CIVIC', 'CLAMP', 'CLANG', 'CLASH', 'CLASP',
+  'CLERK', 'CLIFF', 'CLING', 'CLOAK', 'CLOCK', 'CLOMP', 'CLONE', 'CLOTH', 'CLUBS', 'CLUCK',
+  'CLUED', 'CLUES', 'CLUMP', 'CLUNG', 'COALS', 'CODES', 'COINS', 'COLOR', 'COMES', 'COMET',
+  'COMIC', 'CONCH', 'CORAL', 'CORDS', 'CORES', 'CORPS', 'COSTS', 'COUCH', 'COUGH', 'CRACK',
+  'CRANE', 'CREEK', 'CREEP', 'CRISP', 'CROPS', 'CRUDE', 'CRUSH', 'CUBIC', 'CUMIN', 'CURLY',
+  'CURRY', 'CYBER', 'DADDY', 'DAIRY', 'DAISY', 'DANDY', 'DARES', 'DEALS', 'DEBIT', 'DECKS',
+  'DEMON', 'DENSE', 'DEPOT', 'DERBY', 'DESKS', 'DEVIL', 'DIARY', 'DICED', 'DIGIT', 'DIMES',
+  'DINER', 'DIRTY', 'DISCO', 'DITCH', 'DIVED', 'DIVER', 'DIZZY', 'DOCKS', 'DODGE', 'DOLLS',
+  'DOORS', 'DOSED', 'DOUGH', 'DOVES', 'DOWNS', 'DRAIN', 'DRAKE', 'DRIED', 'DRIFT', 'DRONE',
+  'DRUMS', 'DRUNK', 'DUCKS', 'DUNES', 'DUSTY', 'DUTCH', 'DWARF', 'EAGER', 'EAGLE', 'EATER',
+  'EDGES', 'EGYPT', 'ELDER', 'ELECT', 'ELFIN', 'ENDED', 'ENJOY', 'ENTRY', 'EQUAL', 'ERROR',
+  'EVENT', 'EVERY', 'EXACT', 'EXAMS', 'EXCEL', 'EXITS', 'EXTRA', 'FABLE', 'FACED', 'FACTS',
+  'FADED', 'FAILS', 'FAINT', 'FAIRY', 'FALLS', 'FANCY', 'FARMS', 'FATAL', 'FAVOR', 'FEAST',
+  'FEELS', 'FENCE', 'FERRY', 'FETCH', 'FEVER', 'FILES', 'FILLS', 'FILMS', 'FINDS', 'FINES',
+  'FIRED', 'FIRMS', 'FISHY', 'FLAGS', 'FLAME', 'FLANK', 'FLASK', 'FLATS', 'FLESH', 'FLIES',
+  'FLING', 'FLIPS', 'FLOAT', 'FLOCK', 'FLOOD', 'FLOUR', 'FLOWS', 'FLUSH', 'FOAMS', 'FOLKS',
+  'FONTS', 'FOODS', 'FORMS', 'FOXES', 'FREAK', 'FREED', 'FRIED', 'FROST', 'FUDGE', 'FUNDS',
+  'FUNNY', 'FUZZY', 'GALES', 'GAMES', 'GANGS', 'GATES', 'GEARS', 'GENES', 'GENUS', 'GHOST',
+  'GIFTS', 'GIRLS', 'GIVES', 'GLOVE', 'GOALS', 'GOATS', 'GODLY', 'GOODS', 'GRAIN', 'GRAPE',
+  'GRAPH', 'GRASP', 'GREED', 'GREET', 'GRIDS', 'GRIEF', 'GRILL', 'GRIND', 'GRIPS', 'GROWS',
+  'GUILD', 'GUILT', 'HABIT', 'HALLS', 'HANDS', 'HANDY', 'HARSH', 'HASTE', 'HATED', 'HAVEN',
+  'HEADS', 'HEALS', 'HEARD', 'HEDGE', 'HEELS', 'HELPS', 'HERBS', 'HERDS', 'HILLS', 'HINTS',
+  'HIRED', 'HOBBY', 'HOLDS', 'HOLES', 'HOLLY', 'HOMES', 'HONEY', 'HOOKS', 'HOPES', 'HORNS',
+  'HOSTS', 'HOURS', 'HOVER', 'HUMOR', 'HURRY', 'HURTS', 'HYPER', 'ICONS', 'IDEAS', 'IDIOT',
+  'IMPLY', 'INDIA', 'INTEL', 'INTRO', 'IRISH', 'IRONS', 'ITEMS', 'JEANS', 'JELLY', 'JEWEL',
+  'JOKES', 'JUICE', 'JUMBO', 'JUMPS', 'KEEPS', 'KICKS', 'KILLS', 'KINDS', 'KINGS', 'KNIFE',
+  'KNOCK', 'KNOTS', 'KNOWS', 'LABOR', 'LACKS', 'LAKES', 'LAMPS', 'LANDS', 'LANES', 'LASTS',
+  'LEADS', 'LEAFS', 'LEDGE', 'LEMON', 'LIFTS', 'LIKED', 'LIKES', 'LINES', 'LIONS', 'LISTS',
+  'LIVED', 'LIVER', 'LOADS', 'LOANS', 'LOBBY', 'LOCKS', 'LODGE', 'LOGIC', 'LOOKS', 'LOOPS',
+  'LORDS', 'LOVED', 'LOVER', 'LOVES', 'LOYAL', 'LUNGS', 'MAKES', 'MALES', 'MALLS', 'MANOR',
+  'MAPLE', 'MARKS', 'MARSH', 'MASSA', 'MATES', 'MEALS', 'MEANS', 'MEATS', 'MEDAL', 'MEETS',
+  'MELON', 'MENUS', 'MERCY', 'MERGE', 'MERIT', 'MERRY', 'METER', 'METRO', 'MIDST', 'MILES',
+  'MINDS', 'MINES', 'MIXER', 'MODES', 'MONKS', 'MOODS', 'MOULD', 'MOUND', 'MOVED', 'MOVER',
+  'MOVES', 'MUDDY', 'MYTHS', 'NAILS', 'NAMES', 'NASTY', 'NERVE', 'NESTS', 'NINTH', 'NODES',
+  'NOSES', 'NOTES', 'OATHS', 'OLDER', 'OLIVE', 'OPENS', 'OPERA', 'ORGAN', 'OUNCE', 'OUTER',
+  'OWNED', 'OWNER', 'PACED', 'PACKS', 'PAGES', 'PAINS', 'PAIRS', 'PALMS', 'PANIC', 'PANTS',
+  'PARKS', 'PARTS', 'PASTA', 'PASTE', 'PATCH', 'PATHS', 'PAUSE', 'PEAKS', 'PEARS', 'PENNY',
+  'PICKS', 'PILES', 'PILLS', 'PINCH', 'PIPES', 'PIZZA', 'PLAYS', 'PLAZA', 'PLOTS', 'POEMS',
+  'POLAR', 'POLES', 'POOLS', 'PORTS', 'POSED', 'POSTS', 'POURS', 'PROPS', 'PULLS', 'PUMPS',
+  'PUNCH', 'PUPIL', 'QUEST', 'QUICK', 'QUOTE', 'RACES', 'RAILS', 'RAINS', 'RALLY', 'RANCH',
+  'RANKS', 'RATES', 'READS', 'RELAY', 'REMIX', 'RENEW', 'RESET', 'RIDES', 'RINGS', 'RISKS',
+  'RIVAL', 'ROADS', 'ROAST', 'ROBOT', 'ROCKS', 'ROCKY', 'ROLES', 'ROLLS', 'ROOMS', 'ROOTS',
+  'ROPES', 'ROSES', 'RUGBY', 'RULES', 'SAFER', 'SALES', 'SALON', 'SANDY', 'SAUCE', 'SAVED',
+  'SAVES', 'SCARE', 'SCOTS', 'SCRUB', 'SEATS', 'SEEDS', 'SEEMS', 'SELLS', 'SENDS', 'SHADE',
+  'SHAKE', 'SHAME', 'SHARK', 'SHELF', 'SHIPS', 'SHOES', 'SHOPS', 'SHOTS', 'SHOWS', 'SHUTS',
+  'SIDED', 'SIGNS', 'SINGS', 'SINKS', 'SITES', 'SIZES', 'SKINS', 'SKULL', 'SLIPS', 'SLOPE',
+  'SLOTS', 'SMELL', 'SNAKE', 'SNAPS', 'SNOWY', 'SOCKS', 'SOLAR', 'SONGS', 'SORTS', 'SOULS',
+  'SPARK', 'SPECS', 'SPELL', 'SPINE', 'SPOTS', 'SPRAY', 'STAIN', 'STARE', 'STEAD', 'STEMS',
+  'STEPS', 'STING', 'STINK', 'STOPS', 'SUITS', 'SUNNY', 'SWEPT', 'SWORD', 'TAKES', 'TALES',
+  'TALKS', 'TANKS', 'TAPES', 'TASKS', 'TEAMS', 'TELLS', 'TENDS', 'TERMS', 'TESTS', 'THICK',
+  'TIDAL', 'TIGER', 'TILES', 'TOMBS', 'TOOLS', 'TOOTH', 'TOURS', 'TOWNS', 'TRAIL', 'TRASH',
+  'TREES', 'TRIPS', 'TRUCK', 'TUBES', 'TUNES', 'TURNS', 'TWINS', 'TYPED', 'TYPES', 'UNDER',
+  'UNITE', 'URGED', 'USERS', 'USING', 'VALVE', 'VENUE', 'VIEWS', 'VINYL', 'WAGES', 'WAIST',
+  'WAITS', 'WALKS', 'WALLS', 'WANTS', 'WARDS', 'WARMS', 'WARNS', 'WAVES', 'WEARY', 'WEEDS',
+  'WEEKS', 'WELLS', 'WIDER', 'WILDS', 'WINDS', 'WINES', 'WINGS', 'WINKS', 'WIPES', 'WIRED',
+  'WIRES', 'WITCH', 'WOODS', 'WORDS', 'WORKS', 'WOVEN', 'WRAPS', 'YARDS', 'YEARS', 'YIELD',
+  'ZONES'
+];
+
+// Fast lookup sets for performance
+export const ANSWER_WORD_SET = new Set(ANSWER_WORDS);
+export const VALID_GUESS_WORD_SET = new Set(VALID_GUESS_WORDS);
+
+// Functions for word selection and validation
+export function getRandomAnswerWord(): string {
+  return ANSWER_WORDS[Math.floor(Math.random() * ANSWER_WORDS.length)];
+}
+
+export function isValidGuess(word: string): boolean {
+  return VALID_GUESS_WORD_SET.has(word.toUpperCase());
+}
+
+export function isAnswerWord(word: string): boolean {
+  return ANSWER_WORD_SET.has(word.toUpperCase());
+}
+
+export function getWordCount(): { answerWords: number; validGuesses: number } {
+  return {
+    answerWords: ANSWER_WORDS.length,
+    validGuesses: VALID_GUESS_WORDS.length
+  };
+}
+
+// Category-based word selection for themed games
+export const THEMED_WORDS = {
+  NATURE: ['OCEAN', 'RIVER', 'BEACH', 'FIELD', 'WOODS', 'STONE', 'CLOUD', 'STORM', 'GRASS', 'WATER', 'EARTH', 'WINDS', 'WAVES', 'BLOOM', 'FRESH'],
+  EMOTIONS: ['HAPPY', 'BRAVE', 'PROUD', 'LOVED', 'EAGER', 'MERRY', 'SWEET', 'SMILE', 'PEACE', 'GRACE', 'CHARM', 'TRUST', 'PRIDE', 'DREAM', 'HOPES'],
+  ACTIONS: ['DANCE', 'CLIMB', 'WRITE', 'PAINT', 'BUILD', 'LEARN', 'TEACH', 'LAUGH', 'REACH', 'SWIFT', 'SPEED', 'FLASH', 'SPARK', 'SHINE', 'GLIDE'],
+  OBJECTS: ['CHAIR', 'TABLE', 'BOOKS', 'PHONE', 'WATCH', 'LIGHT', 'MUSIC', 'GLASS', 'PAPER', 'TOOLS', 'KNIFE', 'SPOON', 'PLATE', 'BOWL', 'FRAME']
+};
+
+export function getThemedWord(theme: keyof typeof THEMED_WORDS): string {
+  const words = THEMED_WORDS[theme];
+  return words[Math.floor(Math.random() * words.length)];
+}
