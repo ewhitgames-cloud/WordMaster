@@ -97,7 +97,9 @@ export default function Game({ mode: propMode }: GameProps = {}) {
 
   // Handle game state changes and award coins
   useEffect(() => {
+    console.log('Game state changed to:', gameState);
     if (gameState === 'won') {
+      console.log('Player won! Showing celebration modal...');
       // Award coins based on performance
       const baseReward = 20;
       const attemptBonus = Math.max(0, (7 - (currentRow + 1)) * 5); // Bonus for fewer attempts
@@ -109,7 +111,12 @@ export default function Game({ mode: propMode }: GameProps = {}) {
       FontStoreAPI.addCoins(totalReward);
       setCoins(FontStoreAPI.getState().coins);
       
-      setTimeout(() => setShowCelebration(true), 1000);
+      // Show celebration modal immediately and also with delay as backup
+      setShowCelebration(true);
+      setTimeout(() => {
+        console.log('Setting celebration modal to true after timeout');
+        setShowCelebration(true);
+      }, 500);
       
       toast({
         title: "Coins Earned!",
@@ -117,10 +124,12 @@ export default function Game({ mode: propMode }: GameProps = {}) {
         duration: 3000,
       });
     } else if (gameState === 'lost') {
+      console.log('Player lost! Showing game over modal...');
       // Small consolation prize
       FontStoreAPI.addCoins(5);
       setCoins(FontStoreAPI.getState().coins);
       
+      setShowCelebration(true);
       setTimeout(() => setShowCelebration(true), 500);
       
       toast({

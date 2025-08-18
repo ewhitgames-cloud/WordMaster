@@ -44,12 +44,13 @@ export default function CelebrationModal({
   const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
+    console.log('CelebrationModal isOpen changed to:', isOpen, 'won:', won);
     if (isOpen) {
       setShowConfetti(true);
       const timer = setTimeout(() => setShowConfetti(false), 3000);
       return () => clearTimeout(timer);
     }
-  }, [isOpen]);
+  }, [isOpen, won]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
