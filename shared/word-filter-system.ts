@@ -1,6 +1,8 @@
 // Comprehensive word filtering system for Wordle
 // Implements blocklist/allowlist controls and frequency-based filtering
 
+import { getWordFrequency } from './word-frequency-data';
+
 export interface WordListSettings {
   blocklist: Set<string>;
   allowlist: Set<string>;
@@ -154,7 +156,6 @@ export function filterWords(
     
     // Frequency-based filtering
     if (settings.useFrequencyFilter) {
-      const { getWordFrequency } = require('./word-frequency-data');
       const frequency = getWordFrequency(word);
       const minFreq = isAnswerList ? settings.minAnswerFrequency : settings.minGuessFrequency;
       
