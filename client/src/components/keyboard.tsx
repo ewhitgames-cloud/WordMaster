@@ -53,13 +53,13 @@ export default function Keyboard({ onKeyPress, onEnter, onBackspace, keyboardSta
 
   return (
     <motion.div 
-      className="space-y-2 sm:space-y-3 px-2 py-3 sm:px-6 sm:py-4 bg-white/20 backdrop-blur-sm rounded-2xl border-4 border-white/30 shadow-2xl max-w-2xl mx-auto"
+      className="space-y-2 sm:space-y-3 px-1 py-3 sm:px-4 sm:py-4 bg-white/20 backdrop-blur-sm rounded-2xl border-4 border-white/30 shadow-2xl w-full max-w-lg mx-auto"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
     >
       {KEYBOARD_ROWS.map((row, rowIndex) => (
-        <div key={rowIndex} className="flex justify-center gap-1.5 sm:gap-2 w-full">
+        <div key={rowIndex} className="flex justify-center gap-1 sm:gap-1.5 w-full overflow-hidden">
           {row.map((key) => (
             <motion.button
               key={key}
