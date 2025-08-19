@@ -15,18 +15,30 @@
     <meta name="referrer" content="no-referrer">
     <meta name="robots" content="noindex, nofollow">
     <style>
-      /* Simple approach - just disable refresh */
+      /* Comprehensive pull-to-refresh prevention */
+      * {
+        overscroll-behavior: none !important;
+        overscroll-behavior-y: none !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      
       html, body {
-        overscroll-behavior-y: none;
-        height: 100%;
+        overscroll-behavior: none !important;
+        overscroll-behavior-y: none !important;
+        height: 100% !important;
+        touch-action: manipulation !important;
+        -webkit-user-select: none !important;
+        -webkit-touch-callout: none !important;
       }
       
       #root {
-        overflow-y: auto;
-        overflow-x: hidden;
-        overscroll-behavior-y: none;
-        height: 100vh;
-        width: 100%;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        overscroll-behavior: none !important;
+        overscroll-behavior-y: none !important;
+        height: 100vh !important;
+        width: 100% !important;
+        touch-action: pan-y !important;
       }
     </style>
     
@@ -37,69 +49,131 @@
       function isRunningInApp() {
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
         
-        // Check for common mobile app user agents
-        return (
-          // Android WebView
-          /wv|WebView/i.test(userAgent) ||
-          // iOS WebView
-          /iPhone|iPad|iPod/i.test(userAgent) && !window.MSStream && !window.safari ||
-          // Cordova/PhoneGap
-          !!window.cordova ||
-          // Other mobile app indicators
-          window.navigator.standalone === true ||
-          // No referrer often indicates app environment
-          document.referrer === ""
-        );
-      }
-      
-      // Only apply refresh blocking if in mobile app
-      if (isRunningInApp()) {
-        console.log('Mobile app detected - blocking refresh');
+        // More comprehensive mobile app detection
+        const isMobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+        const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        const isStandalone = window.navigator.standalone === true;
+        const isWebView = /wv|WebView/i.test(userAgent);
+        const isChrome = /Chrome/i.test(userAgent);
+        const noReferrer = document.referrer === "";
         
-        // Block any attempt to refresh or reload the page
-        window.addEventListener('beforeunload', function(e) {
-          e.preventDefault();
-          e.returnValue = '';
-          return '';
+        // If it's a mobile device with touch AND (webview OR standalone OR chrome on mobile), treat as app
+        const isApp = isMobileDevice && hasTouch && (isWebView || isStandalone || (isChrome && noReferrer));
+        
+        console.log('Mobile detection:', {
+          isMobileDevice,
+          hasTouch,
+          isStandalone,
+          isWebView,
+          isChrome,
+          noReferrer,
+          userAgent,
+          finalDecision: isApp
         });
         
-        // Override location.reload for mobile apps only
+        return isApp;
+      }
+      
+      // Multiple ways to detect if refresh should be blocked
+      const urlParams = new URLSearchParams(window.location.search);
+      const forceBlockRefresh = urlParams.has('norefresh');
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isFullscreen = window.navigator.standalone || window.matchMedia('(display-mode: fullscreen)').matches;
+      
+      // Block refresh if: manually set via URL param, or touch device, or running fullscreen
+      const shouldBlockRefresh = forceBlockRefresh || isTouchDevice || isFullscreen;
+      
+      if (shouldBlockRefresh) {
+        console.log('Blocking refresh - reasons:', { forceBlockRefresh, isTouchDevice, isFullscreen });
+        
+        // Block location.reload completely
         const originalReload = window.location.reload;
         window.location.reload = function() {
-          console.log('Refresh blocked in mobile app');
+          console.log('Refresh attempt blocked');
           return false;
         };
         
-        // Block keyboard shortcuts for refresh (mobile apps)
+        // Block beforeunload to prevent refresh
+        window.addEventListener('beforeunload', function(e) {
+          console.log('Preventing page unload/refresh');
+          e.preventDefault();
+          e.returnValue = 'Game in progress - are you sure you want to leave?';
+          return 'Game in progress - are you sure you want to leave?';
+        });
+        
+        // Block keyboard refresh shortcuts
         document.addEventListener('keydown', function(e) {
           if ((e.ctrlKey && e.key === 'r') || 
               (e.metaKey && e.key === 'r') || 
               e.key === 'F5' ||
               (e.ctrlKey && e.shiftKey && e.key === 'R')) {
+            console.log('Keyboard refresh blocked');
             e.preventDefault();
             e.stopPropagation();
-            console.log('Refresh shortcut blocked in mobile app');
             return false;
           }
         });
+        
       } else {
-        console.log('Web browser detected - refresh allowed');
+        console.log('Desktop browser - refresh allowed');
       }
       
-      // Always disable pull-to-refresh gesture (both web and app)
-      let startY;
+      // Universal pull-to-refresh prevention - works on all devices
+      let touchStartY = 0;
+      let touchStartX = 0;
+      let preventRefresh = false;
+      
+      // Always prevent pull-to-refresh regardless of device
       document.addEventListener('touchstart', function(e) {
-        startY = e.touches[0].clientY;
-      });
+        if (e.touches && e.touches.length > 0) {
+          touchStartY = e.touches[0].clientY;
+          touchStartX = e.touches[0].clientX;
+          
+          // Check if at top of page
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+          const rootElement = document.getElementById('root');
+          const rootScrollTop = rootElement ? rootElement.scrollTop : 0;
+          
+          preventRefresh = (scrollTop <= 3 && rootScrollTop <= 3);
+          
+          if (preventRefresh) {
+            console.log('At top - will prevent pull-to-refresh');
+          }
+        }
+      }, { passive: false });
       
       document.addEventListener('touchmove', function(e) {
-        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        const currentY = e.touches[0].clientY;
+        if (!preventRefresh || !e.touches || e.touches.length === 0) return;
         
-        // If at top and pulling down, prevent it
-        if (scrollTop === 0 && currentY > startY) {
+        const touchY = e.touches[0].clientY;
+        const touchX = e.touches[0].clientX;
+        const deltaY = touchY - touchStartY;
+        const deltaX = touchX - touchStartX;
+        
+        // Only prevent if moving primarily down (not left/right scroll)
+        if (deltaY > 10 && Math.abs(deltaX) < Math.abs(deltaY)) {
+          console.log('Blocking pull-to-refresh gesture');
           e.preventDefault();
+          e.stopImmediatePropagation();
+          return false;
         }
+      }, { passive: false });
+      
+      document.addEventListener('touchend', function(e) {
+        preventRefresh = false;
+      }, { passive: false });
+      
+      // Additional WebView-specific prevention
+      document.addEventListener('gesturestart', function(e) {
+        e.preventDefault();
+      });
+      
+      document.addEventListener('gesturechange', function(e) {
+        e.preventDefault();
+      });
+      
+      document.addEventListener('gestureend', function(e) {
+        e.preventDefault();
       });
     </script>
   </head>
