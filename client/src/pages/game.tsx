@@ -192,7 +192,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="w-full px-3 py-3 sm:px-4 sm:py-4">
+        <div className="w-full px-2 py-2 sm:px-4 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Link href="/">
@@ -213,17 +213,18 @@ export default function Game({ mode: propMode }: GameProps = {}) {
                 <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
               <motion.h1 
-                className="font-bold text-lg sm:text-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
+                className="font-bold text-sm sm:text-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                Word Pop! - {getModeText()}
+                <span className="hidden sm:inline">Word Pop! - {getModeText()}</span>
+                <span className="sm:hidden">Word Pop!</span>
               </motion.h1>
             </div>
             
-            <div className="flex items-center space-x-1.5 sm:space-x-3">
+            <div className="flex items-center space-x-1 sm:space-x-3">
               <motion.div 
-                className="bg-gradient-to-r from-purple-500 to-blue-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg border-2 border-white cursor-pointer"
+                className="bg-gradient-to-r from-purple-500 to-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg border-2 border-white cursor-pointer"
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
                 onClick={() => setShowFontStore(true)}
@@ -279,7 +280,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
         </div>
       </motion.header>
 
-      <main className="flex-1 w-full px-3 py-4 sm:px-4 sm:py-6 max-w-sm sm:max-w-lg mx-auto relative z-10">
+      <main className="flex-1 w-full px-2 py-3 sm:px-4 sm:py-6 max-w-sm sm:max-w-lg mx-auto relative z-10">
         {/* Stats Bar */}
         {/* Blind Challenge Info */}
         {blindChallengeMode && (
@@ -299,7 +300,7 @@ export default function Game({ mode: propMode }: GameProps = {}) {
         )}
 
         <motion.div 
-          className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-5 mb-4 sm:mb-6 shadow-2xl border-4 border-white/50"
+          className="bg-white/95 backdrop-blur-sm rounded-2xl p-3 sm:p-5 mb-3 sm:mb-6 shadow-2xl border-4 border-white/50"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -312,21 +313,21 @@ export default function Game({ mode: propMode }: GameProps = {}) {
               className="text-center flex-1"
               whileHover={{ scale: 1.1 }}
             >
-              <div className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent" data-testid="text-attempt">{currentRow + 1}</div>
+              <div className="font-bold text-xl sm:text-2xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent" data-testid="text-attempt">{currentRow + 1}</div>
               <div className="text-gray-600 text-xs font-semibold">Attempt</div>
             </motion.div>
             <motion.div 
               className="text-center flex-1"
               whileHover={{ scale: 1.1 }}
             >
-              <div className="font-bold text-2xl bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent" data-testid="text-streak">{stats.currentStreak}</div>
+              <div className="font-bold text-xl sm:text-2xl bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent" data-testid="text-streak">{stats.currentStreak}</div>
               <div className="text-gray-600 text-xs font-semibold">Streak</div>
             </motion.div>
             <motion.div 
               className="text-center flex-1"
               whileHover={{ scale: 1.1 }}
             >
-              <div className="font-bold text-2xl bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent" data-testid="text-coins">{persistentCoins}</div>
+              <div className="font-bold text-xl sm:text-2xl bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent" data-testid="text-coins">{persistentCoins}</div>
               <div className="text-gray-600 text-xs font-semibold">Coins</div>
             </motion.div>
             <motion.div 

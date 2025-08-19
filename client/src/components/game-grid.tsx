@@ -48,7 +48,7 @@ export default function GameGrid({ grid, currentGuess, currentRow, gameState, ta
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
-      <div className="grid grid-cols-5 gap-2 sm:gap-3 w-full max-w-[320px] sm:max-w-sm mx-auto p-4 bg-white/20 backdrop-blur-sm rounded-2xl border-4 border-white/30 shadow-2xl">
+      <div className="grid grid-cols-5 gap-1.5 sm:gap-3 w-full max-w-[280px] sm:max-w-sm mx-auto p-3 sm:p-4 bg-white/20 backdrop-blur-sm rounded-2xl border-4 border-white/30 shadow-2xl">
         {Array.from({ length: 6 }).map((_, rowIndex) => (
           Array.from({ length: 5 }).map((_, colIndex) => {
             const state = getTileStateForPosition(rowIndex, colIndex);
@@ -80,7 +80,7 @@ export default function GameGrid({ grid, currentGuess, currentRow, gameState, ta
                 whileHover={{ scale: gameState === 'playing' ? 1.05 : 1, y: gameState === 'playing' ? -2 : 0 }}
                 data-testid={`tile-${rowIndex}-${colIndex}`}
               >
-                <span className="font-bold text-lg sm:text-xl select-none uppercase">
+                <span className="font-bold text-base sm:text-xl select-none uppercase">
                   {letter}
                 </span>
               </motion.div>
