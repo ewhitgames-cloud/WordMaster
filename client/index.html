@@ -15,75 +15,84 @@
     <meta name="referrer" content="no-referrer">
     <meta name="robots" content="noindex, nofollow">
     <style>
-      /* Aggressive pull-to-refresh prevention */
+      /* Simple approach - just disable refresh */
       html, body {
-        overscroll-behavior: none !important;
-        overscroll-behavior-y: none !important;
-        overscroll-behavior-x: none !important;
-        height: 100% !important;
-        touch-action: pan-x pan-y !important;
-        -webkit-overflow-scrolling: auto !important;
-        position: fixed !important;
-        width: 100% !important;
-        overflow: hidden !important;
+        overscroll-behavior-y: none;
+        height: 100%;
       }
       
       #root {
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        overscroll-behavior: none !important;
-        overscroll-behavior-y: none !important;
-        overscroll-behavior-x: none !important;
-        height: 100vh !important;
-        width: 100% !important;
-        position: relative !important;
-        touch-action: pan-y !important;
-        -webkit-overflow-scrolling: touch !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior-y: none;
+        height: 100vh;
+        width: 100%;
       }
     </style>
     
     <script>
-      /* Comprehensive pull-to-refresh prevention */
+      /* Disable refresh completely */
       
-      // Prevent all forms of pull-to-refresh
-      let preventPull = false;
+      // Block any attempt to refresh or reload the page
+      window.addEventListener('beforeunload', function(e) {
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+      });
       
+      // Prevent refresh on any navigation attempts
+      window.addEventListener('unload', function(e) {
+        e.preventDefault();
+        return false;
+      });
+      
+      // Override location.reload
+      window.location.reload = function() {
+        console.log('Refresh blocked');
+        return false;
+      };
+      
+      // Override history methods that could cause refresh
+      const originalPushState = history.pushState;
+      const originalReplaceState = history.replaceState;
+      
+      history.pushState = function() {
+        // Allow normal navigation but prevent refresh
+        return originalPushState.apply(history, arguments);
+      };
+      
+      history.replaceState = function() {
+        return originalReplaceState.apply(history, arguments);
+      };
+      
+      // Block keyboard shortcuts for refresh
+      document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey && e.key === 'r') || 
+            (e.metaKey && e.key === 'r') || 
+            e.key === 'F5' ||
+            (e.ctrlKey && e.shiftKey && e.key === 'R')) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('Refresh shortcut blocked');
+          return false;
+        }
+      });
+      
+      // Disable pull-to-refresh with simple approach
+      let startY;
       document.addEventListener('touchstart', function(e) {
-        if (e.touches.length !== 1) return;
-        
-        const scrollY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-        const rootElement = document.getElementById('root');
-        const rootScrollTop = rootElement ? rootElement.scrollTop : 0;
-        
-        preventPull = (scrollY === 0 && rootScrollTop === 0);
-      }, { passive: false });
+        startY = e.touches[0].clientY;
+      });
       
       document.addEventListener('touchmove', function(e) {
-        if (preventPull) {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const currentY = e.touches[0].clientY;
+        
+        // If at top and pulling down, prevent it
+        if (scrollTop === 0 && currentY > startY) {
           e.preventDefault();
-          return false;
         }
-      }, { passive: false });
-      
-      document.addEventListener('touchend', function(e) {
-        preventPull = false;
-      }, { passive: false });
-      
-      // Prevent browser refresh shortcuts
-      document.addEventListener('keydown', function(e) {
-        // Prevent Ctrl+R, F5, Cmd+R
-        if ((e.ctrlKey && e.key === 'r') || e.key === 'F5' || (e.metaKey && e.key === 'r')) {
-          e.preventDefault();
-          return false;
-        }
-      }, { passive: false });
-      
-      // Additional overscroll prevention
-      window.addEventListener('scroll', function(e) {
-        if (window.scrollY < 0) {
-          window.scrollTo(0, 0);
-        }
-      }, { passive: false });
+      });
     </script>
   </head>
   <body>
