@@ -9,28 +9,35 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <style>
-      /* Prevent pull-to-refresh in WebView/APK */
+      /* Stop Android pull-to-refresh & top bounce */
       html, body {
-        overscroll-behavior: none !important;
-        overscroll-behavior-y: none !important;
-        -webkit-overflow-scrolling: touch !important;
-        touch-action: manipulation !important;
+        overscroll-behavior-y: none;
+        height: 100%;
       }
-      body {
-        position: fixed !important;
-        overflow: hidden !important;
-        width: 100% !important;
-        height: 100% !important;
-      }
+      
+      /* Prevent pull-to-refresh on scrolling wrapper */
       #root {
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        height: 100vh !important;
-        width: 100% !important;
-        overscroll-behavior: none !important;
-        -webkit-overflow-scrolling: touch !important;
+        overflow: auto;
+        overscroll-behavior-y: contain;
+        min-height: 100dvh;
       }
     </style>
+    
+    <script>
+      /* JavaScript fallback to block pull-to-refresh */
+      let lastY = 0;
+      window.addEventListener('touchstart', e => { 
+        lastY = e.touches[0].clientY; 
+      }, { passive: true });
+      
+      window.addEventListener('touchmove', e => {
+        const y = e.touches[0].clientY;
+        const atTop = window.scrollY === 0 || document.documentElement.scrollTop === 0;
+        const pullingDown = y > lastY;
+        if (atTop && pullingDown) e.preventDefault();   // block pull-to-refresh
+        lastY = y;
+      }, { passive: false });
+    </script>
   </head>
   <body>
     <div id="root"></div>
