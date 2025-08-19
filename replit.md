@@ -6,7 +6,9 @@ This is a modern React-based Wordle game application built with a full-stack Typ
 
 ## Recent Changes
 
-**August 18, 2025**: Fixed critical case sensitivity bug in win detection logic that prevented celebration modal from showing when players won games. The win condition now properly compares guesses case-insensitively, ensuring proper game completion notifications.
+**August 18, 2025**: 
+- Fixed critical case sensitivity bug in win detection logic that prevented celebration modal from showing when players won games. The win condition now properly compares guesses case-insensitively, ensuring proper game completion notifications.
+- Fixed pull-to-refresh issue in APK deployment that was interfering with upward scrolling. Implemented comprehensive overscroll prevention using CSS overscroll-behavior properties and meta tags to ensure smooth scrolling experience in mobile app environments.
 
 ## User Preferences
 
