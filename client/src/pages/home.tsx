@@ -51,17 +51,10 @@ export default function HomePage() {
     // Position "WORD" centered over the menu content
     const wordLetters = ['W', 'O', 'R', 'D'];
     const totalTitleWidth = (wordLetters.length - 1) * letterSpacing + wordSpacing + (4 * letterSpacing); // WORD + gap + POP!
-    const baseStartX = window.innerWidth / 2 - (totalTitleWidth / 2) + 100; // Move title to the right
+    const baseStartX = window.innerWidth / 2 - (totalTitleWidth / 2); // Center the title properly
     
     wordLetters.forEach((letter, index) => {
-      let finalX;
-      if (index === 0) {
-        // Move W further left for equal spacing
-        finalX = baseStartX - 105; // W gets extra space
-      } else {
-        // O, R, D keep regular spacing from base position
-        finalX = baseStartX + ((index - 1) * letterSpacing);
-      }
+      const finalX = baseStartX + (index * letterSpacing);
       
       letters.push({
         id: `word-${index}`,
@@ -76,7 +69,7 @@ export default function HomePage() {
 
     // Add "POP!" with bigger gap after "WORD"
     const popLetters = ['P', 'O', 'P', '!'];
-    const popStartX = baseStartX + (2 * letterSpacing) + wordSpacing; // After "WORD" with big gap
+    const popStartX = baseStartX + (wordLetters.length * letterSpacing) + wordSpacing;
     
     popLetters.forEach((letter, index) => {
       letters.push({
