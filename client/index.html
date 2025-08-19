@@ -17,25 +17,42 @@
       
       /* Prevent pull-to-refresh on scrolling wrapper */
       #root {
-        overflow: auto;
-        overscroll-behavior-y: contain;
-        min-height: 100dvh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior: none;
+        overscroll-behavior-y: none;
+        height: 100vh;
+        position: relative;
       }
     </style>
     
     <script>
-      /* JavaScript fallback to block pull-to-refresh */
-      let lastY = 0;
-      window.addEventListener('touchstart', e => { 
-        lastY = e.touches[0].clientY; 
+      /* Targeted pull-to-refresh prevention that allows normal scrolling */
+      let touchStartY = 0;
+      let touchMoveY = 0;
+      
+      // Track touch start position
+      document.addEventListener('touchstart', function(e) {
+        touchStartY = e.touches[0].clientY;
       }, { passive: true });
       
-      window.addEventListener('touchmove', e => {
-        const y = e.touches[0].clientY;
-        const atTop = window.scrollY === 0 || document.documentElement.scrollTop === 0;
-        const pullingDown = y > lastY;
-        if (atTop && pullingDown) e.preventDefault();   // block pull-to-refresh
-        lastY = y;
+      // Only prevent pull-to-refresh, allow normal scrolling
+      document.addEventListener('touchmove', function(e) {
+        touchMoveY = e.touches[0].clientY;
+        
+        // Get scroll position of the root element or body
+        const rootElement = document.getElementById('root');
+        const scrollTop = rootElement ? rootElement.scrollTop : (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0);
+        
+        // Calculate if this is a pull-down gesture
+        const pullDistance = touchMoveY - touchStartY;
+        const isPullDown = pullDistance > 0;
+        const isAtTop = scrollTop <= 0;
+        
+        // Only prevent if we're at the very top AND pulling down significantly (pull-to-refresh gesture)
+        if (isAtTop && isPullDown && pullDistance > 10) {
+          e.preventDefault();
+        }
       }, { passive: false });
     </script>
   </head>
