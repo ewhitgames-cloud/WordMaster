@@ -44,9 +44,9 @@ export default function HomePage() {
   useEffect(() => {
     // Create falling letters that will settle into the title
     const letters: FallingLetter[] = [];
-    const baseY = 120; // Where title should settle
-    const letterSpacing = 85; // Equal spacing between all letters
-    const wordSpacing = 120; // Bigger space between WORD and POP!
+    const baseY = window.innerWidth < 640 ? 60 : 120; // Where title should settle - much higher on mobile
+    const letterSpacing = window.innerWidth < 640 ? 35 : 85; // Much smaller spacing on mobile
+    const wordSpacing = window.innerWidth < 640 ? 50 : 120; // Smaller gap on mobile
     
     // Position "WORD" centered over the menu content
     const wordLetters = ['W', 'O', 'R', 'D'];
@@ -146,7 +146,7 @@ export default function HomePage() {
         {fallingLetters.map((letter) => (
           <motion.div
             key={letter.id}
-            className="absolute font-bold text-white text-6xl md:text-8xl z-20"
+            className="absolute font-bold text-white text-3xl sm:text-6xl md:text-8xl z-20"
             initial={{
               x: letter.x,
               y: -100,
@@ -217,11 +217,11 @@ export default function HomePage() {
         transition={{ duration: 1 }}
       >
         {/* Spacer for title */}
-        <div className="h-48 md:h-56"></div>
+        <div className="h-24 sm:h-48 md:h-56"></div>
 
         {/* Subtitle */}
         <motion.p
-          className="text-lg md:text-xl text-white/90 mb-8 text-center font-medium px-4"
+          className="text-sm sm:text-lg md:text-xl text-white/90 mb-4 sm:mb-8 text-center font-medium px-4"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: showContent ? 1 : 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
@@ -232,20 +232,20 @@ export default function HomePage() {
 
         {/* Game Mode Cards */}
         <motion.div
-          className="grid gap-4 w-full max-w-md"
+          className="grid gap-2 sm:gap-4 w-full max-w-xs sm:max-w-md px-4"
           initial={{ y: 40, opacity: 0 }}
           animate={{ y: 0, opacity: showContent ? 1 : 0 }}
           transition={{ delay: 0.7, duration: 0.8 }}
         >
           {/* Classic Mode */}
           <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <Link href="/game" data-testid="link-classic-mode">
                 <Button 
-                  className="w-full h-16 text-lg font-bold bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 shadow-lg"
+                  className="w-full h-10 sm:h-16 text-sm sm:text-lg font-bold bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 shadow-lg"
                   data-testid="button-classic-game"
                 >
-                  <Sparkles className="mr-2 h-5 w-5" />
+                  <Sparkles className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Classic Game
                 </Button>
               </Link>
@@ -254,13 +254,13 @@ export default function HomePage() {
 
           {/* Daily Challenge */}
           <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <Link href="/daily" data-testid="link-daily-challenge">
                 <Button 
-                  className="w-full h-16 text-lg font-bold bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white border-0 shadow-lg"
+                  className="w-full h-10 sm:h-16 text-sm sm:text-lg font-bold bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white border-0 shadow-lg"
                   data-testid="button-daily-challenge"
                 >
-                  <Calendar className="mr-2 h-5 w-5" />
+                  <Calendar className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   🔥 Daily Challenge
                 </Button>
               </Link>
@@ -269,13 +269,13 @@ export default function HomePage() {
 
           {/* Challenge Mode */}
           <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <Link href="/challenge" data-testid="link-challenge-mode">
                 <Button 
-                  className="w-full h-16 text-lg font-bold bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0 shadow-lg"
+                  className="w-full h-10 sm:h-16 text-sm sm:text-lg font-bold bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0 shadow-lg"
                   data-testid="button-timed-challenge"
                 >
-                  <Trophy className="mr-2 h-5 w-5" />
+                  <Trophy className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Timed Challenge
                 </Button>
               </Link>
@@ -284,10 +284,10 @@ export default function HomePage() {
 
           {/* Blind Challenge */}
           <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <Link href="/blind" data-testid="link-blind-challenge">
                 <Button 
-                  className="w-full h-16 text-lg font-bold bg-gradient-to-r from-gray-700 to-black hover:from-gray-800 hover:to-gray-900 text-white border-0 shadow-lg"
+                  className="w-full h-10 sm:h-16 text-sm sm:text-lg font-bold bg-gradient-to-r from-gray-700 to-black hover:from-gray-800 hover:to-gray-900 text-white border-0 shadow-lg"
                   data-testid="button-blind-challenge"
                 >
                   <span className="mr-2">👁️</span>
@@ -302,7 +302,7 @@ export default function HomePage() {
 
           {/* Font Store with Coin Balance */}
           <Card className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 transition-all duration-300">
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-2">
                   <Store className="h-5 w-5 text-white" />
@@ -314,7 +314,7 @@ export default function HomePage() {
                 </div>
               </div>
               <Button 
-                className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0 shadow-lg"
+                className="w-full h-8 sm:h-auto text-sm bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0 shadow-lg"
                 onClick={() => setShowFontStore(true)}
                 data-testid="button-font-store"
               >
