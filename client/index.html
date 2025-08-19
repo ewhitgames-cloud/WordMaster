@@ -31,54 +31,62 @@
     </style>
     
     <script>
-      /* Disable refresh completely */
+      /* Only disable refresh in mobile app environments */
       
-      // Block any attempt to refresh or reload the page
-      window.addEventListener('beforeunload', function(e) {
-        e.preventDefault();
-        e.returnValue = '';
-        return '';
-      });
+      // Detect if running in a mobile app/WebView (not regular browser)
+      function isRunningInApp() {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        
+        // Check for common mobile app user agents
+        return (
+          // Android WebView
+          /wv|WebView/i.test(userAgent) ||
+          // iOS WebView
+          /iPhone|iPad|iPod/i.test(userAgent) && !window.MSStream && !window.safari ||
+          // Cordova/PhoneGap
+          !!window.cordova ||
+          // Other mobile app indicators
+          window.navigator.standalone === true ||
+          // No referrer often indicates app environment
+          document.referrer === ""
+        );
+      }
       
-      // Prevent refresh on any navigation attempts
-      window.addEventListener('unload', function(e) {
-        e.preventDefault();
-        return false;
-      });
-      
-      // Override location.reload
-      window.location.reload = function() {
-        console.log('Refresh blocked');
-        return false;
-      };
-      
-      // Override history methods that could cause refresh
-      const originalPushState = history.pushState;
-      const originalReplaceState = history.replaceState;
-      
-      history.pushState = function() {
-        // Allow normal navigation but prevent refresh
-        return originalPushState.apply(history, arguments);
-      };
-      
-      history.replaceState = function() {
-        return originalReplaceState.apply(history, arguments);
-      };
-      
-      // Block keyboard shortcuts for refresh
-      document.addEventListener('keydown', function(e) {
-        if ((e.ctrlKey && e.key === 'r') || 
-            (e.metaKey && e.key === 'r') || 
-            e.key === 'F5' ||
-            (e.ctrlKey && e.shiftKey && e.key === 'R')) {
+      // Only apply refresh blocking if in mobile app
+      if (isRunningInApp()) {
+        console.log('Mobile app detected - blocking refresh');
+        
+        // Block any attempt to refresh or reload the page
+        window.addEventListener('beforeunload', function(e) {
           e.preventDefault();
-          e.stopPropagation();
-          console.log('Refresh shortcut blocked');
+          e.returnValue = '';
+          return '';
+        });
+        
+        // Override location.reload for mobile apps only
+        const originalReload = window.location.reload;
+        window.location.reload = function() {
+          console.log('Refresh blocked in mobile app');
           return false;
-        }
-      });
+        };
+        
+        // Block keyboard shortcuts for refresh (mobile apps)
+        document.addEventListener('keydown', function(e) {
+          if ((e.ctrlKey && e.key === 'r') || 
+              (e.metaKey && e.key === 'r') || 
+              e.key === 'F5' ||
+              (e.ctrlKey && e.shiftKey && e.key === 'R')) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Refresh shortcut blocked in mobile app');
+            return false;
+          }
+        });
+      } else {
+        console.log('Web browser detected - refresh allowed');
+      }
       
-      // Disable pull-to-refresh with simple approach
+      // Always disable pull-to-refresh gesture (both web and app)
       let startY;
       document.addEventListener('touchstart', function(e) {
         startY = e.touches[0].clientY;
