@@ -2,56 +2,86 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
+    <meta name="theme-color" content="#7c3aed">
+    <meta name="apple-mobile-web-app-title" content="Word Pop">
+    <meta name="application-name" content="Word Pop">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="noindex, nofollow">
     <style>
-      /* Stop Android pull-to-refresh & top bounce */
+      /* Aggressive pull-to-refresh prevention */
       html, body {
-        overscroll-behavior-y: none;
-        height: 100%;
+        overscroll-behavior: none !important;
+        overscroll-behavior-y: none !important;
+        overscroll-behavior-x: none !important;
+        height: 100% !important;
+        touch-action: pan-x pan-y !important;
+        -webkit-overflow-scrolling: auto !important;
+        position: fixed !important;
+        width: 100% !important;
+        overflow: hidden !important;
       }
       
-      /* Prevent pull-to-refresh on scrolling wrapper */
       #root {
-        overflow-y: auto;
-        overflow-x: hidden;
-        overscroll-behavior: none;
-        overscroll-behavior-y: none;
-        height: 100vh;
-        position: relative;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        overscroll-behavior: none !important;
+        overscroll-behavior-y: none !important;
+        overscroll-behavior-x: none !important;
+        height: 100vh !important;
+        width: 100% !important;
+        position: relative !important;
+        touch-action: pan-y !important;
+        -webkit-overflow-scrolling: touch !important;
       }
     </style>
     
     <script>
-      /* Targeted pull-to-refresh prevention that allows normal scrolling */
-      let touchStartY = 0;
-      let touchMoveY = 0;
+      /* Comprehensive pull-to-refresh prevention */
       
-      // Track touch start position
+      // Prevent all forms of pull-to-refresh
+      let preventPull = false;
+      
       document.addEventListener('touchstart', function(e) {
-        touchStartY = e.touches[0].clientY;
-      }, { passive: true });
-      
-      // Only prevent pull-to-refresh, allow normal scrolling
-      document.addEventListener('touchmove', function(e) {
-        touchMoveY = e.touches[0].clientY;
+        if (e.touches.length !== 1) return;
         
-        // Get scroll position of the root element or body
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
         const rootElement = document.getElementById('root');
-        const scrollTop = rootElement ? rootElement.scrollTop : (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0);
+        const rootScrollTop = rootElement ? rootElement.scrollTop : 0;
         
-        // Calculate if this is a pull-down gesture
-        const pullDistance = touchMoveY - touchStartY;
-        const isPullDown = pullDistance > 0;
-        const isAtTop = scrollTop <= 0;
-        
-        // Only prevent if we're at the very top AND pulling down significantly (pull-to-refresh gesture)
-        if (isAtTop && isPullDown && pullDistance > 10) {
+        preventPull = (scrollY === 0 && rootScrollTop === 0);
+      }, { passive: false });
+      
+      document.addEventListener('touchmove', function(e) {
+        if (preventPull) {
           e.preventDefault();
+          return false;
+        }
+      }, { passive: false });
+      
+      document.addEventListener('touchend', function(e) {
+        preventPull = false;
+      }, { passive: false });
+      
+      // Prevent browser refresh shortcuts
+      document.addEventListener('keydown', function(e) {
+        // Prevent Ctrl+R, F5, Cmd+R
+        if ((e.ctrlKey && e.key === 'r') || e.key === 'F5' || (e.metaKey && e.key === 'r')) {
+          e.preventDefault();
+          return false;
+        }
+      }, { passive: false });
+      
+      // Additional overscroll prevention
+      window.addEventListener('scroll', function(e) {
+        if (window.scrollY < 0) {
+          window.scrollTo(0, 0);
         }
       }, { passive: false });
     </script>
